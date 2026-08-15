@@ -1,0 +1,30 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+output-reports:
+  active: true
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 60
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+
+style:
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: true
+    max: 3

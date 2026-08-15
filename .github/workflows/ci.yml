@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    name: Build, test, static analysis and specification audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Compile application
+        run: ./gradlew --no-daemon clean compileKotlin
+
+      - name: Run application tests
+        run: ./gradlew --no-daemon test
+
+      - name: Run static analysis
+        run: ./gradlew --no-daemon detekt --config config/detekt/detekt.yml
+
+      - name: Run specification contract tests
+        run: node --test
+
+      - name: Audit specification
+        run: npx --yes onp-spec audit --ci
+
+  container-image:
+    name: Build container image
+    needs: quality-gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build container image
+        run: docker build --tag credito-rotativo:${{ github.sha }} .
