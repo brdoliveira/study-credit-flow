@@ -1,0 +1,5 @@
+body { background: #f7f9fc; }
+.decision-approved { border-left: .35rem solid #198754; }
+.decision-rejected { border-left: .35rem solid #dc3545; }
+.rule-status { min-width: 7rem; }
+.correlation-id { overflow-wrap: anywhere; }
