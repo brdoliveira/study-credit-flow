@@ -1,0 +1,11 @@
+{
+  "feature": "credito-rotativo",
+  "timestamp": "2026-08-15T22:42:58.218Z",
+  "gitRev": "6e40a1a",
+  "command": "node --test",
+  "reporter": "tap",
+  "exitCode": 0,
+  "testsParsed": 0,
+  "results": {},
+  "principles": {}
+}
