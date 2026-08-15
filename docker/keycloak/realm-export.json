@@ -1,0 +1,54 @@
+{
+  "realm": "credit-rotativo",
+  "enabled": true,
+  "displayName": "Crédito Rotativo (local)",
+  "roles": {
+    "realm": [
+      { "name": "credit:write", "description": "Criar avaliações de crédito" },
+      { "name": "credit:read", "description": "Consultar avaliações de crédito" },
+      { "name": "credit:report", "description": "Gerar relatórios de crédito" },
+      { "name": "credit:admin", "description": "Executar operações administrativas" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "credit-api",
+      "name": "Credit API",
+      "enabled": true,
+      "bearerOnly": true,
+      "publicClient": false,
+      "protocol": "openid-connect"
+    },
+    {
+      "clientId": "credit-local",
+      "name": "Credit local client",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "protocol": "openid-connect"
+    }
+  ],
+  "users": [
+    {
+      "username": "credit-writer",
+      "enabled": true,
+      "realmRoles": ["credit:write"]
+    },
+    {
+      "username": "credit-reader",
+      "enabled": true,
+      "realmRoles": ["credit:read"]
+    },
+    {
+      "username": "credit-reporter",
+      "enabled": true,
+      "realmRoles": ["credit:report"]
+    },
+    {
+      "username": "credit-admin",
+      "enabled": true,
+      "realmRoles": ["credit:admin"]
+    }
+  ]
+}
