@@ -1,0 +1,25 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8081/realms/credit-rotativo}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    require-ssl: true
+  web:
+    resources:
+      add-mappings: false
+server:
+  forward-headers-strategy: framework
+  ssl:
+    enabled: true
+    enabled-protocols: TLSv1.2,TLSv1.3
+app:
+  security:
+    require-https: true
