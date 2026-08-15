@@ -1,0 +1,14 @@
+{
+  "name": "Cliente de Carga",
+  "cpf": "52998224725",
+  "creditScore": 800,
+  "currentInvoiceAmount": 1000.00,
+  "totalLimit": 10000.00,
+  "availableLimit": 9000.00,
+  "latePayments": 0,
+  "monthlySpending": [
+    800.00,
+    900.00,
+    1000.00
+  ]
+}
