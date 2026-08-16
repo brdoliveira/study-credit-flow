@@ -29,8 +29,17 @@ class CreditEvaluationController(
         @RequestHeader("Idempotency-Key") idempotencyKey: String,
         @RequestHeader(value = "X-Correlation-ID", required = false) correlationId: String?
     ): ResponseEntity<CreditEvaluationResponse> {
-        val response = service.evaluate(request, idempotencyKey, correlationId.orNewCorrelationId())
-        return ResponseEntity.created(URI.create("/api/v1/credit-evaluations/${response.evaluationId}")).body(response)
+        val outcome = service.evaluateWithOutcome(request, idempotencyKey, correlationId.orNewCorrelationId())
+        val response = outcome.response
+        return if (outcome.replayed) {
+            ResponseEntity.ok()
+                .header("Idempotency-Replayed", "true")
+                .body(response)
+        } else {
+            ResponseEntity.created(URI.create("/api/v1/credit-evaluations/${response.evaluationId}"))
+                .header("Idempotency-Replayed", "false")
+                .body(response)
+        }
     }
 
     @GetMapping("/{evaluationId}")
@@ -60,9 +69,22 @@ class CreditEvaluationController(
 
 interface CreditEvaluationApiService {
     fun evaluate(request: CreditEvaluationRequest, idempotencyKey: String, correlationId: String): CreditEvaluationResponse
+    fun evaluateWithOutcome(
+        request: CreditEvaluationRequest,
+        idempotencyKey: String,
+        correlationId: String,
+    ): IdempotentCreditEvaluationResponse = IdempotentCreditEvaluationResponse(
+        evaluate(request, idempotencyKey, correlationId),
+        replayed = false,
+    )
     fun findById(evaluationId: UUID, correlationId: String): CreditEvaluationResponse?
     fun list(criteria: CreditEvaluationSearchCriteria, correlationId: String): CreditEvaluationPageResponse
 }
+
+data class IdempotentCreditEvaluationResponse(
+    val response: CreditEvaluationResponse,
+    val replayed: Boolean,
+)
 
 data class CreditEvaluationSearchCriteria(
     val decision: String?,
