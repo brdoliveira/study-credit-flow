@@ -11,10 +11,10 @@
   <main class="container py-4">
     <header class="d-flex justify-content-between align-items-center mb-4">
       <div><h1 class="h3 mb-1">Avaliação de crédito rotativo</h1><p class="text-body-secondary mb-0">Fluxo demonstrativo para operadores autorizados.</p></div>
-      <a class="btn btn-outline-primary" href="/report.html">Consultar relatório</a>
+      <div class="d-flex gap-2"><a class="btn btn-outline-primary" data-authority="SCOPE_credit:report" href="/report.html">Consultar relatório</a><button class="btn btn-outline-secondary" id="logout" type="button">Sair</button></div>
     </header>
     <div id="feedback" aria-live="polite"></div>
-    <form id="evaluation-form" class="card card-body shadow-sm" novalidate>
+    <form id="evaluation-form" data-authority="SCOPE_credit:write" class="card card-body shadow-sm" novalidate>
       <div class="row g-3">
         <div class="col-md-6"><label class="form-label" for="name">Nome</label><input class="form-control" id="name" name="name" required></div>
         <div class="col-md-3"><label class="form-label" for="cpf">CPF</label><input class="form-control" id="cpf" name="cpf" inputmode="numeric" required></div>
@@ -29,6 +29,6 @@
     </form>
     <section id="decision" class="mt-4" aria-live="polite"></section>
   </main>
-  <script type="module" src="/ts/evaluation.ts"></script>
+  <script type="module">import { initialiseSession } from "/ts/session.ts"; initialiseSession();</script><script type="module" src="/ts/evaluation.ts"></script>
 </body>
 </html>

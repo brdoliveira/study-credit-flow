@@ -27,6 +27,17 @@
       "directAccessGrantsEnabled": true,
       "standardFlowEnabled": true,
       "protocol": "openid-connect"
+    },
+    {
+      "clientId": "credit-bff",
+      "name": "Credit browser BFF",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:8080/login/oauth2/code/*"],
+      "webOrigins": ["http://localhost:8080"],
+      "protocol": "openid-connect"
     }
   ],
   "users": [
