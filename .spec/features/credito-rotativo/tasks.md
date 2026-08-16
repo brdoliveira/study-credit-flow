@@ -12,7 +12,7 @@
 - Arquivos: src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt, src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt, src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt, src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt, src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt, src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt, src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt
 - Notas: todas as regras executam; severidades BLOCKING e WARNING.
 
-## T-003 — Implementar cálculo do crédito [pendente]
+## T-003 — Implementar cálculo do crédito [em-andamento]
 - Refs: US-003, AC-012, AC-013, AC-014
 - Arquivos: src/main/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculatorTest.kt
 - Notas: depende da confirmação das premissas de fórmula e arredondamento.
