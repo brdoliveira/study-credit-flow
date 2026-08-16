@@ -22,7 +22,9 @@ A arquitetura e o caminho para AWS estão em [docs/architecture.md](docs/archite
 
 Não é necessário instalar Gradle, PostgreSQL, Kafka ou Keycloak na máquina.
 
-## Executar todo o ambiente local
+## Roteiro de demonstração local
+
+Este é o roteiro principal para uma demonstração sem conhecimento prévio. Os valores de senha ficam somente em `.env`, que é ignorado pelo Git; nunca copie seu conteúdo para evidências, issue ou chat.
 
 1. Crie o arquivo local de variáveis:
 
@@ -32,14 +34,21 @@ Não é necessário instalar Gradle, PostgreSQL, Kafka ou Keycloak na máquina.
 
 2. Troque em `.env` os placeholders de senha. O arquivo `.env` é local e não deve ser commitado.
 
-3. Gere o artefato da aplicação e suba os serviços:
+3. Para uma demonstração manual (que preserva dados entre reinícios), gere o artefato e suba os serviços:
 
    ```powershell
    .\gradlew.bat bootJar --no-daemon
    docker compose up --build
    ```
 
-4. Aguarde os health checks e consulte:
+4. Aguarde os health checks. O Compose só considera o ambiente pronto quando `app`, PostgreSQL, Keycloak e Redpanda estão `healthy`:
+
+   ```powershell
+   docker compose ps
+   Invoke-RestMethod http://localhost:8080/actuator/health/readiness
+   ```
+
+5. Consulte:
 
    - aplicação/frontend: `http://localhost:8080`;
    - readiness: `http://localhost:8080/actuator/health/readiness`;
@@ -47,7 +56,30 @@ Não é necessário instalar Gradle, PostgreSQL, Kafka ou Keycloak na máquina.
    - Keycloak: `http://localhost:8180`;
    - métricas: `http://localhost:8080/actuator/prometheus`.
 
+6. Execute `./scripts/demo.ps1` para abrir a jornada visual e receber os passos para login, criação, histórico, PDF, evento e métricas.
+
 Para encerrar preservando os volumes, execute `docker compose down`. A remoção de volumes é deliberadamente omitida do fluxo normal porque apaga os dados locais.
+
+### Prova reproduzível a partir de volumes limpos
+
+Para comprovar a pilha de um ambiente limpo, sem reutilizar banco ou broker, execute:
+
+```powershell
+./scripts/e2e-compose.ps1
+```
+
+Ele verifica `.env`, cria um projeto Compose descartável, remove os volumes antes e depois, espera os health checks em até 240 segundos e roda a jornada automatizada. Consulte os detalhes e a saída TAP em [docs/evidence/compose-e2e.md](docs/evidence/compose-e2e.md). O roteiro não depende de senhas, tokens ou CPFs versionados: os placeholders estão em `.env.example`, as senhas são locais e o CPF de fixture é criado em memória.
+
+### Jornada no navegador
+
+Com o ambiente saudável, siga a ordem abaixo. Não salve o token/senha exibido ou usado no Keycloak.
+
+1. Abra `http://localhost:8080` e entre pelo Keycloak com o usuário demonstrativo e a senha local que você definiu em `.env`.
+2. Crie uma avaliação na tela inicial e confira decisão, regras, motivos e `correlationId` devolvido.
+3. Abra o histórico, aplique filtros e confirme que o registro persiste.
+4. Baixe o PDF pela tela de relatório usando os mesmos filtros e compare decisão, regras e motivos.
+5. Observe o evento publicado no Redpanda e as métricas em `http://localhost:8080/actuator/prometheus`; use o `correlationId` para correlacionar sem expor CPF completo.
+6. Em caso de falha, execute `docker compose ps`, `docker compose logs app keycloak postgres kafka` e consulte a readiness acima. Verifique se `.env` não manteve nenhum placeholder.
 
 ## Executar e testar sem containers
 
@@ -129,3 +161,7 @@ O cenário k6 em `performance/k6/credit-evaluation.js` modela 10.000 avaliaçõe
 - a evolução sugerida usa ECS/Fargate, Aurora PostgreSQL, MSK/EventBridge, Secrets Manager, KMS e CloudWatch, detalhada na arquitetura.
 
 O uso de IA e as verificações humanas realizadas estão registrados em [docs/ai-usage.md](docs/ai-usage.md).
+
+## Evidências e escopo da demonstração
+
+O [índice de evidências](docs/evidence/README.md) informa para cada prova o comando, resultado, data e commit validados. Ele separa de forma explícita a execução realmente comprovada das propostas de arquitetura, capacidade e cloud que ainda dependem de um ambiente apropriado.
