@@ -1,17 +1,18 @@
 package com.itau.credit.infrastructure.idempotency
 
 import com.itau.credit.application.port.IdempotencyKeyConflictException
+import com.itau.credit.application.port.IdempotencyExecution
 import com.itau.credit.application.port.IdempotencyRepository
 import com.itau.credit.application.port.InvalidIdempotencyKeyException
 import com.itau.credit.application.port.MissingIdempotencyKeyException
 import jakarta.persistence.EntityManager
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import org.springframework.transaction.support.TransactionTemplate
 import java.time.Duration
 import java.time.Instant
 import java.util.UUID
 
-@Repository
+@Component
 class PostgresIdempotencyRepository(
     private val entityManager: EntityManager,
     private val transactionTemplate: TransactionTemplate,
@@ -19,11 +20,15 @@ class PostgresIdempotencyRepository(
     private val retention: Duration = Duration.ofHours(24),
     private val now: () -> Instant = Instant::now,
 ) : IdempotencyRepository {
-    override fun execute(idempotencyKey: String?, requestBody: String, operation: () -> String): String {
+    override fun executeWithOutcome(
+        idempotencyKey: String?,
+        requestBody: String,
+        operation: () -> String,
+    ): IdempotencyExecution {
         val key = parseKey(idempotencyKey)
         val requestHash = requestHasher.hash(requestBody)
 
-        return requireNotNull(transactionTemplate.execute {
+        val execution = transactionTemplate.execute<IdempotencyExecution?> {
             val timestamp = now()
             entityManager.createNativeQuery("delete from credit_idempotency where idempotency_key = :key and expires_at <= :now")
                 .setParameter("key", key)
@@ -43,8 +48,8 @@ class PostgresIdempotencyRepository(
                 "select request_hash, response_body from credit_idempotency where idempotency_key = :key for update",
             ).setParameter("key", key).singleResult as Array<Any?>
 
-            if (row[0] != requestHash) throw IdempotencyKeyConflictException()
-            (row[1] as String?)?.let { return@execute it }
+            if (row[0] != requestHash) return@execute null
+            (row[1] as String?)?.let { return@execute IdempotencyExecution(it, replayed = true) }
 
             val response = operation()
             entityManager.createNativeQuery(
@@ -56,8 +61,9 @@ class PostgresIdempotencyRepository(
                 .setParameter("completedAt", now())
                 .setParameter("key", key)
                 .executeUpdate()
-            response
-        })
+            IdempotencyExecution(response, replayed = false)
+        }
+        return execution ?: throw IdempotencyKeyConflictException()
     }
 
     private fun parseKey(value: String?): UUID {

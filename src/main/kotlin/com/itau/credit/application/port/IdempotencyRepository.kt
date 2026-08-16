@@ -9,8 +9,19 @@ interface IdempotencyRepository {
         idempotencyKey: String?,
         requestBody: String,
         operation: () -> String,
-    ): String
+    ): String = executeWithOutcome(idempotencyKey, requestBody, operation).responseBody
+
+    fun executeWithOutcome(
+        idempotencyKey: String?,
+        requestBody: String,
+        operation: () -> String,
+    ): IdempotencyExecution
 }
+
+data class IdempotencyExecution(
+    val responseBody: String,
+    val replayed: Boolean,
+)
 
 class MissingIdempotencyKeyException : IllegalArgumentException("Idempotency-Key is required")
 

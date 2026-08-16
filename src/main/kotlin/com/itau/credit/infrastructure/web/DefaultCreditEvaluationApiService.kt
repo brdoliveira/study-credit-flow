@@ -25,13 +25,22 @@ class DefaultCreditEvaluationApiService(
         request: CreditEvaluationRequest,
         idempotencyKey: String,
         correlationId: String,
-    ): CreditEvaluationResponse {
+    ): CreditEvaluationResponse = evaluateWithOutcome(request, idempotencyKey, correlationId).response
+
+    override fun evaluateWithOutcome(
+        request: CreditEvaluationRequest,
+        idempotencyKey: String,
+        correlationId: String,
+    ): IdempotentCreditEvaluationResponse {
         val requestJson = objectMapper.writeValueAsString(request)
-        val responseJson = idempotencyRepository.execute(idempotencyKey, requestJson) {
+        val execution = idempotencyRepository.executeWithOutcome(idempotencyKey, requestJson) {
             val result = useCase.execute(request.toCommand(correlationId))
             objectMapper.writeValueAsString(result.toResponse(request.name!!))
         }
-        return objectMapper.readValue(responseJson, CreditEvaluationResponse::class.java)
+        return IdempotentCreditEvaluationResponse(
+            objectMapper.readValue(execution.responseBody, CreditEvaluationResponse::class.java),
+            execution.replayed,
+        )
     }
 
     override fun findById(evaluationId: UUID, correlationId: String): CreditEvaluationResponse? =
