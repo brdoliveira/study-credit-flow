@@ -1,6 +1,7 @@
 {
   "realm": "credit-rotativo",
   "enabled": true,
+  "accessTokenLifespan": 900,
   "displayName": "Crédito Rotativo (local)",
   "roles": {
     "realm": [
@@ -43,24 +44,40 @@
   "users": [
     {
       "username": "credit-writer",
+      "firstName": "Credit",
+      "lastName": "Writer",
+      "email": "credit-writer@example.invalid",
+      "emailVerified": true,
       "enabled": true,
       "realmRoles": ["credit:write"],
       "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-reader",
+      "firstName": "Credit",
+      "lastName": "Reader",
+      "email": "credit-reader@example.invalid",
+      "emailVerified": true,
       "enabled": true,
       "realmRoles": ["credit:read"],
       "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-reporter",
+      "firstName": "Credit",
+      "lastName": "Reporter",
+      "email": "credit-reporter@example.invalid",
+      "emailVerified": true,
       "enabled": true,
       "realmRoles": ["credit:report"],
       "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-admin",
+      "firstName": "Credit",
+      "lastName": "Admin",
+      "email": "credit-admin@example.invalid",
+      "emailVerified": true,
       "enabled": true,
       "realmRoles": ["credit:admin"],
       "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]

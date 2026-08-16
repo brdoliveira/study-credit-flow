@@ -53,6 +53,7 @@ test('AC-069 @spec:AC-069 registra evidência rastreável e sanitizada a partir 
   assert.match(runner, /LOAD_TEST_COMMIT/);
   assert.match(runner, /LOAD_TEST_EXECUTED_AT_UTC/);
   assert.match(runner, /Remove-Item Env:AUTHORIZATION/);
+  assert.match(runner, /if \(\$LASTEXITCODE -ne 0\)/);
   assert.equal(placeholder.executionStatus, 'not-executed');
   assert.doesNotMatch(JSON.stringify(placeholder), /\b\d{11}\b|Bearer\s+|token["']\s*:/i);
 });

@@ -20,5 +20,8 @@ $env:LOAD_TEST_RESOURCES = $Resources
 $env:LOAD_TEST_EVIDENCE_FILE = $EvidenceFile
 if ($Authorization) { $env:AUTHORIZATION = $Authorization } else { Remove-Item Env:AUTHORIZATION -ErrorAction SilentlyContinue }
 
-try { k6 run performance/k6/credit-evaluation.js }
+try {
+    k6 run performance/k6/credit-evaluation.js
+    if ($LASTEXITCODE -ne 0) { throw "k6 failed with exit code $LASTEXITCODE." }
+}
 finally { Remove-Item Env:AUTHORIZATION -ErrorAction SilentlyContinue }
