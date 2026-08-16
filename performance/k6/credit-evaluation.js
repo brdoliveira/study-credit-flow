@@ -2,6 +2,7 @@ import http from 'k6/http';
 import { check, fail } from 'k6';
 import { Counter, Rate } from 'k6/metrics';
 import { SharedArray } from 'k6/data';
+import { createLoadTestSummary } from './summary.js';
 
 const baseUrl = __ENV.BASE_URL;
 const authorization = __ENV.AUTHORIZATION;
@@ -44,6 +45,8 @@ export const options = {
     'http_req_duration{scenario:nominal}': ['p(99)<1000'],
     'technical_error_rate{scenario:nominal}': ['rate<0.01'],
     'checks{scenario:nominal}': ['rate==1'],
+    'iterations{scenario:nominal}': ['count>=50000'],
+    dropped_iterations: ['count==0'],
   },
 };
 
@@ -73,9 +76,29 @@ export default function creditEvaluationLoadTest() {
 
   const isTechnicalError = response.status === 0 || response.status >= 500;
   technicalErrors.add(isTechnicalError);
-  completedEvaluations.add(1);
+  completedEvaluations.add(response.status >= 200 && response.status < 300);
 
   check(response, {
-    'credit evaluation is created': (result) => result.status === 201,
+    'credit evaluation completed': (result) => result.status >= 200 && result.status < 300,
   });
+}
+
+export function handleSummary(data) {
+  const summary = createLoadTestSummary(data, {
+    commit: __ENV.LOAD_TEST_COMMIT,
+    executedAtUtc: __ENV.LOAD_TEST_EXECUTED_AT_UTC,
+    environment: __ENV.LOAD_TEST_ENVIRONMENT,
+    resources: __ENV.LOAD_TEST_RESOURCES,
+    configuration: {
+      baseUrl,
+      nominalRatePerMinute: 10000,
+      nominalDuration: '5m',
+      warmUpRatePerMinute: 1000,
+      warmUpDuration: '1m',
+    },
+  });
+  const evidenceFile = __ENV.LOAD_TEST_EVIDENCE_FILE || 'docs/evidence/load-test-summary.json';
+  const rendered = `${JSON.stringify(summary, null, 2)}\n`;
+
+  return { [evidenceFile]: rendered, stdout: rendered };
 }

@@ -1,0 +1,6 @@
+{
+  "schemaVersion": 1,
+  "executionStatus": "not-executed",
+  "reason": "This is the output location for a real k6 run. Run scripts/run-load-test.ps1 in an isolated documented environment to replace it with measured evidence.",
+  "requiredFields": ["commit", "executedAtUtc", "environment", "resources", "configuration", "observed.nominalRatePerMinute", "observed.p99Milliseconds", "observed.technicalErrorRate", "observed.droppedIterations", "thresholds"]
+}
