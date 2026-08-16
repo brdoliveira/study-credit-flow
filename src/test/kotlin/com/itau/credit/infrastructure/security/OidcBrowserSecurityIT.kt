@@ -85,10 +85,15 @@ class OidcBrowserSecurityIT @Autowired constructor(private val mvc: MockMvc) {
     fun `AC-052 uses the same public issuer with an internal Keycloak backchannel`() {
         val compose = Files.readString(Path.of("compose.yaml"))
         val security = Files.readString(Path.of("src/main/resources/application-security.yml"))
+        val realm = Files.readString(Path.of("docker/keycloak/realm-export.json"))
         require(compose.contains("KC_HOSTNAME: http://localhost:"))
         require(compose.contains("KC_HOSTNAME_BACKCHANNEL_DYNAMIC: \"true\""))
-        require(compose.contains("KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/credit-rotativo"))
+        require(compose.contains("KEYCLOAK_ISSUER_URI: http://localhost:"))
+        require(compose.contains("JWT_JWK_SET_URI: http://keycloak:8080/realms/credit-rotativo"))
+        require(compose.contains("PROVIDER_KEYCLOAK_TOKEN_URI: http://keycloak:8080/realms/credit-rotativo"))
         require(security.contains("issuer-uri: \${KEYCLOAK_ISSUER_URI:"))
+        require(realm.contains("oidc-usermodel-realm-role-mapper"))
+        require(realm.contains("\"id.token.claim\": \"true\""))
     }
 
     private fun browser(scope: String) = oauth2Login().authorities(SimpleGrantedAuthority("SCOPE_$scope"))

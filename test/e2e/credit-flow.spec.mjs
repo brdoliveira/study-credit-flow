@@ -43,7 +43,10 @@ test('@spec:AC-060 evento percorre Outbox Kafka e consumidor sem dados sensiveis
 });
 
 test('@spec:AC-065 Compose limpo deixa app PostgreSQL Keycloak e Kafka saudaveis', async () => {
-  const status = JSON.parse(await compose(['ps', '--format', 'json']));
+  const rawStatus = await compose(['ps', '--format', 'json']);
+  const status = rawStatus.trimStart().startsWith('[')
+    ? JSON.parse(rawStatus)
+    : rawStatus.split(/\r?\n/).filter(Boolean).map(line => JSON.parse(line));
   for (const service of ['app', 'postgres', 'keycloak', 'kafka']) assert.equal(status.find(item => item.Service === service)?.Health, 'healthy');
 });
 

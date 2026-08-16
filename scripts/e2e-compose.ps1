@@ -16,6 +16,7 @@ try {
     docker compose up --build --detach --wait --wait-timeout $TimeoutSeconds --renew-anon-volumes | Out-Host
     $env:E2E_COMPOSE_PROJECT = $projectName
     node --test --test-reporter=tap test/e2e/credit-flow.spec.mjs
+    if ($LASTEXITCODE -ne 0) { throw "E2E tests failed with exit code $LASTEXITCODE." }
 }
 finally {
     docker compose down --volumes --remove-orphans | Out-Host
