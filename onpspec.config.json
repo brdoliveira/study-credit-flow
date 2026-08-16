@@ -1,14 +1,11 @@
 {
-  "testCommand": "node --test",
+  "testCommand": "gradlew.bat test --no-daemon && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "testGlobs": [
-    "test/**",
-    "tests/**",
-    "src/**/*.test.*",
-    "src/**/*.spec.*",
-    "__tests__/**"
+    "src/test/**/*.kt"
   ],
   "srcGlobs": [
-    "src/**"
+    "src/main/kotlin/**",
+    "src/main/resources/**"
   ]
 }

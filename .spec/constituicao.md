@@ -20,8 +20,20 @@ AC_SEM_PROVA, TASK_CONCLUIDA_SEM_PROVA) — não precisa de teste extra seu.
 
 - verificação(gate): intrínseca ao audit
 
-## P-002 [RECOMENDADO] Segredos nunca em código
+## P-002 [DEVE] Segredos nunca em código
 
 Chaves e senhas vêm de variáveis de ambiente, nunca hard-coded.
 
-- verificação(proibido): `(api[_-]?key|senha|password)\s*[:=]\s*['"][^'"]{8,}` em `src/**/*.js`
+- verificação(teste): @principle:P-002
+
+## P-003 [DEVE] O domínio não depende de frameworks
+
+As regras e os modelos de negócio não importam Spring nem APIs de persistência.
+
+- verificação(teste): @principle:P-003
+
+## P-004 [DEVE] Integração usa PostgreSQL real
+
+Testes de persistência e concorrência não usam H2; o comportamento é validado com PostgreSQL/Testcontainers.
+
+- verificação(teste): @principle:P-004
