@@ -34,6 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("org.apache.pdfbox:pdfbox:3.0.8")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1")
 
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     runtimeOnly("org.postgresql:postgresql")
