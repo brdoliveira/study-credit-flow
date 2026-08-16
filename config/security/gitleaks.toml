@@ -1,0 +1,10 @@
+title = "credito-rotativo-gitleaks"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Placeholders locais documentados não são segredos."
+paths = [
+  '''^\.env\.example$''',
+]
