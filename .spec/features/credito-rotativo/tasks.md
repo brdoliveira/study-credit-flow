@@ -57,7 +57,7 @@
 - Arquivos: src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/css/app.css, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/evaluation.ts, src/main/resources/static/ts/report.ts, src/test/kotlin/com/itau/credit/infrastructure/web/FrontendSmokeTest.kt
 - Notas: frontend fino, sem lógica de decisão; reutilizar filtros no PDF.
 
-## T-012 — Implementar observabilidade e resiliência [pendente]
+## T-012 — Implementar observabilidade e resiliência [em-andamento]
 - Refs: US-010, AC-037, AC-038, AC-039, AC-040
 - Arquivos: src/main/kotlin/com/itau/credit/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/com/itau/credit/infrastructure/observability/ObservabilityTest.kt
 - Notas: controlar cardinalidade e não registrar payload financeiro completo.

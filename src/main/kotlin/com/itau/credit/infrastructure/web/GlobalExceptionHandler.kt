@@ -2,6 +2,7 @@ package com.itau.credit.infrastructure.web
 
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
+import com.itau.credit.infrastructure.observability.CorrelationIdFilter
 import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.method.annotation.HandlerMethodValidationException
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
-import java.util.UUID
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -47,8 +47,10 @@ class GlobalExceptionHandler {
         request: HttpServletRequest,
         fieldErrors: List<ApiFieldError> = emptyList()
     ): ResponseEntity<ApiError> = ResponseEntity.status(status).body(
-        ApiError(status.value(), code, message, request.getHeader("X-Correlation-ID").validCorrelationId(), request.requestURI, fieldErrors)
+        ApiError(status.value(), code, message, request.correlationId(), request.requestURI, fieldErrors)
     )
 }
 
-private fun String?.validCorrelationId(): String = this?.takeIf { it.isNotBlank() && it.length <= 128 } ?: UUID.randomUUID().toString()
+private fun HttpServletRequest.correlationId(): String =
+    (getAttribute(CorrelationIdFilter.REQUEST_ATTRIBUTE) as? String)
+        ?: CorrelationIdFilter.normalizeCorrelationId(getHeader(CorrelationIdFilter.HEADER_NAME))
