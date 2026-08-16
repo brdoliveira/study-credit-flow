@@ -783,6 +783,393 @@
       "primeiraVez": "2026-08-16T18:59:17.043Z",
       "ultimaVez": "2026-08-16T18:59:17.043Z",
       "gitRev": "fe0a177"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-017": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-017",
+      "ocorrencias": 4,
+      "primeiraVez": "2026-08-16T20:49:54.642Z",
+      "ultimaVez": "2026-08-16T20:49:54.642Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-018": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-018",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.642Z",
+      "ultimaVez": "2026-08-16T20:49:54.642Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-019": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-019",
+      "ocorrencias": 5,
+      "primeiraVez": "2026-08-16T20:49:54.642Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-020": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-020",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-021": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-021",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-022": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-022",
+      "ocorrencias": 4,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-023": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-023",
+      "ocorrencias": 4,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-024": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-024",
+      "ocorrencias": 5,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-025": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-025",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-026": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-026",
+      "ocorrencias": 11,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "ARQUIVO_INEXISTENTE::prontidao-entrega::T-027": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "prontidao-entrega",
+      "ref": "T-027",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-048": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-048",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-049": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-049",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-050": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-050",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-051": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-051",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-052": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-052",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-053": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-053",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-054": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-054",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-055": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-055",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-056": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-056",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-057": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-057",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-058": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-058",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-059": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-059",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-060": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-060",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-061": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-061",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-062": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-062",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-063": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-063",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-064": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-064",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-065": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-065",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-066": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-066",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-067": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-067",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-068": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-068",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-069": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-069",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-070": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-070",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-071": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-071",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-072": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-072",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-073": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-073",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-074": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-074",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-075": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-075",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-076": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-076",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-077": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-077",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-078": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-078",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
+    },
+    "AC_SEM_TESTE::prontidao-entrega::AC-079": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "prontidao-entrega",
+      "ref": "AC-079",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T20:49:54.643Z",
+      "ultimaVez": "2026-08-16T20:49:54.643Z",
+      "gitRev": "fabcecb"
     }
   }
 }
