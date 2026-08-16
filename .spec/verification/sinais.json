@@ -747,6 +747,42 @@
       "primeiraVez": "2026-08-15T22:42:58.638Z",
       "ultimaVez": "2026-08-15T22:42:58.638Z",
       "gitRev": "6e40a1a"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/com/itau/credit/CreditFlowApplication.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/com/itau/credit/CreditFlowApplication.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T18:59:17.042Z",
+      "ultimaVez": "2026-08-16T18:59:17.043Z",
+      "gitRev": "fe0a177"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T18:59:17.043Z",
+      "ultimaVez": "2026-08-16T18:59:17.043Z",
+      "gitRev": "fe0a177"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T18:59:17.043Z",
+      "ultimaVez": "2026-08-16T18:59:17.043Z",
+      "gitRev": "fe0a177"
+    },
+    "ARQUIVO_ORFAO::—::src/main/resources/application.yml": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/resources/application.yml",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-16T18:59:17.043Z",
+      "ultimaVez": "2026-08-16T18:59:17.043Z",
+      "gitRev": "fe0a177"
     }
   }
 }

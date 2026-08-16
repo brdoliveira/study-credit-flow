@@ -1,9 +1,10 @@
-const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
-const { resolve } = require('node:path');
-const { test } = require('node:test');
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { test } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-const projectRoot = resolve(__dirname, '../../../..');
+const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..');
 const scenarioPath = resolve(projectRoot, 'performance/k6/credit-evaluation.js');
 const payloadPath = resolve(projectRoot, 'src/test/resources/performance/valid-credit-evaluation.json');
 

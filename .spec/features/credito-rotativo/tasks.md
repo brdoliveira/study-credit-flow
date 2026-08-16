@@ -4,7 +4,7 @@
 
 ## T-001 — Preparar projeto Kotlin e testes de especificação [concluida]
 - Refs: US-012, AC-045, AC-047
-- Arquivos: settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt
+- Arquivos: settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/main/kotlin/com/itau/credit/CreditFlowApplication.kt, src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt
 - Notas: configurar Java 21, Kotlin, Spring Boot, lint/análise estática e comando de teste usado pelo motor.
 
 ## T-002 — Implementar domínio e motor extensível de regras [concluida]
@@ -19,12 +19,12 @@
 
 ## T-004 — Implementar caso de uso de avaliação [concluida]
 - Refs: US-001, US-004, AC-001, AC-003, AC-015, AC-016
-- Arquivos: src/main/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/com/itau/credit/application/evaluation/EvaluateCreditCommand.kt, src/main/kotlin/com/itau/credit/application/evaluation/CreditEvaluationResult.kt, src/test/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt
+- Arquivos: src/main/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/com/itau/credit/application/evaluation/EvaluateCreditCommand.kt, src/main/kotlin/com/itau/credit/application/evaluation/CreditEvaluationResult.kt, src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt, src/test/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt
 - Notas: orquestra regras, decisão, cálculo e portas transacionais.
 
 ## T-005 — Implementar API REST e contrato de erros [concluida]
 - Refs: US-001, US-006, AC-001, AC-002, AC-003, AC-022, AC-023, AC-024, AC-028, AC-040
-- Arquivos: src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationRequest.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationResponse.kt, src/main/kotlin/com/itau/credit/infrastructure/web/ApiError.kt, src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt, src/test/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationControllerTest.kt
+- Arquivos: src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationRequest.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationResponse.kt, src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/com/itau/credit/infrastructure/web/ApiError.kt, src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt, src/test/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationControllerTest.kt
 - Notas: incluir paginação, ordenação, filtros, Location e status padronizados.
 
 ## T-006 — Implementar persistência PostgreSQL e auditoria [concluida]
@@ -64,7 +64,7 @@
 
 ## T-013 — Preparar execução local em containers [concluida]
 - Refs: US-012, AC-044
-- Arquivos: Dockerfile, compose.yaml, .env.example, docker/postgres/init.sql, docker/kafka/README.md
+- Arquivos: Dockerfile, compose.yaml, .env.example, docker/postgres/init.sql, docker/kafka/README.md, src/main/resources/application.yml
 - Notas: aplicação, PostgreSQL, identidade e broker; health checks e volumes explícitos.
 
 ## T-014 — Criar pipeline de CI e gates [concluida]

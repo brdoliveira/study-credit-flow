@@ -28,11 +28,17 @@ for (const file of await xmlFiles(root)) {
   const regex = /<testcase\b([^>]*)(?:\/>|>([\s\S]*?)<\/testcase>)/g;
   for (const match of xml.matchAll(regex)) {
     const name = /\bname="([^"]*)"/.exec(match[1])?.[1];
-    if (!name || !name.includes('@spec:') && !name.includes('@principle:')) continue;
+    if (!name) continue;
+    const decodedName = decode(name);
+    const criterion = /\bAC-\d{3}\b/.exec(decodedName)?.[0];
+    if (!criterion && !decodedName.includes('@spec:') && !decodedName.includes('@principle:')) continue;
     const body = match[2] ?? '';
     const failed = /<(failure|error)\b/.test(body);
     const skipped = /<skipped\b/.test(body);
-    tests.push({ name: decode(name), failed, skipped });
+    const annotatedName = criterion && !decodedName.includes('@spec:')
+      ? `@spec:${criterion} ${decodedName}`
+      : decodedName;
+    tests.push({ name: annotatedName, failed, skipped });
   }
 }
 

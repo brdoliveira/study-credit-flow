@@ -1,11 +1,247 @@
 {
   "feature": "credito-rotativo",
-  "timestamp": "2026-08-15T22:42:58.218Z",
-  "gitRev": "6e40a1a",
-  "command": "node --test",
+  "timestamp": "2026-08-16T18:59:08.905Z",
+  "gitRev": "fe0a177",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,
-  "testsParsed": 0,
-  "results": {},
+  "testsParsed": 62,
+  "results": {
+    "AC-001": {
+      "status": "pass",
+      "testName": "@spec:AC-001 AC-001 creates a single evaluation for a valid command()",
+      "method": "tap"
+    },
+    "AC-002": {
+      "status": "pass",
+      "testName": "@spec:AC-002 AC-002 explains every invalid input field()",
+      "method": "tap"
+    },
+    "AC-003": {
+      "status": "pass",
+      "testName": "@spec:AC-003 AC-003 returns a rejected decision instead of a technical error()",
+      "method": "tap"
+    },
+    "AC-004": {
+      "status": "pass",
+      "testName": "@spec:AC-004 AC-004 executes every registered rule even after a blocking failure()",
+      "method": "tap"
+    },
+    "AC-005": {
+      "status": "pass",
+      "testName": "@spec:AC-005 AC-005 score below 650 rejects the evaluation()",
+      "method": "tap"
+    },
+    "AC-006": {
+      "status": "pass",
+      "testName": "@spec:AC-006 AC-006 more than two late payments rejects the evaluation()",
+      "method": "tap"
+    },
+    "AC-007": {
+      "status": "pass",
+      "testName": "@spec:AC-007 AC-007 zero available limit rejects the evaluation()",
+      "method": "tap"
+    },
+    "AC-008": {
+      "status": "pass",
+      "testName": "@spec:AC-008 AC-008 commitment above 80 percent rejects the evaluation()",
+      "method": "tap"
+    },
+    "AC-009": {
+      "status": "pass",
+      "testName": "@spec:AC-009 AC-009 spending growth above 20 percent warns without rejecting()",
+      "method": "tap"
+    },
+    "AC-010": {
+      "status": "pass",
+      "testName": "@spec:AC-010 AC-010 a new rule participates without changing the engine()",
+      "method": "tap"
+    },
+    "AC-011": {
+      "status": "pass",
+      "testName": "@spec:AC-011 AC-011 equal inputs and configuration produce equal decisions()",
+      "method": "tap"
+    },
+    "AC-012": {
+      "status": "pass",
+      "testName": "@spec:AC-012 AC-012 applies percentage risk and configured cap without exceeding available limit()",
+      "method": "tap"
+    },
+    "AC-013": {
+      "status": "pass",
+      "testName": "@spec:AC-013 AC-013 produces BRL scale using half even rounding()",
+      "method": "tap"
+    },
+    "AC-014": {
+      "status": "pass",
+      "testName": "@spec:AC-014 AC-014 rejected evaluation always receives zero()",
+      "method": "tap"
+    },
+    "AC-015": {
+      "status": "pass",
+      "testName": "@spec:AC-015 AC-015 returns all decision traceability fields with a masked CPF()",
+      "method": "tap"
+    },
+    "AC-016": {
+      "status": "pass",
+      "testName": "@spec:AC-016 AC-016 persists an immutable photograph of the completed decision()",
+      "method": "tap"
+    },
+    "AC-017": {
+      "status": "pass",
+      "testName": "@spec:AC-017 AC-017 full CPF is neither stored nor returned()",
+      "method": "tap"
+    },
+    "AC-018": {
+      "status": "pass",
+      "testName": "@spec:AC-018 AC-018 missing or malformed idempotency key is rejected before an operation is created()",
+      "method": "tap"
+    },
+    "AC-019": {
+      "status": "pass",
+      "testName": "@spec:AC-019 AC-019 identical canonical request replays the original evaluation result()",
+      "method": "tap"
+    },
+    "AC-020": {
+      "status": "pass",
+      "testName": "@spec:AC-020 AC-020 divergent reuse is rejected and preserves the original result()",
+      "method": "tap"
+    },
+    "AC-021": {
+      "status": "pass",
+      "testName": "@spec:AC-021 AC-021 concurrent identical requests persist one evaluation and converge on its result()",
+      "method": "tap"
+    },
+    "AC-022": {
+      "status": "pass",
+      "testName": "@spec:AC-022 AC-022 list is filtered paginated and ordered()",
+      "method": "tap"
+    },
+    "AC-023": {
+      "status": "pass",
+      "testName": "@spec:AC-023 AC-023 evaluation is found by its identifier()",
+      "method": "tap"
+    },
+    "AC-024": {
+      "status": "pass",
+      "testName": "@spec:AC-024 AC-024 missing evaluation has no repository result for standardized not-found mapping()",
+      "method": "tap"
+    },
+    "AC-025": {
+      "status": "pass",
+      "testName": "@spec:AC-025 AC-025 controller returns a valid PDF attachment with a safe filename()",
+      "method": "tap"
+    },
+    "AC-026": {
+      "status": "pass",
+      "testName": "@spec:AC-026 AC-026 PDF exposes filters totals rates and auditable evaluation rows()",
+      "method": "tap"
+    },
+    "AC-027": {
+      "status": "pass",
+      "testName": "@spec:AC-027 AC-027 empty report is still a readable PDF with zero totals()",
+      "method": "tap"
+    },
+    "AC-028": {
+      "status": "pass",
+      "testName": "@spec:AC-028 AC-028 inverted periods and unknown filters are rejected with their cause()",
+      "method": "tap"
+    },
+    "AC-029": {
+      "status": "pass",
+      "testName": "@spec:AC-029 AC-029 rejects missing and invalid tokens without exposing internal data()",
+      "method": "tap"
+    },
+    "AC-030": {
+      "status": "pass",
+      "testName": "@spec:AC-030 AC-030 rejects authenticated users without the required permission()",
+      "method": "tap"
+    },
+    "AC-031": {
+      "status": "pass",
+      "testName": "@spec:AC-031 AC-031 separates evaluation read write report and administration by scope()",
+      "method": "tap"
+    },
+    "AC-032": {
+      "status": "pass",
+      "testName": "@spec:AC-032 AC-032 redirects production HTTP requests to HTTPS()",
+      "method": "tap"
+    },
+    "AC-033": {
+      "status": "pass",
+      "testName": "@spec:AC-033 AC-033 evaluation insert is atomically accompanied by an outbox insert()",
+      "method": "tap"
+    },
+    "AC-034": {
+      "status": "pass",
+      "testName": "@spec:AC-034 AC-034 serialized event is versioned and never exposes a complete CPF()",
+      "method": "tap"
+    },
+    "AC-035": {
+      "status": "pass",
+      "testName": "@spec:AC-035 AC-035 transient publication failure stays pending and is retried with bounded backoff()",
+      "method": "tap"
+    },
+    "AC-036": {
+      "status": "pass",
+      "testName": "@spec:AC-036 AC-036 duplicate event is acknowledged without repeating its effect()",
+      "method": "tap"
+    },
+    "AC-037": {
+      "status": "pass",
+      "testName": "@spec:AC-037 AC-037 normalized correlation follows request response logs and downstream processing()",
+      "method": "tap"
+    },
+    "AC-038": {
+      "status": "pass",
+      "testName": "@spec:AC-038 AC-038 essential bounded-cardinality counters duration and throughput are recorded()",
+      "method": "tap"
+    },
+    "AC-039": {
+      "status": "pass",
+      "testName": "@spec:AC-039 AC-039 readiness goes down for a required dependency while liveness remains independent()",
+      "method": "tap"
+    },
+    "AC-040": {
+      "status": "pass",
+      "testName": "@spec:AC-040 AC-040 technical errors have stable status code and correlation without stack trace()",
+      "method": "tap"
+    },
+    "AC-041": {
+      "status": "pass",
+      "testName": "@spec:AC-041 mostra decisão, valor, regras, motivos e identificador",
+      "method": "tap"
+    },
+    "AC-042": {
+      "status": "pass",
+      "testName": "@spec:AC-042 reutiliza exatamente os filtros na consulta e no PDF",
+      "method": "tap"
+    },
+    "AC-043": {
+      "status": "pass",
+      "testName": "@spec:AC-043 apresenta erro compreensível sem vazar detalhes internos",
+      "method": "tap"
+    },
+    "AC-044": {
+      "status": "pass",
+      "testName": "@spec:AC-044 docker compose starts the application, PostgreSQL, identity provider and broker with documented variables",
+      "method": "tap"
+    },
+    "AC-045": {
+      "status": "pass",
+      "testName": "@spec:AC-045 pipeline blocks an invalid change before the image build",
+      "method": "tap"
+    },
+    "AC-046": {
+      "status": "pass",
+      "testName": "AC-046 @spec:AC-046 configura 10.000 avaliações/minuto com p99 e erros técnicos dentro do objetivo",
+      "method": "tap"
+    },
+    "AC-047": {
+      "status": "pass",
+      "testName": "@spec:AC-047 AC-047 documentation supports execution demonstration architecture and technical defense()",
+      "method": "tap"
+    }
+  },
   "principles": {}
 }
