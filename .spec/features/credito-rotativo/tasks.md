@@ -77,7 +77,7 @@
 - Arquivos: performance/k6/credit-evaluation.js, performance/README.md, src/test/resources/performance/valid-credit-evaluation.json
 - Notas: ambiente, warm-up, duração, concorrência, taxa de erro, throughput e percentis reproduzíveis.
 
-## T-016 — Consolidar README, ADRs e arquitetura cloud [pendente]
+## T-016 — Consolidar README, ADRs e arquitetura cloud [em-andamento]
 - Refs: US-012, AC-047
 - Arquivos: README.md, docs/architecture.md, docs/adrs/001-modular-monolith.md, docs/adrs/002-postgresql.md, docs/adrs/003-outbox-messaging.md, docs/adrs/004-pdf-library.md, docs/adrs/005-ecs-vs-eks.md, docs/adrs/006-aurora-vs-dynamodb.md, docs/ai-usage.md
 - Notas: explicar execução, decisões, limitações, evolução, segurança, operação e uso de IA.

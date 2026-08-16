@@ -6,6 +6,7 @@ import kotlin.io.path.extension
 import kotlin.io.path.readText
 import kotlin.test.Test
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class SpecificationContractTest {
     private val projectRoot: Path = Path.of("").toAbsolutePath()
@@ -32,6 +33,27 @@ class SpecificationContractTest {
     fun `P-004 tests use PostgreSQL instead of H2`() {
         val build = projectRoot.resolve("build.gradle.kts").readText()
         assertFalse(build.contains("com.h2database", ignoreCase = true), "H2 must not be a project dependency")
+    }
+
+    @Test
+    // @spec:AC-047
+    fun `AC-047 documentation supports execution demonstration architecture and technical defense`() {
+        val readme = projectRoot.resolve("README.md").readText()
+        val requiredCommands = listOf("docker compose up --build", "gradlew.bat test", "gradlew.bat detekt", "node --test")
+        val requiredDocuments = listOf(
+            "docs/architecture.md",
+            "docs/ai-usage.md",
+            "docs/adrs/001-modular-monolith.md",
+            "docs/adrs/002-postgresql.md",
+            "docs/adrs/003-outbox-messaging.md",
+            "docs/adrs/004-pdf-library.md",
+            "docs/adrs/005-ecs-vs-eks.md",
+            "docs/adrs/006-aurora-vs-dynamodb.md",
+        )
+
+        assertTrue(requiredCommands.all(readme::contains), "README must contain reproducible execution and test commands")
+        assertTrue(requiredDocuments.all { Files.isRegularFile(projectRoot.resolve(it)) }, "Architecture, ADRs and AI usage must exist")
+        assertTrue(readme.contains("Limitações") && readme.contains("Autenticação") && readme.contains("AWS"))
     }
 
     private fun sourceFiles(): Sequence<Path> =
