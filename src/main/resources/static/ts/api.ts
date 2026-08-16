@@ -1,5 +1,9 @@
 export const API_BASE = "/api/v1/credit-evaluations";
 
+let csrfToken = null;
+
+export function setCsrfToken(token) { csrfToken = typeof token === "string" && token ? token : null; }
+
 export function userMessage(error) {
   const status = Number(error?.status);
   if (status === 400) return "Revise os dados informados e tente novamente.";
@@ -14,7 +18,9 @@ export function correlationId(error) {
 }
 
 export async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, { headers: { Accept: "application/json", ...options.headers }, ...options });
+  const headers = { Accept: "application/json", ...options.headers };
+  if (csrfToken && !["GET", "HEAD", "OPTIONS"].includes((options.method || "GET").toUpperCase())) headers["X-XSRF-TOKEN"] = csrfToken;
+  const response = await fetch(`${API_BASE}${path}`, { credentials: "same-origin", ...options, headers });
   if (response.ok) return response;
   let error = { status: response.status };
   try { error = { ...error, ...await response.json() }; } catch { /* The message remains generic. */ }

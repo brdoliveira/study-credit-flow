@@ -9,6 +9,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/credit-rotativo
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/credit-rotativo
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - "${APP_PORT:-8080}:8080"
@@ -51,6 +52,8 @@ services:
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       CREDIT_DEMO_PASSWORD: ${CREDIT_DEMO_PASSWORD}
       KC_HEALTH_ENABLED: "true"
+      KC_HOSTNAME: http://localhost:${KEYCLOAK_PORT:-8180}
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
     ports:
       - "${KEYCLOAK_PORT:-8180}:8080"
     volumes:
