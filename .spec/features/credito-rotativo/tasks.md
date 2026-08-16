@@ -2,17 +2,17 @@
 
 > feature: credito-rotativo
 
-## T-001 — Preparar projeto Kotlin e testes de especificação [em-andamento]
+## T-001 — Preparar projeto Kotlin e testes de especificação [concluida]
 - Refs: US-012, AC-045, AC-047
 - Arquivos: settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt
 - Notas: configurar Java 21, Kotlin, Spring Boot, lint/análise estática e comando de teste usado pelo motor.
 
-## T-002 — Implementar domínio e motor extensível de regras [em-andamento]
+## T-002 — Implementar domínio e motor extensível de regras [concluida]
 - Refs: US-002, AC-004, AC-005, AC-006, AC-007, AC-008, AC-009, AC-010, AC-011
 - Arquivos: src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt, src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt, src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt, src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt, src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt, src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt, src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt
 - Notas: todas as regras executam; severidades BLOCKING e WARNING.
 
-## T-003 — Implementar cálculo do crédito [em-andamento]
+## T-003 — Implementar cálculo do crédito [concluida]
 - Refs: US-003, AC-012, AC-013, AC-014
 - Arquivos: src/main/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculatorTest.kt
 - Notas: depende da confirmação das premissas de fórmula e arredondamento.
@@ -47,7 +47,7 @@
 - Arquivos: src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/security/ScopeAuthoritiesConverter.kt, src/main/resources/application-security.yml, src/test/kotlin/com/itau/credit/infrastructure/security/ApiSecurityTest.kt, docker/keycloak/realm-export.json
 - Notas: Resource Server JWT; provedor local depende da confirmação de ASM-006.
 
-## T-010 — Implementar relatório PDF [em-andamento]
+## T-010 — Implementar relatório PDF [concluida]
 - Refs: US-007, AC-025, AC-026, AC-027, AC-028
 - Arquivos: src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationReportController.kt, src/test/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportTest.kt
 - Notas: registrar a biblioteca escolhida em ADR antes da implementação.
@@ -57,7 +57,7 @@
 - Arquivos: src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/css/app.css, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/evaluation.ts, src/main/resources/static/ts/report.ts, src/test/kotlin/com/itau/credit/infrastructure/web/FrontendSmokeTest.kt
 - Notas: frontend fino, sem lógica de decisão; reutilizar filtros no PDF.
 
-## T-012 — Implementar observabilidade e resiliência [em-andamento]
+## T-012 — Implementar observabilidade e resiliência [concluida]
 - Refs: US-010, AC-037, AC-038, AC-039, AC-040
 - Arquivos: src/main/kotlin/com/itau/credit/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/com/itau/credit/infrastructure/observability/ObservabilityTest.kt
 - Notas: controlar cardinalidade e não registrar payload financeiro completo.
@@ -77,7 +77,7 @@
 - Arquivos: performance/k6/credit-evaluation.js, performance/README.md, src/test/resources/performance/valid-credit-evaluation.json
 - Notas: ambiente, warm-up, duração, concorrência, taxa de erro, throughput e percentis reproduzíveis.
 
-## T-016 — Consolidar README, ADRs e arquitetura cloud [em-andamento]
+## T-016 — Consolidar README, ADRs e arquitetura cloud [concluida]
 - Refs: US-012, AC-047
 - Arquivos: README.md, docs/architecture.md, docs/adrs/001-modular-monolith.md, docs/adrs/002-postgresql.md, docs/adrs/003-outbox-messaging.md, docs/adrs/004-pdf-library.md, docs/adrs/005-ecs-vs-eks.md, docs/adrs/006-aurora-vs-dynamodb.md, docs/ai-usage.md
 - Notas: explicar execução, decisões, limitações, evolução, segurança, operação e uso de IA.
