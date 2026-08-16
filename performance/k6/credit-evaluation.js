@@ -19,6 +19,7 @@ const technicalErrors = new Rate('technical_error_rate');
 const completedEvaluations = new Counter('credit_evaluations_completed');
 
 export const options = {
+  summaryTrendStats: ['avg', 'min', 'med', 'max', 'p(90)', 'p(95)', 'p(99)'],
   discardResponseBodies: true,
   scenarios: {
     warm_up: {
@@ -36,8 +37,8 @@ export const options = {
       rate: 10000,
       timeUnit: '1m',
       duration: '5m',
-      preAllocatedVUs: 250,
-      maxVUs: 1000,
+      preAllocatedVUs: 500,
+      maxVUs: 2000,
       tags: { phase: 'nominal' },
     },
   },

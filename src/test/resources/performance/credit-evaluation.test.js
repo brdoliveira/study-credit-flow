@@ -20,6 +20,9 @@ test('AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.00
   assert.match(scenario, /rate:\s*10000/);
   assert.match(scenario, /timeUnit:\s*'1m'/);
   assert.match(scenario, /duration:\s*'5m'/);
+  assert.match(scenario, /summaryTrendStats:[\s\S]*?'p\(99\)'/);
+  assert.match(scenario, /preAllocatedVUs:\s*500/);
+  assert.match(scenario, /maxVUs:\s*2000/);
   assert.match(scenario, /'http_req_duration\{scenario:nominal\}':\s*\['p\(99\)<1000'\]/);
   assert.match(scenario, /'technical_error_rate\{scenario:nominal\}':\s*\['rate<0\.01'\]/);
   assert.match(scenario, /'iterations\{scenario:nominal\}':\s*\['count>=50000'\]/);
@@ -45,7 +48,7 @@ test('AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.00
 test('AC-069 @spec:AC-069 registra evidência rastreável e sanitizada a partir do resumo do k6', () => {
   const summary = readFileSync(summaryPath, 'utf8');
   const runner = readFileSync(runnerPath, 'utf8');
-  const placeholder = JSON.parse(readFileSync(evidencePath, 'utf8'));
+  const evidence = JSON.parse(readFileSync(evidencePath, 'utf8'));
 
   for (const field of ['commit', 'executedAtUtc', 'environment', 'resources', 'nominalRatePerMinute', 'p99Milliseconds', 'technicalErrorRate', 'droppedIterations', 'thresholds']) {
     assert.match(summary, new RegExp(field));
@@ -54,8 +57,13 @@ test('AC-069 @spec:AC-069 registra evidência rastreável e sanitizada a partir 
   assert.match(runner, /LOAD_TEST_EXECUTED_AT_UTC/);
   assert.match(runner, /Remove-Item Env:AUTHORIZATION/);
   assert.match(runner, /if \(\$LASTEXITCODE -ne 0\)/);
-  assert.equal(placeholder.executionStatus, 'not-executed');
-  assert.doesNotMatch(JSON.stringify(placeholder), /\b\d{11}\b|Bearer\s+|token["']\s*:/i);
+  assert.ok(['not-executed', 'completed'].includes(evidence.executionStatus));
+  if (evidence.executionStatus === 'completed') {
+    for (const field of ['commit', 'executedAtUtc', 'environment', 'resources', 'configuration', 'observed', 'thresholds', 'passed']) {
+      assert.ok(field in evidence, `missing evidence field ${field}`);
+    }
+  }
+  assert.doesNotMatch(JSON.stringify(evidence), /\b\d{11}\b|Bearer\s+|token["']\s*:/i);
 });
 
 test('AC-070 @spec:AC-070 contabiliza apenas transporte e respostas 5xx como erro técnico', () => {
