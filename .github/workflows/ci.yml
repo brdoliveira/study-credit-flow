@@ -40,7 +40,7 @@ jobs:
         run: ./gradlew --no-daemon detekt --config config/detekt/detekt.yml
 
       - name: Run specification contract tests
-        run: node --test
+        run: node --test "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"
 
       - name: Audit specification
         run: npx --yes onp-spec audit --ci

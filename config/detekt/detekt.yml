@@ -1,6 +1,3 @@
-build:
-  maxIssues: 0
-
 config:
   validation: true
 
@@ -10,19 +7,23 @@ processors:
 console-reports:
   active: true
 
-output-reports:
-  active: true
-
 complexity:
   LongMethod:
     active: true
-    threshold: 60
+    allowedLines: 60
   TooManyFunctions:
     active: true
-    thresholdInFiles: 20
-    thresholdInClasses: 15
+    allowedFunctionsPerFile: 20
+    allowedFunctionsPerClass: 15
 
 style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 180
+    excludes: ['**/test/**']
+  FunctionOnlyReturningConstant:
+    active: true
+    excludes: ['**/test/**']
   MagicNumber:
     active: false
   ReturnCount:

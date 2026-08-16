@@ -13,7 +13,7 @@ test('@spec:AC-045 pipeline blocks an invalid change before the image build', ()
     './gradlew --no-daemon clean compileKotlin',
     './gradlew --no-daemon test',
     './gradlew --no-daemon detekt --config config/detekt/detekt.yml',
-    'node --test',
+    'node --test "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"',
     'npx --yes onp-spec audit --ci',
   ];
   const imageBuild = 'docker build --tag credito-rotativo:${{ github.sha }} .';

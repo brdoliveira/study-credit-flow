@@ -1,7 +1,7 @@
 CREATE TABLE credit_idempotency (
     idempotency_key UUID PRIMARY KEY,
     request_hash CHAR(64) NOT NULL,
-    response_body JSONB,
+    response_body TEXT,
     completed_at TIMESTAMPTZ,
     expires_at TIMESTAMPTZ NOT NULL,
     CONSTRAINT ck_credit_idempotency_completion

@@ -7,9 +7,9 @@ CREATE TABLE credit_evaluation (
     rule_results JSONB NOT NULL,
     evaluated_at TIMESTAMPTZ NOT NULL,
     duration_millis BIGINT NOT NULL,
-    correlation_id UUID NOT NULL,
+    correlation_id VARCHAR(128) NOT NULL,
     CONSTRAINT ck_credit_evaluation_cpf_masked
-        CHECK (cpf_masked ~ '^\\*\\*\\*\\.\\*\\*\\*\\.\\*\\*\\*-[0-9]{2}$'),
+        CHECK (cpf_masked ~ '^\*\*\*\.\*\*\*\.\*\*\*-[0-9]{2}$'),
     CONSTRAINT ck_credit_evaluation_approved_amount
         CHECK (approved_amount >= 0),
     CONSTRAINT ck_credit_evaluation_duration

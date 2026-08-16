@@ -20,7 +20,7 @@ test("@spec:AC-044 docker compose starts the application, PostgreSQL, identity p
   assert.match(compose, /SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092/);
   assert.match(dockerfile, /actuator\/health\/readiness|ENTRYPOINT/, "application image must provide its runnable entrypoint");
 
-  for (const variable of ["POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "KEYCLOAK_ADMIN", "KEYCLOAK_ADMIN_PASSWORD"]) {
+  for (const variable of ["POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "KEYCLOAK_ADMIN", "KEYCLOAK_ADMIN_PASSWORD", "CREDIT_DEMO_PASSWORD"]) {
     assert.match(envExample, new RegExp(`^${variable}=.+$`, "m"), `${variable} must be documented`);
   }
   assert.doesNotMatch(compose, /(?:PASSWORD|password):\s*(?!\$\{)[^\s]+/, "compose must not embed a password");

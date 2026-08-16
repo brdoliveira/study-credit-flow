@@ -6,12 +6,16 @@ import com.itau.credit.infrastructure.web.CreditEvaluationRequest
 import com.itau.credit.infrastructure.web.CreditEvaluationResponse
 import com.itau.credit.infrastructure.web.RuleResponse
 import org.junit.jupiter.api.Test
-import org.mockito.ArgumentMatchers.any
-import org.mockito.BDDMockito.given
+import org.mockito.Mockito.doThrow
+import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Bean
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.JwtDecoder
+import org.springframework.security.oauth2.jwt.BadJwtException
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.context.bean.override.mockito.MockitoBean
@@ -25,15 +29,17 @@ import java.time.OffsetDateTime
 import java.util.UUID
 
 @WebMvcTest(controllers = [CreditEvaluationController::class])
-@Import(SecurityConfiguration::class, SecurityProbeController::class)
-class ApiSecurityTest(
+@Import(SecurityConfiguration::class, SecurityProbeController::class, SecurityTestServices::class)
+class ApiSecurityTest @Autowired constructor(
     private val mvc: MockMvc
 ) {
     @MockitoBean
-    private lateinit var service: CreditEvaluationApiService
-
-    @MockitoBean
     private lateinit var jwtDecoder: JwtDecoder
+
+    @BeforeEach
+    fun rejectInvalidToken() {
+        doThrow(BadJwtException("invalid token")).`when`(jwtDecoder).decode("invalid-token")
+    }
 
     @Test
     // @spec:AC-029
@@ -55,9 +61,6 @@ class ApiSecurityTest(
     @Test
     // @spec:AC-031
     fun `AC-031 separates evaluation read write report and administration by scope`() {
-        given(service.evaluate(any(CreditEvaluationRequest::class.java), any(String::class.java), any(String::class.java))).willReturn(response())
-        given(service.findById(any(UUID::class.java), any(String::class.java))).willReturn(response())
-
         mvc.perform(post("/api/v1/credit-evaluations").header("Idempotency-Key", UUID.randomUUID().toString()).contentType(MediaType.APPLICATION_JSON).content(validRequest()).with(token("credit:write")))
             .andExpect(status().isCreated)
         mvc.perform(get("/api/v1/credit-evaluations/${UUID.randomUUID()}").with(token("credit:read")))
@@ -74,12 +77,11 @@ class ApiSecurityTest(
 
     private fun validRequest() = """{"name":"Ana","cpf":"52998224725","creditScore":720,"currentInvoiceAmount":1800.00,"totalLimit":5000.00,"availableLimit":4000.00,"latePayments":0,"monthlySpending":[1500.00,1700.00,1800.00]}"""
 
-    private fun response() = CreditEvaluationResponse(UUID.randomUUID(), "Ana", "***.982.247-**", "APPROVED", BigDecimal("2800.00"), "v1", listOf(RuleResponse("MINIMUM_SCORE", "Minimum score", "PASSED", "Score meets the threshold")), OffsetDateTime.parse("2026-08-15T10:00:00Z"), 21, "trace-1")
 }
 
 @WebMvcTest(controllers = [SecurityProbeController::class], properties = ["app.security.require-https=true"])
 @Import(SecurityConfiguration::class, SecurityProbeController::class)
-class ProductionTransportSecurityTest(
+class ProductionTransportSecurityTest @Autowired constructor(
     private val mvc: MockMvc
 ) {
     @MockitoBean
@@ -102,4 +104,30 @@ class SecurityProbeController {
 
     @GetMapping("/api/v1/admin/ping")
     fun admin(): Map<String, String> = mapOf("status" to "ok")
+}
+
+@TestConfiguration(proxyBeanMethods = false)
+class SecurityTestServices {
+    @Bean
+    fun creditEvaluationApiService(): CreditEvaluationApiService = object : CreditEvaluationApiService {
+        override fun evaluate(request: CreditEvaluationRequest, idempotencyKey: String, correlationId: String) = response()
+
+        override fun findById(evaluationId: UUID, correlationId: String) = response(evaluationId)
+
+        override fun list(criteria: com.itau.credit.infrastructure.web.CreditEvaluationSearchCriteria, correlationId: String) =
+            com.itau.credit.infrastructure.web.CreditEvaluationPageResponse(emptyList(), 0, criteria.page, criteria.size, criteria.sort)
+
+        private fun response(evaluationId: UUID = UUID.randomUUID()) = CreditEvaluationResponse(
+            evaluationId,
+            "Ana",
+            "***.***.***-25",
+            "APPROVED",
+            BigDecimal("2800.00"),
+            "v1",
+            listOf(RuleResponse("MINIMUM_SCORE", "Minimum score", "PASSED", "Score meets the threshold")),
+            OffsetDateTime.parse("2026-08-15T10:00:00Z"),
+            21,
+            "trace-1",
+        )
+    }
 }

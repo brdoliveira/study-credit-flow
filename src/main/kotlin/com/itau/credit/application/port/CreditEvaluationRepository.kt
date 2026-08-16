@@ -26,7 +26,7 @@ data class CreditEvaluationSnapshot(
     val ruleResults: String,
     val evaluatedAt: Instant,
     val durationMillis: Long,
-    val correlationId: UUID,
+    val correlationId: String,
 )
 
 data class CreditEvaluationFilter(
@@ -49,6 +49,10 @@ data class CreditEvaluationPageRequest(
 enum class CreditEvaluationSort {
     EVALUATED_AT_ASC,
     EVALUATED_AT_DESC,
+    DECISION_ASC,
+    DECISION_DESC,
+    APPROVED_AMOUNT_ASC,
+    APPROVED_AMOUNT_DESC,
 }
 
 data class CreditEvaluationPage(

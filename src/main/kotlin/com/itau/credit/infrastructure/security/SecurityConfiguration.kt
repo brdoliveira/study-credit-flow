@@ -37,7 +37,7 @@ class SecurityConfiguration(
             .oauth2ResourceServer { it.jwt { jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter) } }
 
         if (requireHttps) {
-            http.requiresChannel { it.anyRequest().requiresSecure() }
+            http.redirectToHttps { }
         }
 
         return http.build()

@@ -36,7 +36,7 @@ class CreditEvaluationReportController(
         try {
             filter.validate(params.keys)
         } catch (exception: IllegalArgumentException) {
-            throw InvalidFilterException(exception.message ?: "Invalid report filter")
+            throw InvalidFilterException(exception.message ?: "Invalid report filter", exception)
         }
         val generatedAt = clock.instant()
         val bytes = service.generate(filter, generatedAt, correlationId.orEmpty())

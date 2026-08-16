@@ -5,7 +5,6 @@ import com.itau.credit.infrastructure.health.RequiredDependencyProbe
 import com.itau.credit.infrastructure.web.GlobalExceptionHandler
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.slf4j.MDC
-import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import java.time.Duration
@@ -73,8 +72,8 @@ class ObservabilityTest {
         }
         val handler = GlobalExceptionHandler()
 
-        val internal = handler.unexpected(IllegalStateException("secret details"), request)
-        val unavailable = handler.unavailable(DataAccessResourceFailureException("database host"), request)
+        val internal = handler.unexpected(request)
+        val unavailable = handler.unavailable(request)
 
         assertEquals(500, internal.statusCode.value())
         assertEquals("INTERNAL_ERROR", internal.body!!.code)

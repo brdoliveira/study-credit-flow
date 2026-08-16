@@ -57,7 +57,7 @@ Com PostgreSQL e as demais dependências disponíveis nos endereços configurado
 .\gradlew.bat bootRun --no-daemon
 .\gradlew.bat test --no-daemon
 .\gradlew.bat detekt --no-daemon
-node --test
+node --test "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"
 ```
 
 Para verificar a especificação localmente, com a skill `onp-spec-driven` instalada:
@@ -81,6 +81,15 @@ A API é um OAuth 2.0 Resource Server. O ambiente local importa o realm `credit-
 | `credit:admin` | administração operacional |
 
 Tokens ausentes ou inválidos retornam `401`; tokens válidos sem o escopo necessário retornam `403`. O perfil `prod` exige HTTPS e considera os cabeçalhos do proxy confiável. Nunca grave JWTs, senhas ou CPFs completos em exemplos, logs ou commits.
+
+Para obter um token local de escrita, use a senha definida em `CREDIT_DEMO_PASSWORD` no seu `.env`:
+
+```powershell
+$token = Invoke-RestMethod -Method Post -Uri 'http://localhost:8180/realms/credit-rotativo/protocol/openid-connect/token' -ContentType 'application/x-www-form-urlencoded' -Body @{ client_id = 'credit-local'; grant_type = 'password'; username = 'credit-writer'; password = $env:CREDIT_DEMO_PASSWORD }
+$headers = @{ Authorization = "Bearer $($token.access_token)"; 'Idempotency-Key' = [guid]::NewGuid().ToString() }
+```
+
+O password grant existe somente para facilitar a demonstração local. A evolução corporativa usa Authorization Code com PKCE para canais interativos ou client credentials/workload identity entre serviços; senhas de usuário não transitam pela aplicação.
 
 ## Demonstrar a solução
 

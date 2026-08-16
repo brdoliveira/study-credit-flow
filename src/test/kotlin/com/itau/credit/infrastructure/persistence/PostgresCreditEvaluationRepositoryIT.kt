@@ -114,7 +114,7 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
         ruleResults: String = "[]",
         evaluatedAt: Instant = Instant.parse("2026-08-01T10:00:00Z"),
     ) = CreditEvaluationSnapshot(
-        UUID.randomUUID(), maskedCpf, decision, BigDecimal("1200.50"), "2026.08", ruleResults, evaluatedAt, 42, UUID.randomUUID(),
+        UUID.randomUUID(), maskedCpf, decision, BigDecimal("1200.50"), "2026.08", ruleResults, evaluatedAt, 42, UUID.randomUUID().toString(),
     )
 
     private companion object {
@@ -134,4 +134,5 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
+@Suppress("unused")
 private class PersistenceTestApplication

@@ -41,10 +41,10 @@ class CreditEvaluationEntity(
     var durationMillis: Long,
 
     @Column(name = "correlation_id", nullable = false, updatable = false)
-    var correlationId: UUID,
+    var correlationId: String,
 ) {
     constructor() : this(
-        UUID(0, 0), "***.***.***-00", "", BigDecimal.ZERO, "", "[]", Instant.EPOCH, 0, UUID(0, 0),
+        UUID(0, 0), "***.***.***-00", "", BigDecimal.ZERO, "", "[]", Instant.EPOCH, 0, "00000000-0000-0000-0000-000000000000",
     )
 
     fun toSnapshot() = CreditEvaluationSnapshot(

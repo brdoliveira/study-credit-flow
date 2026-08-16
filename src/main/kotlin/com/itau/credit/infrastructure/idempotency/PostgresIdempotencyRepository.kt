@@ -40,7 +40,7 @@ class PostgresIdempotencyRepository(
 
             @Suppress("UNCHECKED_CAST")
             val row = entityManager.createNativeQuery(
-                "select request_hash, response_body::text from credit_idempotency where idempotency_key = :key for update",
+                "select request_hash, response_body from credit_idempotency where idempotency_key = :key for update",
             ).setParameter("key", key).singleResult as Array<Any?>
 
             if (row[0] != requestHash) throw IdempotencyKeyConflictException()
@@ -49,7 +49,7 @@ class PostgresIdempotencyRepository(
             val response = operation()
             entityManager.createNativeQuery(
                 """update credit_idempotency
-                   set response_body = cast(:response as jsonb), completed_at = :completedAt
+                   set response_body = :response, completed_at = :completedAt
                    where idempotency_key = :key""",
             )
                 .setParameter("response", response)

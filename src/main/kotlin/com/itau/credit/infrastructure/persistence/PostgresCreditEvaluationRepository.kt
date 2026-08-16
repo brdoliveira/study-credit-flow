@@ -33,13 +33,14 @@ class PostgresCreditEvaluationRepository(
         val root = criteriaQuery.from(CreditEvaluationEntity::class.java)
         val predicates = predicates(filter, root, criteriaBuilder)
         criteriaQuery.where(*predicates.toTypedArray())
-        criteriaQuery.orderBy(
-            if (page.sort == CreditEvaluationSort.EVALUATED_AT_ASC) {
-                criteriaBuilder.asc(root.get<java.time.Instant>("evaluatedAt"))
-            } else {
-                criteriaBuilder.desc(root.get<java.time.Instant>("evaluatedAt"))
-            },
-        )
+        criteriaQuery.orderBy(when (page.sort) {
+            CreditEvaluationSort.EVALUATED_AT_ASC -> criteriaBuilder.asc(root.get<java.time.Instant>("evaluatedAt"))
+            CreditEvaluationSort.EVALUATED_AT_DESC -> criteriaBuilder.desc(root.get<java.time.Instant>("evaluatedAt"))
+            CreditEvaluationSort.DECISION_ASC -> criteriaBuilder.asc(root.get<String>("decision"))
+            CreditEvaluationSort.DECISION_DESC -> criteriaBuilder.desc(root.get<String>("decision"))
+            CreditEvaluationSort.APPROVED_AMOUNT_ASC -> criteriaBuilder.asc(root.get<java.math.BigDecimal>("approvedAmount"))
+            CreditEvaluationSort.APPROVED_AMOUNT_DESC -> criteriaBuilder.desc(root.get<java.math.BigDecimal>("approvedAmount"))
+        })
 
         val items = entityManager.createQuery(criteriaQuery)
             .setFirstResult(page.page * page.size)

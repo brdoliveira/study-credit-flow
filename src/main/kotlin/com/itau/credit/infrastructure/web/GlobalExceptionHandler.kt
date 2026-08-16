@@ -3,6 +3,9 @@ package com.itau.credit.infrastructure.web
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
 import com.itau.credit.infrastructure.observability.CorrelationIdFilter
+import com.itau.credit.application.port.IdempotencyKeyConflictException
+import com.itau.credit.application.port.InvalidIdempotencyKeyException
+import com.itau.credit.application.port.MissingIdempotencyKeyException
 import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,16 +31,24 @@ class GlobalExceptionHandler {
     fun invalidFilter(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> =
         error(HttpStatus.BAD_REQUEST, "INVALID_FILTER", exception.message ?: "Invalid request filter", request)
 
+    @ExceptionHandler(MissingIdempotencyKeyException::class, InvalidIdempotencyKeyException::class)
+    fun invalidIdempotencyKey(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> =
+        error(HttpStatus.BAD_REQUEST, "INVALID_IDEMPOTENCY_KEY", exception.message ?: "Invalid idempotency key", request)
+
+    @ExceptionHandler(IdempotencyKeyConflictException::class)
+    fun idempotencyConflict(exception: IdempotencyKeyConflictException, request: HttpServletRequest): ResponseEntity<ApiError> =
+        error(HttpStatus.CONFLICT, "IDEMPOTENCY_KEY_CONFLICT", exception.message ?: "Idempotency key conflict", request)
+
     @ExceptionHandler(EvaluationNotFoundException::class)
-    fun notFound(exception: EvaluationNotFoundException, request: HttpServletRequest): ResponseEntity<ApiError> =
+    fun notFound(request: HttpServletRequest): ResponseEntity<ApiError> =
         error(HttpStatus.NOT_FOUND, "EVALUATION_NOT_FOUND", "Credit evaluation was not found", request)
 
     @ExceptionHandler(DataAccessResourceFailureException::class)
-    fun unavailable(exception: DataAccessResourceFailureException, request: HttpServletRequest): ResponseEntity<ApiError> =
+    fun unavailable(request: HttpServletRequest): ResponseEntity<ApiError> =
         error(HttpStatus.SERVICE_UNAVAILABLE, "DEPENDENCY_UNAVAILABLE", "A required dependency is temporarily unavailable", request)
 
     @ExceptionHandler(Exception::class)
-    fun unexpected(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> =
+    fun unexpected(request: HttpServletRequest): ResponseEntity<ApiError> =
         error(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "An unexpected error occurred", request)
 
     private fun error(

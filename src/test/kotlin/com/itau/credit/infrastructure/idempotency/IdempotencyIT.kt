@@ -117,4 +117,5 @@ class IdempotencyIT @Autowired constructor(
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
+@Suppress("unused")
 private class IdempotencyTestApplication

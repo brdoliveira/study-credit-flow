@@ -76,15 +76,19 @@ data class CreditEvaluationSearchCriteria(
     fun validate(parameterNames: Set<String>) {
         val allowed = setOf("decision", "from", "to", "page", "size", "sort", "direction")
         val unknown = parameterNames - allowed
-        if (unknown.isNotEmpty()) throw InvalidFilterException("Unknown filter: ${unknown.sorted().joinToString()}")
-        if (decision != null && decision !in setOf("APPROVED", "REJECTED")) throw InvalidFilterException("decision must be APPROVED or REJECTED")
-        if (from != null && to != null && from.isAfter(to)) throw InvalidFilterException("from must not be after to")
-        if (sort !in setOf("processedAt", "decision", "approvedAmount")) throw InvalidFilterException("Unsupported sort field: $sort")
-        if (direction.uppercase() !in setOf("ASC", "DESC")) throw InvalidFilterException("direction must be ASC or DESC")
+        valid(unknown.isEmpty()) { "Unknown filter: ${unknown.sorted().joinToString()}" }
+        valid(decision == null || decision in setOf("APPROVED", "REJECTED")) { "decision must be APPROVED or REJECTED" }
+        valid(from == null || to == null || !from.isAfter(to)) { "from must not be after to" }
+        valid(sort in setOf("processedAt", "decision", "approvedAmount")) { "Unsupported sort field: $sort" }
+        valid(direction.uppercase() in setOf("ASC", "DESC")) { "direction must be ASC or DESC" }
+    }
+
+    private fun valid(condition: Boolean, message: () -> String) {
+        if (!condition) throw InvalidFilterException(message())
     }
 }
 
 class EvaluationNotFoundException(evaluationId: UUID) : RuntimeException("Credit evaluation $evaluationId was not found")
-class InvalidFilterException(message: String) : RuntimeException(message)
+class InvalidFilterException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
 
 private fun String?.orNewCorrelationId(): String = this?.takeIf { it.isNotBlank() && it.length <= 128 } ?: UUID.randomUUID().toString()

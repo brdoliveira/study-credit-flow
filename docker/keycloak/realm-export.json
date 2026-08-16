@@ -33,22 +33,26 @@
     {
       "username": "credit-writer",
       "enabled": true,
-      "realmRoles": ["credit:write"]
+      "realmRoles": ["credit:write"],
+      "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-reader",
       "enabled": true,
-      "realmRoles": ["credit:read"]
+      "realmRoles": ["credit:read"],
+      "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-reporter",
       "enabled": true,
-      "realmRoles": ["credit:report"]
+      "realmRoles": ["credit:report"],
+      "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     },
     {
       "username": "credit-admin",
       "enabled": true,
-      "realmRoles": ["credit:admin"]
+      "realmRoles": ["credit:admin"],
+      "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
     }
   ]
 }
