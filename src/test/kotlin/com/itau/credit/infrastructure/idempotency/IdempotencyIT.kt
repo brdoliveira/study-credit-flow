@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -39,7 +39,8 @@ class IdempotencyIT @Autowired constructor(
     private val repository = PostgresIdempotencyRepository(entityManager, TransactionTemplate(transactionManager))
 
     @Test
-    fun `@spec:AC-018 missing or malformed idempotency key is rejected before an operation is created`() {
+    // @spec:AC-018
+    fun `AC-018 missing or malformed idempotency key is rejected before an operation is created`() {
         assertThatThrownBy { repository.execute(null, "{}") { "{\"evaluationId\":\"new\"}" } }
             .isInstanceOf(MissingIdempotencyKeyException::class.java)
         assertThatThrownBy { repository.execute("not-a-uuid", "{}") { "{\"evaluationId\":\"new\"}" } }
@@ -47,7 +48,8 @@ class IdempotencyIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-019 identical canonical request replays the original evaluation result`() {
+    // @spec:AC-019
+    fun `AC-019 identical canonical request replays the original evaluation result`() {
         val calls = AtomicInteger()
         val key = UUID.randomUUID().toString()
         val original = repository.execute(key, "{\"score\":720,\"customer\":{\"name\":\"Ana\"}}") {
@@ -62,7 +64,8 @@ class IdempotencyIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-020 divergent reuse is rejected and preserves the original result`() {
+    // @spec:AC-020
+    fun `AC-020 divergent reuse is rejected and preserves the original result`() {
         val key = UUID.randomUUID().toString()
         val original = repository.execute(key, "{\"score\":720}") { "{\"evaluationId\":\"evaluation-1\"}" }
 
@@ -72,7 +75,8 @@ class IdempotencyIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-021 concurrent identical requests persist one evaluation and converge on its result`() {
+    // @spec:AC-021
+    fun `AC-021 concurrent identical requests persist one evaluation and converge on its result`() {
         val calls = AtomicInteger()
         val key = UUID.randomUUID().toString()
         val barrier = CyclicBarrier(2)

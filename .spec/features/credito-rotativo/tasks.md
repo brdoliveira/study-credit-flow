@@ -7,7 +7,7 @@
 - Arquivos: settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt
 - Notas: configurar Java 21, Kotlin, Spring Boot, lint/análise estática e comando de teste usado pelo motor.
 
-## T-002 — Implementar domínio e motor extensível de regras [pendente]
+## T-002 — Implementar domínio e motor extensível de regras [em-andamento]
 - Refs: US-002, AC-004, AC-005, AC-006, AC-007, AC-008, AC-009, AC-010, AC-011
 - Arquivos: src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt, src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt, src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt, src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt, src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt, src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt, src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt
 - Notas: todas as regras executam; severidades BLOCKING e WARNING.

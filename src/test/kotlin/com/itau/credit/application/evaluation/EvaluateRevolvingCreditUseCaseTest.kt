@@ -14,7 +14,8 @@ class EvaluateRevolvingCreditUseCaseTest {
     private val fixedId = UUID.fromString("00000000-0000-0000-0000-000000000001")
 
     @Test
-    fun `@spec:AC-001 creates a single evaluation for a valid command`() {
+    // @spec:AC-001
+    fun `AC-001 creates a single evaluation for a valid command`() {
         val store = RecordingStore()
         val result = useCase(passingRules(), store).execute(validCommand())
 
@@ -24,7 +25,8 @@ class EvaluateRevolvingCreditUseCaseTest {
     }
 
     @Test
-    fun `@spec:AC-003 returns a rejected decision instead of a technical error`() {
+    // @spec:AC-003
+    fun `AC-003 returns a rejected decision instead of a technical error`() {
         val store = RecordingStore()
         var calculatorCalled = false
         val useCase = useCase(
@@ -41,7 +43,8 @@ class EvaluateRevolvingCreditUseCaseTest {
     }
 
     @Test
-    fun `@spec:AC-015 returns all decision traceability fields with a masked CPF`() {
+    // @spec:AC-015
+    fun `AC-015 returns all decision traceability fields with a masked CPF`() {
         val result = useCase(passingRules(), RecordingStore()).execute(validCommand())
 
         assertEquals(fixedId, result.evaluationId)
@@ -56,7 +59,8 @@ class EvaluateRevolvingCreditUseCaseTest {
     }
 
     @Test
-    fun `@spec:AC-016 persists an immutable photograph of the completed decision`() {
+    // @spec:AC-016
+    fun `AC-016 persists an immutable photograph of the completed decision`() {
         val store = RecordingStore()
         val rules = mutableListOf(passingRule())
         val result = useCase(RuleEvaluation("rules-v1", rules), store).execute(validCommand())

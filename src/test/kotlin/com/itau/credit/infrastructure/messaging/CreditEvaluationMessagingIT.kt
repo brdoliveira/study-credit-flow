@@ -1,7 +1,6 @@
 package com.itau.credit.infrastructure.messaging
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import tools.jackson.databind.ObjectMapper
 import com.itau.credit.application.event.CreditEvaluationCompleted
 import com.itau.credit.infrastructure.outbox.OutboxPublisher
 import com.itau.credit.infrastructure.outbox.OutboxStore
@@ -14,13 +13,15 @@ import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 import java.util.UUID
+import kotlin.test.assertFalse
 
 class CreditEvaluationMessagingIT {
     private val now = Instant.parse("2026-08-15T10:00:00Z")
     private val clock = Clock.fixed(now, ZoneOffset.UTC)
 
     @Test
-    fun `@spec:AC-033 evaluation insert is atomically accompanied by an outbox insert`() {
+    // @spec:AC-033
+    fun `AC-033 evaluation insert is atomically accompanied by an outbox insert`() {
         val migration = javaClass.getResource("/db/migration/V3__credit_outbox.sql")!!.readText()
 
         assertThat(migration).contains("AFTER INSERT ON credit_evaluation", "INSERT INTO credit_outbox")
@@ -28,16 +29,19 @@ class CreditEvaluationMessagingIT {
     }
 
     @Test
-    fun `@spec:AC-034 serialized event is versioned and never exposes a complete CPF`() {
+    // @spec:AC-034
+    fun `AC-034 serialized event is versioned and never exposes a complete CPF`() {
         val event = event()
-        val json = ObjectMapper().registerKotlinModule().writeValueAsString(event)
+        val json = ObjectMapper().writeValueAsString(event)
 
         assertThat(json).contains("eventId", "eventVersion", "evaluationId", "decision", "approvedAmount", "ruleVersion", "evaluatedAt", "correlationId")
-        assertThat(json).doesNotContain("12345678909", "cpf", "CPF")
+        assertFalse(json.contains("12345678909"))
+        assertFalse(json.contains("cpf", ignoreCase = true))
     }
 
     @Test
-    fun `@spec:AC-035 transient publication failure stays pending and is retried with bounded backoff`() {
+    // @spec:AC-035
+    fun `AC-035 transient publication failure stays pending and is retried with bounded backoff`() {
         val store = InMemoryOutboxStore(PendingOutboxEvent(event().eventId, event(), attempts = 0))
         var calls = 0
         val producer = CreditEvaluationEventProducer(
@@ -45,7 +49,7 @@ class CreditEvaluationMessagingIT {
                 calls++
                 if (calls == 1) throw TransientBrokerException("broker unavailable")
             },
-            objectMapper = ObjectMapper().registerKotlinModule(),
+            objectMapper = ObjectMapper(),
         )
         val publisher = OutboxPublisher(store, producer, clock, Duration.ofSeconds(1), Duration.ofSeconds(2))
 
@@ -59,7 +63,8 @@ class CreditEvaluationMessagingIT {
     }
 
     @Test
-    fun `@spec:AC-036 duplicate event is acknowledged without repeating its effect`() {
+    // @spec:AC-036
+    fun `AC-036 duplicate event is acknowledged without repeating its effect`() {
         val seen = mutableSetOf<UUID>()
         var effects = 0
         val consumer = IdempotentCreditEvaluationConsumer(

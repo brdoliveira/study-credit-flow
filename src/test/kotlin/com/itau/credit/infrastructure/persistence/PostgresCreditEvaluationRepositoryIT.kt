@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -35,7 +35,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     private val cpfProtector = CpfProtector()
 
     @Test
-    fun `@spec:AC-015 persisted result preserves every traceability field`() {
+    // @spec:AC-015
+    fun `AC-015 persisted result preserves every traceability field`() {
         val snapshot = snapshot(cpfProtector.mask("12345678909"))
         repository.save(snapshot)
         entityManager.flush()
@@ -45,7 +46,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-016 decision snapshot remains queryable after persistence`() {
+    // @spec:AC-016
+    fun `AC-016 decision snapshot remains queryable after persistence`() {
         val snapshot = snapshot(cpfProtector.mask("12345678909"), ruleResults = "[{\"code\":\"MINIMUM_SCORE\",\"status\":\"PASSED\"}]")
         repository.save(snapshot)
         entityManager.flush()
@@ -59,7 +61,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-017 full CPF is neither stored nor returned`() {
+    // @spec:AC-017
+    fun `AC-017 full CPF is neither stored nor returned`() {
         val fullCpf = "12345678909"
         repository.save(snapshot(cpfProtector.mask(fullCpf)))
         entityManager.flush()
@@ -70,7 +73,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-022 list is filtered paginated and ordered`() {
+    // @spec:AC-022
+    fun `AC-022 list is filtered paginated and ordered`() {
         val first = snapshot(cpfProtector.mask("12345678909"), evaluatedAt = Instant.parse("2026-08-01T10:00:00Z"))
         val approved = snapshot(cpfProtector.mask("98765432100"), decision = "APPROVED", evaluatedAt = Instant.parse("2026-08-02T10:00:00Z"))
         val third = snapshot(cpfProtector.mask("11122233344"), decision = "APPROVED", evaluatedAt = Instant.parse("2026-08-03T10:00:00Z"))
@@ -89,7 +93,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-023 evaluation is found by its identifier`() {
+    // @spec:AC-023
+    fun `AC-023 evaluation is found by its identifier`() {
         val snapshot = snapshot(cpfProtector.mask("12345678909"))
         repository.save(snapshot)
         entityManager.flush()
@@ -98,7 +103,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    fun `@spec:AC-024 missing evaluation has no repository result for standardized not-found mapping`() {
+    // @spec:AC-024
+    fun `AC-024 missing evaluation has no repository result for standardized not-found mapping`() {
         assertThat(repository.findById(UUID.randomUUID())).isNull()
     }
 

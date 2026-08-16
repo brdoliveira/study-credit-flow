@@ -8,13 +8,13 @@ import com.itau.credit.infrastructure.web.RuleResponse
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.BDDMockito.given
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -29,14 +29,15 @@ import java.util.UUID
 class ApiSecurityTest(
     private val mvc: MockMvc
 ) {
-    @MockBean
+    @MockitoBean
     private lateinit var service: CreditEvaluationApiService
 
-    @MockBean
+    @MockitoBean
     private lateinit var jwtDecoder: JwtDecoder
 
     @Test
-    fun `@spec:AC-029 rejects missing and invalid tokens without exposing internal data`() {
+    // @spec:AC-029
+    fun `AC-029 rejects missing and invalid tokens without exposing internal data`() {
         mvc.perform(get("/api/v1/credit-evaluations/${UUID.randomUUID()}"))
             .andExpect(status().isUnauthorized)
 
@@ -45,13 +46,15 @@ class ApiSecurityTest(
     }
 
     @Test
-    fun `@spec:AC-030 rejects authenticated users without the required permission`() {
+    // @spec:AC-030
+    fun `AC-030 rejects authenticated users without the required permission`() {
         mvc.perform(get("/api/v1/credit-evaluations/${UUID.randomUUID()}").with(token("credit:write")))
             .andExpect(status().isForbidden)
     }
 
     @Test
-    fun `@spec:AC-031 separates evaluation read write report and administration by scope`() {
+    // @spec:AC-031
+    fun `AC-031 separates evaluation read write report and administration by scope`() {
         given(service.evaluate(any(CreditEvaluationRequest::class.java), any(String::class.java), any(String::class.java))).willReturn(response())
         given(service.findById(any(UUID::class.java), any(String::class.java))).willReturn(response())
 
@@ -79,11 +82,12 @@ class ApiSecurityTest(
 class ProductionTransportSecurityTest(
     private val mvc: MockMvc
 ) {
-    @MockBean
+    @MockitoBean
     private lateinit var jwtDecoder: JwtDecoder
 
     @Test
-    fun `@spec:AC-032 redirects production HTTP requests to HTTPS`() {
+    // @spec:AC-032
+    fun `AC-032 redirects production HTTP requests to HTTPS`() {
         mvc.perform(get("/api/v1/admin/ping").with(token("credit:admin")).secure(false))
             .andExpect(status().is3xxRedirection)
     }

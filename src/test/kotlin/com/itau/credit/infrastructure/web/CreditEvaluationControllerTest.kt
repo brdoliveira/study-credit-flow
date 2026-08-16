@@ -18,7 +18,8 @@ class CreditEvaluationControllerTest {
     private val evaluationId = UUID.fromString("d2719d1c-f0db-4c3d-9de2-4d7cfd6d4d7e")
 
     @Test
-    fun `@spec:AC-001 creates a valid evaluation and returns its location`() {
+    // @spec:AC-001
+    fun `AC-001 creates a valid evaluation and returns its location`() {
         mvc().perform(post("/api/v1/credit-evaluations").header("Idempotency-Key", "key-1").contentType(MediaType.APPLICATION_JSON).content(validRequest()))
             .andExpect(status().isCreated)
             .andExpect(header().string("Location", "/api/v1/credit-evaluations/$evaluationId"))
@@ -26,7 +27,8 @@ class CreditEvaluationControllerTest {
     }
 
     @Test
-    fun `@spec:AC-002 explains every invalid input field`() {
+    // @spec:AC-002
+    fun `AC-002 explains every invalid input field`() {
         mvc().perform(post("/api/v1/credit-evaluations").header("Idempotency-Key", "key-1").contentType(MediaType.APPLICATION_JSON).content("""{"name":"","cpf":"123","creditScore":1001,"currentInvoiceAmount":-1,"totalLimit":0,"availableLimit":-1,"latePayments":-1,"monthlySpending":[1,-1]}"""))
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.code").value("INVALID_REQUEST"))
@@ -36,7 +38,8 @@ class CreditEvaluationControllerTest {
     }
 
     @Test
-    fun `@spec:AC-003 returns rejected evaluation as a successful response`() {
+    // @spec:AC-003
+    fun `AC-003 returns rejected evaluation as a successful response`() {
         mvc(FakeService(response = response(decision = "REJECTED", approvedAmount = BigDecimal.ZERO))).perform(post("/api/v1/credit-evaluations").header("Idempotency-Key", "key-1").contentType(MediaType.APPLICATION_JSON).content(validRequest()))
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.decision").value("REJECTED"))
@@ -44,7 +47,8 @@ class CreditEvaluationControllerTest {
     }
 
     @Test
-    fun `@spec:AC-022 lists evaluations with pagination filters and ordering`() {
+    // @spec:AC-022
+    fun `AC-022 lists evaluations with pagination filters and ordering`() {
         mvc().perform(get("/api/v1/credit-evaluations?decision=APPROVED&from=2026-08-01&to=2026-08-15&page=1&size=10&sort=approvedAmount&direction=ASC"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.items").isArray())
@@ -55,14 +59,16 @@ class CreditEvaluationControllerTest {
     }
 
     @Test
-    fun `@spec:AC-023 retrieves a persisted evaluation by identifier`() {
+    // @spec:AC-023
+    fun `AC-023 retrieves a persisted evaluation by identifier`() {
         mvc().perform(get("/api/v1/credit-evaluations/$evaluationId"))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.rules[0].code").value("MINIMUM_SCORE"))
     }
 
     @Test
-    fun `@spec:AC-024 returns a standardized error for a missing evaluation`() {
+    // @spec:AC-024
+    fun `AC-024 returns a standardized error for a missing evaluation`() {
         mvc(FakeService(found = null)).perform(get("/api/v1/credit-evaluations/$evaluationId"))
             .andExpect(status().isNotFound)
             .andExpect(jsonPath("$.code").value("EVALUATION_NOT_FOUND"))
@@ -70,14 +76,16 @@ class CreditEvaluationControllerTest {
     }
 
     @Test
-    fun `@spec:AC-028 rejects invalid and unknown list filters`() {
+    // @spec:AC-028
+    fun `AC-028 rejects invalid and unknown list filters`() {
         mvc().perform(get("/api/v1/credit-evaluations?from=2026-08-15&to=2026-08-01&unexpected=true"))
             .andExpect(status().isBadRequest)
             .andExpect(jsonPath("$.code").value("INVALID_FILTER"))
     }
 
     @Test
-    fun `@spec:AC-040 returns a correlated internal error without stack trace`() {
+    // @spec:AC-040
+    fun `AC-040 returns a correlated internal error without stack trace`() {
         mvc(FakeService(failure = IllegalStateException("database password leaked"))).perform(get("/api/v1/credit-evaluations/$evaluationId").header("X-Correlation-ID", "trace-123"))
             .andExpect(status().isInternalServerError)
             .andExpect(jsonPath("$.code").value("INTERNAL_ERROR"))

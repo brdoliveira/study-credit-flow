@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 
 class FrontendSmokeTest {
     @Test
-    fun `@spec:AC-041 evaluation screen exposes the explainable decision area`() {
+    // @spec:AC-041
+    fun `AC-041 evaluation screen exposes the explainable decision area`() {
         val page = resource("static/index.html")
         val script = resource("static/ts/evaluation.ts")
         assertTrue(page.contains("id=\"decision\""))
@@ -13,14 +14,16 @@ class FrontendSmokeTest {
     }
 
     @Test
-    fun `@spec:AC-042 report screen reuses one filter query for listing and PDF`() {
+    // @spec:AC-042
+    fun `AC-042 report screen reuses one filter query for listing and PDF`() {
         val script = resource("static/ts/report.ts")
         assertTrue(script.contains("filterQuery(filters())"))
         assertTrue(script.contains("/report.pdf?"))
     }
 
     @Test
-    fun `@spec:AC-043 frontend error presentation is generic and correlation-aware`() {
+    // @spec:AC-043
+    fun `AC-043 frontend error presentation is generic and correlation-aware`() {
         val script = resource("static/ts/api.ts")
         assertTrue(script.contains("Código de acompanhamento"))
         assertTrue(script.contains("Não foi possível concluir a operação agora"))

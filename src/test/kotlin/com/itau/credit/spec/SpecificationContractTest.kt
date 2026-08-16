@@ -11,14 +11,16 @@ class SpecificationContractTest {
     private val projectRoot: Path = Path.of("").toAbsolutePath()
 
     @Test
-    fun `@principle:P-002 source contains no hardcoded credentials`() {
+    // @principle:P-002
+    fun `P-002 source contains no hardcoded credentials`() {
         val credential = Regex("(?i)(api[_-]?key|password|senha)\\s*[:=]\\s*[\\\"'][^$\\{][^\\\"']{7,}[\\\"']")
         val violations = sourceFiles().filter { credential.containsMatchIn(it.readText()) }
         assertFalse(violations.any(), "Hardcoded credential found in: $violations")
     }
 
     @Test
-    fun `@principle:P-003 domain is independent from frameworks`() {
+    // @principle:P-003
+    fun `P-003 domain is independent from frameworks`() {
         val forbidden = Regex("^import (org\\.springframework|jakarta\\.persistence)", RegexOption.MULTILINE)
         val domain = projectRoot.resolve("src/main/kotlin/com/itau/credit/domain")
         val violations = kotlinFiles(domain).filter { forbidden.containsMatchIn(it.readText()) }
@@ -26,7 +28,8 @@ class SpecificationContractTest {
     }
 
     @Test
-    fun `@principle:P-004 tests use PostgreSQL instead of H2`() {
+    // @principle:P-004
+    fun `P-004 tests use PostgreSQL instead of H2`() {
         val build = projectRoot.resolve("build.gradle.kts").readText()
         assertFalse(build.contains("com.h2database", ignoreCase = true), "H2 must not be a project dependency")
     }

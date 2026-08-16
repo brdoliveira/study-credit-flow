@@ -1,7 +1,7 @@
 package com.itau.credit.infrastructure.messaging
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.itau.credit.application.event.CreditEvaluationCompleted
+import tools.jackson.databind.ObjectMapper
 
 fun interface BrokerPublisher {
     /** Throws [TransientBrokerException] when the broker can be retried later. */

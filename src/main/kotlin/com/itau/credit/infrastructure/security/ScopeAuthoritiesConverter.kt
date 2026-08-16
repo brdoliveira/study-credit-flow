@@ -19,7 +19,7 @@ class ScopeAuthoritiesConverter : Converter<Jwt, Collection<GrantedAuthority>> {
 
     private fun Jwt.scopeValues(): Set<String> = sequenceOf("scope", "scp")
         .flatMap { claim ->
-            when (val value = getClaim<Any?>(claim)) {
+            when (val value = getClaim<Any>(claim)) {
                 is String -> value.split(Regex("\\s+")).asSequence()
                 is Collection<*> -> value.asSequence().filterIsInstance<String>()
                 else -> emptySequence()
@@ -30,7 +30,7 @@ class ScopeAuthoritiesConverter : Converter<Jwt, Collection<GrantedAuthority>> {
 
     @Suppress("UNCHECKED_CAST")
     private fun Jwt.realmRoles(): Set<String> =
-        ((getClaim<Map<String, Any?>>("realm_access") ?: emptyMap())["roles"] as? Collection<*>)
+        ((getClaim<Map<String, Any>>("realm_access") ?: emptyMap())["roles"] as? Collection<*>)
             ?.filterIsInstance<String>()
             ?.toSet()
             ?: emptySet()

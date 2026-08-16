@@ -46,8 +46,9 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-validation-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:postgresql")
+    testImplementation(platform("org.testcontainers:testcontainers-bom:2.0.5"))
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers-postgresql")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
@@ -69,7 +70,22 @@ detekt {
     parallel = true
 }
 
+// Java/Gradle argument files corrupt non-ASCII workspace paths on Windows. A
+// manifest-only pathing JAR keeps the worker command ASCII-safe and portable.
+val testRuntimeClasspath = sourceSets.test.get().runtimeClasspath
+val testClasspathJar by tasks.registering(Jar::class) {
+    archiveFileName.set("test-classpath.jar")
+    destinationDirectory.set(file("${System.getProperty("java.io.tmpdir")}/credit-flow-gradle"))
+    inputs.files(testRuntimeClasspath)
+    doFirst {
+        manifest.attributes["Class-Path"] = testRuntimeClasspath.files
+            .joinToString(" ") { it.toURI().toASCIIString() }
+    }
+}
+
 tasks.withType<Test> {
+    dependsOn(testClasspathJar)
+    classpath = files(testClasspathJar.flatMap { it.archiveFile })
     useJUnitPlatform()
     testLogging {
         events("failed", "skipped")
