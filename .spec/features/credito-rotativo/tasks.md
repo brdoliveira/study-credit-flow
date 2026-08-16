@@ -47,7 +47,7 @@
 - Arquivos: src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/security/ScopeAuthoritiesConverter.kt, src/main/resources/application-security.yml, src/test/kotlin/com/itau/credit/infrastructure/security/ApiSecurityTest.kt, docker/keycloak/realm-export.json
 - Notas: Resource Server JWT; provedor local depende da confirmação de ASM-006.
 
-## T-010 — Implementar relatório PDF [pendente]
+## T-010 — Implementar relatório PDF [em-andamento]
 - Refs: US-007, AC-025, AC-026, AC-027, AC-028
 - Arquivos: src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationReportController.kt, src/test/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportTest.kt
 - Notas: registrar a biblioteca escolhida em ADR antes da implementação.
