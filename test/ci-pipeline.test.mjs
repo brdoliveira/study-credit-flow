@@ -2,29 +2,52 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const workflowPath = new URL('../.github/workflows/ci.yml', import.meta.url);
-const workflow = await readFile(workflowPath, 'utf8');
+const root = new URL('../', import.meta.url);
+const read = (path) => readFile(new URL(path, root), 'utf8');
 
-test('@spec:AC-045 pipeline blocks an invalid change before the image build', () => {
-  assert.match(workflow, /quality-gates:/);
-  assert.match(workflow, /container-image:\s*[\s\S]*?needs: quality-gates/);
+test('@spec:AC-071 CI verifica e audita a spec com o motor versionado no repositório', async () => {
+  const [workflow, tool, manifest, lock] = await Promise.all([
+    read('.github/workflows/ci.yml'),
+    read('tools/onp-spec/onp-spec.mjs'),
+    read('package.json'),
+    read('package-lock.json'),
+  ]);
 
-  const gateCommands = [
-    './gradlew --no-daemon clean compileKotlin',
-    './gradlew --no-daemon test',
-    './gradlew --no-daemon detekt --config config/detekt/detekt.yml',
-    'node --test "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"',
-    'npx --yes onp-spec audit --ci',
-  ];
+  assert.match(workflow, /node tools\/onp-spec\/onp-spec\.mjs verify prontidao-entrega/);
+  assert.match(workflow, /node tools\/onp-spec\/onp-spec\.mjs audit --ci/);
+  assert.doesNotMatch(workflow, /\bnpx\b[\s\S]*?\bonp-spec\b/);
+  assert.match(tool, /ONP_SPEC_VERSION = '1\.0\.0'/);
+  assert.match(manifest, /"packageManager": "npm@10\.9\.2"/);
+  assert.match(lock, /"lockfileVersion": 3/);
+});
+
+test('@spec:AC-072 integração real com PostgreSQL, Kafka e jornada HTTP bloqueia a imagem', async () => {
+  const workflow = await read('.github/workflows/ci.yml');
+  const integrationStart = 'docker compose up --detach --wait postgres kafka';
+  const integrationTest = './gradlew --no-daemon test --tests "*IT"';
   const imageBuild = 'docker build --tag credito-rotativo:${{ github.sha }} .';
 
-  let previousPosition = -1;
-  for (const command of gateCommands) {
-    const position = workflow.indexOf(command);
-    assert.ok(position > previousPosition, `missing or misplaced CI gate: ${command}`);
-    previousPosition = position;
-  }
+  assert.match(workflow, /container-image:\s*[\s\S]*?needs: integration-gates/);
+  assert.ok(workflow.indexOf(integrationStart) >= 0, 'CI must start real PostgreSQL and Kafka');
+  assert.ok(workflow.indexOf(integrationTest) > workflow.indexOf(integrationStart));
+  assert.ok(workflow.indexOf(imageBuild) > workflow.indexOf(integrationTest));
+  assert.match(workflow, /SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092/);
+});
 
-  assert.ok(workflow.indexOf(imageBuild) > previousPosition);
+test('@spec:AC-073 supply chain bloqueia segredos e vulnerabilidades e publica SBOM versionada', async () => {
+  const [workflow, trivy, gitleaks] = await Promise.all([
+    read('.github/workflows/ci.yml'),
+    read('config/security/trivy.yaml'),
+    read('config/security/gitleaks.toml'),
+  ]);
+
+  assert.match(workflow, /gitleaks:v8\.18\.4/);
+  assert.match(workflow, /trivy:0\.57\.1/);
+  assert.match(workflow, /syft:v1\.18\.0/);
+  assert.match(workflow, /--exit-code 1/);
+  assert.match(workflow, /sbom-\$\{\{ github\.sha \}\}\.cdx\.json/);
+  assert.match(workflow, /actions\/upload-artifact@v4/);
   assert.doesNotMatch(workflow, /continue-on-error:\s*true/);
+  assert.match(trivy, /severity:\s*HIGH,CRITICAL/);
+  assert.match(gitleaks, /useDefault\s*=\s*true/);
 });
