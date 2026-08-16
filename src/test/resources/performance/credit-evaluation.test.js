@@ -12,7 +12,7 @@ const summaryPath = resolve(projectRoot, 'performance/k6/summary.js');
 const runnerPath = resolve(projectRoot, 'scripts/run-load-test.ps1');
 const evidencePath = resolve(projectRoot, 'docs/evidence/load-test-summary.json');
 
-test('AC-068 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto, p99 abaixo de um segundo e nenhuma iteração descartada', () => {
+test('AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto e seus thresholds', () => {
   const scenario = readFileSync(scenarioPath, 'utf8');
   const payload = JSON.parse(readFileSync(payloadPath, 'utf8'));
 

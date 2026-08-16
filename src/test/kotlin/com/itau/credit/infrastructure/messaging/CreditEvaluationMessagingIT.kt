@@ -55,7 +55,7 @@ class CreditEvaluationMessagingIT {
 
         publisher.publishPending()
         assertThat(store.published).isEmpty()
-        assertThat(store.retry).isEqualTo(Retry(1, now.plusSeconds(1), "broker unavailable"))
+        assertThat(store.retry).isEqualTo(Retry(1, now.plusSeconds(1), "Broker publication failed (TransientBrokerException)"))
 
         store.now = now.plusSeconds(1)
         publisher.publishPending()

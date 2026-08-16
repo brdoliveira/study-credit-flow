@@ -46,6 +46,8 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/oauth2/**", "/login/**", "/error").permitAll()
+                    .requestMatchers("/actuator/health/liveness", "/actuator/health/readiness").permitAll()
+                    .requestMatchers("/actuator/prometheus", "/actuator/**").hasAuthority("SCOPE_credit:admin")
                     .requestMatchers("/api/session").authenticated()
                     .requestMatchers("/api/v1/credit-evaluations/report/**").hasAuthority("SCOPE_credit:report")
                     .requestMatchers("/api/v1/admin/**").hasAuthority("SCOPE_credit:admin")

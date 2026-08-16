@@ -5,7 +5,7 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, root), 'utf8');
 
-test('@spec:AC-071 CI verifica e audita a spec com o motor versionado no repositório', async () => {
+test('@spec:AC-045 @spec:AC-071 CI bloqueia mudança inválida e audita com o motor versionado', async () => {
   const [workflow, tool, manifest, lock] = await Promise.all([
     read('.github/workflows/ci.yml'),
     read('tools/onp-spec/onp-spec.mjs'),

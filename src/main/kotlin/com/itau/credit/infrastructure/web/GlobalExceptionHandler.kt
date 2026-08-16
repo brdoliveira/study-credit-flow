@@ -3,6 +3,7 @@ package com.itau.credit.infrastructure.web
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
 import com.itau.credit.infrastructure.observability.CorrelationIdFilter
+import com.itau.credit.infrastructure.observability.CreditMetrics
 import com.itau.credit.application.port.IdempotencyKeyConflictException
 import com.itau.credit.application.port.InvalidIdempotencyKeyException
 import com.itau.credit.application.port.MissingIdempotencyKeyException
@@ -16,7 +17,9 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @RestControllerAdvice
-class GlobalExceptionHandler {
+class GlobalExceptionHandler(
+    private val metrics: CreditMetrics? = null,
+) {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun invalidBody(exception: MethodArgumentNotValidException, request: HttpServletRequest): ResponseEntity<ApiError> {
         val errors = exception.bindingResult.fieldErrors.map { error ->
@@ -44,12 +47,16 @@ class GlobalExceptionHandler {
         error(HttpStatus.NOT_FOUND, "EVALUATION_NOT_FOUND", "Credit evaluation was not found", request)
 
     @ExceptionHandler(DataAccessResourceFailureException::class)
-    fun unavailable(request: HttpServletRequest): ResponseEntity<ApiError> =
-        error(HttpStatus.SERVICE_UNAVAILABLE, "DEPENDENCY_UNAVAILABLE", "A required dependency is temporarily unavailable", request)
+    fun unavailable(request: HttpServletRequest): ResponseEntity<ApiError> {
+        metrics?.recordTechnicalError("DEPENDENCY")
+        return error(HttpStatus.SERVICE_UNAVAILABLE, "DEPENDENCY_UNAVAILABLE", "A required dependency is temporarily unavailable", request)
+    }
 
     @ExceptionHandler(Exception::class)
-    fun unexpected(request: HttpServletRequest): ResponseEntity<ApiError> =
-        error(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "An unexpected error occurred", request)
+    fun unexpected(request: HttpServletRequest): ResponseEntity<ApiError> {
+        metrics?.recordTechnicalError("INTERNAL")
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "An unexpected error occurred", request)
+    }
 
     private fun error(
         status: HttpStatus,

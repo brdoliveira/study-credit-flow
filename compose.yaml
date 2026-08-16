@@ -8,8 +8,12 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/credit-rotativo
-      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/credit-rotativo
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://localhost:${KEYCLOAK_PORT:-8180}/realms/credit-rotativo
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/credit-rotativo/protocol/openid-connect/certs
+      KEYCLOAK_ISSUER_URI: http://localhost:${KEYCLOAK_PORT:-8180}/realms/credit-rotativo
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI: http://keycloak:8080/realms/credit-rotativo/protocol/openid-connect/token
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_INFO_URI: http://keycloak:8080/realms/credit-rotativo/protocol/openid-connect/userinfo
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/credit-rotativo/protocol/openid-connect/certs
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - "${APP_PORT:-8080}:8080"

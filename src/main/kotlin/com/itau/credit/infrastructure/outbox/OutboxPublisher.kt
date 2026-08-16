@@ -44,7 +44,7 @@ class OutboxPublisher(
                     pending.eventId,
                     attempts,
                     now.plus(backoff(attempts)),
-                    error.message ?: error.javaClass.simpleName,
+                    "Broker publication failed (${error.javaClass.simpleName})",
                 )
             }
         }

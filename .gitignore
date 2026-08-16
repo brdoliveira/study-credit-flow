@@ -39,3 +39,8 @@ out/
 ### Kotlin ###
 .kotlin
 .env
+
+### Terraform ###
+**/.terraform/
+*.tfstate
+*.tfstate.*

@@ -9,6 +9,7 @@ import com.itau.credit.application.port.CreditEvaluationRepository
 import com.itau.credit.application.port.CreditEvaluationSnapshot
 import com.itau.credit.application.port.CreditEvaluationSort
 import com.itau.credit.application.port.IdempotencyRepository
+import com.itau.credit.infrastructure.observability.ObservedCreditEvaluationService
 import org.springframework.stereotype.Service
 import tools.jackson.databind.ObjectMapper
 import java.time.ZoneOffset
@@ -20,6 +21,7 @@ class DefaultCreditEvaluationApiService(
     private val repository: CreditEvaluationRepository,
     private val idempotencyRepository: IdempotencyRepository,
     private val objectMapper: ObjectMapper,
+    private val observer: ObservedCreditEvaluationService,
 ) : CreditEvaluationApiService {
     override fun evaluate(
         request: CreditEvaluationRequest,
@@ -31,13 +33,13 @@ class DefaultCreditEvaluationApiService(
         request: CreditEvaluationRequest,
         idempotencyKey: String,
         correlationId: String,
-    ): IdempotentCreditEvaluationResponse {
+    ): IdempotentCreditEvaluationResponse = observer.observe {
         val requestJson = objectMapper.writeValueAsString(request)
         val execution = idempotencyRepository.executeWithOutcome(idempotencyKey, requestJson) {
             val result = useCase.execute(request.toCommand(correlationId))
             objectMapper.writeValueAsString(result.toResponse(request.name!!))
         }
-        return IdempotentCreditEvaluationResponse(
+        IdempotentCreditEvaluationResponse(
             objectMapper.readValue(execution.responseBody, CreditEvaluationResponse::class.java),
             execution.replayed,
         )

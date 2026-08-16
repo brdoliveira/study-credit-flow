@@ -31,6 +31,17 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Validate AWS reference infrastructure without provisioning
+        run: |
+          terraform fmt -check -recursive infrastructure/terraform
+          terraform -chdir=infrastructure/terraform init -backend=false
+          terraform -chdir=infrastructure/terraform validate
+
       - name: Compile application
         run: ./gradlew --no-daemon clean compileKotlin
 
@@ -48,6 +59,9 @@ jobs:
 
       - name: Scan source dependencies
         run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 fs --config config/security/trivy.yaml --exit-code 1 .
+
+      - name: Scan Terraform security defaults
+        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 config --severity HIGH,CRITICAL --exit-code 1 infrastructure/terraform
 
   integration-gates:
     name: Real PostgreSQL, Kafka and critical HTTP integration

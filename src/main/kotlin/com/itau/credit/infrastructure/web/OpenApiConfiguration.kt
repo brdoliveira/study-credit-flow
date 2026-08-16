@@ -14,11 +14,19 @@ import org.springframework.context.annotation.Configuration
 class OpenApiConfiguration {
     @Bean
     fun creditEvaluationsOpenApi(): OpenAPI = OpenAPI()
-        .info(Info().title("Credit evaluations API").version("v1").description("The versioned contract is available at /openapi/credit-evaluations.yaml."))
+        .info(
+            Info().title("Credit evaluations API")
+                .version("v1")
+                .description("The versioned contract is available at /openapi/credit-evaluations.yaml.")
+        )
         .addSecurityItem(SecurityRequirement().addList("oauth2"))
         .schemaRequirement("oauth2", SecurityScheme().type(SecurityScheme.Type.OAUTH2).flows(OAuthFlows().authorizationCode(
             OAuthFlow().authorizationUrl("/oauth2/authorization/keycloak").tokenUrl("/login/oauth2/code/keycloak").scopes(
-                Scopes().addString("credit:read", "Read credit evaluations").addString("credit:write", "Create credit evaluations").addString("credit:report", "Generate reports").addString("credit:admin", "Access administration")
+                Scopes()
+                    .addString("credit:read", "Read credit evaluations")
+                    .addString("credit:write", "Create credit evaluations")
+                    .addString("credit:report", "Generate reports")
+                    .addString("credit:admin", "Access administration")
             )
         )))
 }

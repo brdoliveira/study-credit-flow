@@ -20,19 +20,39 @@ import com.itau.credit.domain.rule.RecentSpendingTrendRule
 import com.itau.credit.domain.rule.RuleEngine
 import com.itau.credit.infrastructure.health.DependencyReadinessIndicator
 import com.itau.credit.infrastructure.health.RequiredDependencyProbe
+import com.itau.credit.infrastructure.messaging.BrokerPublisher
+import com.itau.credit.infrastructure.messaging.CreditEvaluationEventEffect
+import com.itau.credit.infrastructure.messaging.CreditEvaluationKafkaListener
+import com.itau.credit.infrastructure.messaging.KafkaBrokerPublisher
+import com.itau.credit.infrastructure.messaging.PostgresProcessedEventStore
+import com.itau.credit.infrastructure.messaging.ProcessedEventStore
 import com.itau.credit.infrastructure.observability.CreditMetrics
+import com.itau.credit.infrastructure.outbox.OutboxSchedulingConfiguration
+import com.itau.credit.infrastructure.outbox.OutboxStore
+import com.itau.credit.infrastructure.outbox.PostgresOutboxStore
 import com.itau.credit.infrastructure.report.PdfCreditEvaluationReportGenerator
 import com.itau.credit.infrastructure.web.CreditEvaluationReportService
 import com.itau.credit.infrastructure.web.DefaultCreditEvaluationReportService
 import io.micrometer.core.instrument.MeterRegistry
+import org.apache.kafka.clients.admin.AdminClient
+import org.apache.kafka.clients.admin.AdminClientConfig
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.ObjectProvider
 import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.transaction.support.TransactionTemplate
 import tools.jackson.databind.ObjectMapper
 import java.time.Clock
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 
 @Configuration(proxyBeanMethods = false)
+@Import(OutboxSchedulingConfiguration::class)
 class ApplicationConfiguration {
     @Bean
     fun clock(): Clock = Clock.systemUTC()
@@ -127,9 +147,38 @@ class ApplicationConfiguration {
     @Bean
     fun creditMetrics(registry: MeterRegistry) = CreditMetrics(registry)
 
+    @Bean
+    fun outboxStore(jdbcTemplate: JdbcTemplate, objectMapper: ObjectMapper): OutboxStore =
+        PostgresOutboxStore(jdbcTemplate, objectMapper)
+
+    @Bean
+    fun brokerPublisher(kafkaTemplate: KafkaTemplate<String, String>): BrokerPublisher =
+        KafkaBrokerPublisher(kafkaTemplate)
+
+    @Bean
+    fun processedEventStore(jdbcTemplate: JdbcTemplate, transactions: TransactionTemplate): ProcessedEventStore =
+        PostgresProcessedEventStore(jdbcTemplate, transactions)
+
+    @Bean
+    fun creditEvaluationKafkaListener(
+        objectMapper: ObjectMapper,
+        processedEventStore: ProcessedEventStore,
+        eventEffect: ObjectProvider<CreditEvaluationEventEffect>,
+    ) = CreditEvaluationKafkaListener(objectMapper, processedEventStore, eventEffect)
+
     @Bean("dependencyReadiness")
-    fun dependencyReadiness(dataSource: DataSource): HealthIndicator = DependencyReadinessIndicator(
-        mapOf("postgres" to RequiredDependencyProbe { dataSource.connection.use { it.isValid(2) } })
+    fun dependencyReadiness(
+        dataSource: DataSource,
+        @Value("\${spring.kafka.bootstrap-servers}") bootstrapServers: String,
+    ): HealthIndicator = DependencyReadinessIndicator(
+        mapOf(
+            "postgres" to RequiredDependencyProbe { dataSource.connection.use { it.isValid(2) } },
+            "kafka" to RequiredDependencyProbe {
+                AdminClient.create(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers)).use { client ->
+                    client.describeCluster().clusterId().get(2, TimeUnit.SECONDS).isNotBlank()
+                }
+            },
+        )
     )
 
     companion object {

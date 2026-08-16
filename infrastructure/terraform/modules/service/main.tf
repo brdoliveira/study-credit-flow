@@ -1,0 +1,155 @@
+variable "name" { type = string }
+variable "vpc_id" { type = string }
+variable "vpc_cidr" { type = string }
+variable "public_subnet_ids" { type = list(string) }
+variable "private_subnet_ids" { type = list(string) }
+variable "container_image" { type = string }
+variable "certificate_arn" { type = string }
+variable "desired_count" { type = number }
+variable "secret_arn" { type = string }
+variable "kms_key_arn" { type = string }
+
+data "aws_region" "current" {}
+
+resource "aws_cloudwatch_log_group" "service" {
+  name              = "/ecs/${var.name}"
+  retention_in_days = 30
+  kms_key_id        = var.kms_key_arn
+}
+resource "aws_ecs_cluster" "this" { name = var.name }
+resource "aws_security_group" "alb" {
+  name_prefix = "${var.name}-alb-"
+  vpc_id      = var.vpc_id
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+}
+resource "aws_security_group" "service" {
+  name_prefix = "${var.name}-service-"
+  vpc_id      = var.vpc_id
+  ingress {
+    from_port       = 8080
+    to_port         = 8080
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+  egress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+  egress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+  egress {
+    from_port   = 9098
+    to_port     = 9098
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+}
+#trivy:ignore:AVD-AWS-0053 The internet-facing HTTPS ALB is the intentional public entrypoint; workloads stay private.
+resource "aws_lb" "this" {
+  name                       = var.name
+  internal                   = false
+  load_balancer_type         = "application"
+  security_groups            = [aws_security_group.alb.id]
+  subnets                    = var.public_subnet_ids
+  drop_invalid_header_fields = true
+}
+resource "aws_lb_target_group" "this" {
+  name        = var.name
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+  health_check { path = "/actuator/health/readiness" }
+}
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn   = var.certificate_arn
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this.arn
+  }
+}
+resource "aws_iam_role" "execution" {
+  name = "${var.name}-execution"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "ecs-tasks.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+resource "aws_iam_role_policy" "secret" {
+  role = aws_iam_role.execution.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = var.secret_arn },
+      { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn }
+    ]
+  })
+}
+resource "aws_ecs_task_definition" "this" {
+  family                   = var.name
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 1024
+  memory                   = 2048
+  execution_role_arn       = aws_iam_role.execution.arn
+  container_definitions = jsonencode([{
+    name         = var.name
+    image        = var.container_image
+    essential    = true
+    portMappings = [{ containerPort = 8080 }]
+    secrets      = [{ name = "APPLICATION_CONFIG", valueFrom = var.secret_arn }]
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-group         = aws_cloudwatch_log_group.service.name
+        awslogs-region        = data.aws_region.current.name
+        awslogs-stream-prefix = "app"
+      }
+    }
+  }])
+}
+resource "aws_ecs_service" "this" {
+  name            = var.name
+  cluster         = aws_ecs_cluster.this.id
+  task_definition = aws_ecs_task_definition.this.arn
+  desired_count   = var.desired_count
+  launch_type     = "FARGATE"
+  network_configuration {
+    subnets          = var.private_subnet_ids
+    security_groups  = [aws_security_group.service.id]
+    assign_public_ip = false
+  }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.this.arn
+    container_name   = var.name
+    container_port   = 8080
+  }
+}
+output "service_sg_id" { value = aws_security_group.service.id }
+output "cluster_name" { value = aws_ecs_cluster.this.name }
+output "service_name" { value = aws_ecs_service.this.name }
+output "load_balancer_dns" { value = aws_lb.this.dns_name }

@@ -88,6 +88,7 @@ val testClasspathJar by tasks.registering(Jar::class) {
 tasks.withType<Test> {
     dependsOn(testClasspathJar)
     classpath = files(testClasspathJar.flatMap { it.archiveFile })
+    systemProperty("credit.outbox.scheduling-enabled", "false")
     useJUnitPlatform()
     testLogging {
         events("failed", "skipped")
