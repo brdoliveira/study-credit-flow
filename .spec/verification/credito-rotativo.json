@@ -1,7 +1,7 @@
 {
   "feature": "credito-rotativo",
   "timestamp": "2026-08-16T18:59:08.905Z",
-  "gitRev": "fe0a177",
+  "gitRev": "0ae87c8",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,

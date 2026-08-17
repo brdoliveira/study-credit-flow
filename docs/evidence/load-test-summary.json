@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "executionStatus": "completed",
-  "commit": "b8df8f2b1c700939f5adfd7fa8afdf91a2cdc845",
+  "commit": "f9aa3b37569faa0f0de0dc6a1aee14c4e6e7c37d",
   "executedAtUtc": "2026-08-16T23:15:20Z",
   "environment": "isolated-docker-desktop-local",
   "resources": "docker=12 CPU/7.7 GB; app=400 threads; hikari=40; postgres=16.4; redpanda=24.2.12; k6=0.54.0",
