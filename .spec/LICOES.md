@@ -23,6 +23,11 @@ Vistas em uma feature só. Registradas, não confiadas.
 - features: arquitetura-kotlin
 - última evidência: AC-088 (arquitetura-kotlin, 2026-08-17T02:47:53.185Z)
 
+### L-003 — Antes de renomear um namespace arquitetural, criar um teste estrutural anotado que falhe com o nome atual e proteja o destino.
+- sinal: `AC_SEM_TESTE` · recorrência: 1 feature(s) · escopo: `arquitetura` · penalidades: 0
+- features: renomear-infraestrutura-platform
+- última evidência: AC-096 (renomear-infraestrutura-platform, 2026-08-17T05:31:27.431Z)
+
 ## Quarentena — aplicadas e falharam, ignorar
 
 A falha recorreu mesmo com a lição aplicada. Revisão é do usuário.

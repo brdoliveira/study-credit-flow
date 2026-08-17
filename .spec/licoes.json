@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "proximoId": 3,
+  "proximoId": 4,
   "licoes": [
     {
       "id": "L-001",
@@ -47,6 +47,29 @@
       "penalidades": 0,
       "criadaEm": "2026-08-17T02:47:53.185Z",
       "ultimaVez": "2026-08-17T02:47:53.185Z"
+    },
+    {
+      "id": "L-003",
+      "texto": "Antes de renomear um namespace arquitetural, criar um teste estrutural anotado que falhe com o nome atual e proteja o destino.",
+      "chave": "AC_SEM_TESTE::antes de renomear um namespace arquitetural criar um teste estrutural anotado que falhe com o nome atual e proteja o destino",
+      "sinal": "AC_SEM_TESTE",
+      "escopo": "arquitetura",
+      "status": "candidata",
+      "recorrencia": 1,
+      "features": [
+        "renomear-infraestrutura-platform"
+      ],
+      "evidencias": [
+        {
+          "fonte": "AC-096",
+          "feature": "renomear-infraestrutura-platform",
+          "quando": "2026-08-17T05:31:27.431Z",
+          "gitRev": "ddb7fa3"
+        }
+      ],
+      "penalidades": 0,
+      "criadaEm": "2026-08-17T05:31:27.431Z",
+      "ultimaVez": "2026-08-17T05:31:27.431Z"
     }
   ]
 }
