@@ -4,7 +4,7 @@ import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyK
 import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
 import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
 import io.github.brdoliveira.creditflow.infrastructure.observability.CorrelationIdFilter
-import io.github.brdoliveira.creditflow.infrastructure.observability.CreditMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
 import org.springframework.dao.DataAccessResourceFailureException

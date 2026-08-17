@@ -18,7 +18,7 @@ import io.github.brdoliveira.creditflow.evaluation.domain.rule.RecentSpendingTre
 import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCreditEvaluationReportGenerator
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.mapper.CreditEvaluationWebMapper
-import io.github.brdoliveira.creditflow.infrastructure.observability.CreditMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

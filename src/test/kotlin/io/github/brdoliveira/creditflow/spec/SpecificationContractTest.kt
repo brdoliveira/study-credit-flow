@@ -22,9 +22,10 @@ class SpecificationContractTest {
     @Test
     // @principle:P-003
     fun `P-003 domain is independent from frameworks`() {
-        val forbidden = Regex("^import (org\\.springframework|jakarta\\.persistence)", RegexOption.MULTILINE)
-        val domain = projectRoot.resolve("src/main/kotlin/io/github/brdoliveira/creditflow/domain")
-        val violations = kotlinFiles(domain).filter { forbidden.containsMatchIn(it.readText()) }
+        val forbidden = Regex("^import (org\\.springframework|jakarta\\.persistence|javax\\.persistence|org\\.hibernate)", RegexOption.MULTILINE)
+        val domains = domainRoots()
+        assertTrue(domains.isNotEmpty(), "At least one production domain package must exist")
+        val violations = domains.asSequence().flatMap(::kotlinFiles).filter { forbidden.containsMatchIn(it.readText()) }
         assertFalse(violations.any(), "Framework import found in domain: $violations")
     }
 
@@ -67,4 +68,9 @@ class SpecificationContractTest {
             paths.filter { Files.isRegularFile(it) && it.extension == "kt" }.toList().asSequence()
         }
     }
+
+    private fun domainRoots(): List<Path> =
+        Files.walk(projectRoot.resolve("src/main/kotlin")).use { paths ->
+            paths.filter { Files.isDirectory(it) && it.fileName.toString() == "domain" }.toList()
+        }
 }

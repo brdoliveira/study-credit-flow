@@ -31,6 +31,16 @@ function filesUnder(fragment) {
   return kotlinFiles.filter((file) => rel(file).includes(fragment));
 }
 
+function imports(file) {
+  return [...source(file).matchAll(/^\s*import\s+([\w.]+)/gm)].map((match) => match[1]);
+}
+
+function dependencyViolations(files, forbidden) {
+  return files.flatMap((file) => imports(file)
+    .filter((dependency) => forbidden.test(dependency))
+    .map((dependency) => `${rel(file)} imports ${dependency}`));
+}
+
 function kdocBefore(lines, index) {
   const windowStart = Math.max(0, index - 24);
   const localEnd = lines.slice(windowStart, index).findLastIndex((line) => line.includes('*/'));
@@ -113,6 +123,27 @@ test('AC-085: aplicação depende diretamente do domínio @spec:AC-085', () => {
   assert.deepEqual(legacyImports, [], 'a aplicação não deve importar os pacotes legados');
 });
 
+test('AC-090: Fronteiras de dependência são verificadas integralmente @spec:AC-090', () => {
+  const evaluation = 'io/github/brdoliveira/creditflow/evaluation/';
+  const domain = filesUnder(`${evaluation}domain/`);
+  const application = filesUnder(`${evaluation}application/`);
+  assert.ok(domain.length > 0, 'o domínio real de evaluation não pode ser um diretório vazio');
+  assert.ok(application.length > 0, 'a aplicação de evaluation não pode ser um diretório vazio');
+
+  const externalToDomain = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?(?:application|infrastructure)(?:\.|$)/;
+  const infrastructureToApplication = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?infrastructure(?:\.|$)/;
+  assert.deepEqual(
+    dependencyViolations(domain, externalToDomain),
+    [],
+    'o domínio não pode depender das camadas de aplicação ou infraestrutura',
+  );
+  assert.deepEqual(
+    dependencyViolations(application, infrastructureToApplication),
+    [],
+    'a aplicação não pode depender de adaptadores ou infraestrutura compartilhada',
+  );
+});
+
 test('AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086', () => {
   const domain = filesUnder('io/github/brdoliveira/creditflow/evaluation/domain/');
   const names = domain.flatMap(declarations);
@@ -159,4 +190,35 @@ test('AC-089: arquitetura documentada corresponde ao código @spec:AC-089', () =
   for (const term of ['evaluation/domain', 'evaluation/application', 'web/controller', 'web/dto', 'PostgreSQL', 'PDF']) {
     assert.ok(documentation.includes(term), `documentação não descreve ${term}`);
   }
+});
+
+test('AC-095: Documentação e contratos continuam coerentes @spec:AC-095', () => {
+  const architecture = readFileSync(resolve('docs/architecture.md'), 'utf8');
+  const adr = readFileSync(resolve('docs/adrs/001-modular-monolith.md'), 'utf8');
+  const documentation = `${architecture}\n${adr}`;
+  const requiredPackages = [
+    'evaluation/domain',
+    'evaluation/application',
+    'evaluation/application/event',
+    'evaluation/infrastructure',
+    'evaluation/infrastructure/outbox',
+    'evaluation/infrastructure/messaging',
+  ];
+  for (const packagePath of requiredPackages) {
+    assert.ok(filesUnder(`io/github/brdoliveira/creditflow/${packagePath}/`).length > 0,
+      `pacote produtivo ausente: ${packagePath}`);
+    assert.ok(documentation.includes(packagePath), `documentação não descreve ${packagePath}`);
+  }
+
+  const eventContract = filesUnder('io/github/brdoliveira/creditflow/evaluation/application/event/CreditEvaluationCompleted.kt');
+  assert.equal(eventContract.length, 1, 'contrato Kotlin do evento de avaliação ausente');
+  assert.match(documentation, /CreditEvaluationCompleted/, 'a documentação deve registrar a fonte do contrato da outbox');
+
+  const tests = walk(resolve('src/test/kotlin')).filter((file) => file.endsWith('.kt'));
+  for (const area of ['web', 'security', 'persistence', 'messaging', 'report', 'observability']) {
+    assert.ok(tests.some((file) => file.replaceAll('\\', '/').includes(`/${area}/`)),
+      `contrato funcional sem cobertura: ${area}`);
+  }
+  assert.equal(tests.some((file) => /@(?:Disabled|Ignore)\b/.test(source(file))), false,
+    'nenhum contrato funcional pode ser desabilitado durante a refatoração');
 });
