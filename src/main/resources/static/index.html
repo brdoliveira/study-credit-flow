@@ -3,32 +3,123 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17212b">
   <title>Crédito rotativo | Avaliação</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="/css/app.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
 </head>
-<body>
-  <main class="container py-4">
-    <header class="d-flex justify-content-between align-items-center mb-4">
-      <div><h1 class="h3 mb-1">Avaliação de crédito rotativo</h1><p class="text-body-secondary mb-0">Fluxo demonstrativo para operadores autorizados.</p></div>
-      <div class="d-flex gap-2"><a class="btn btn-outline-primary" data-authority="SCOPE_credit:report" href="/report.html">Consultar relatório</a><button class="btn btn-outline-secondary" id="logout" type="button">Sair</button></div>
-    </header>
-    <div id="feedback" aria-live="polite"></div>
-    <form id="evaluation-form" data-authority="SCOPE_credit:write" class="card card-body shadow-sm" novalidate>
-      <div class="row g-3">
-        <div class="col-md-6"><label class="form-label" for="name">Nome</label><input class="form-control" id="name" name="name" required></div>
-        <div class="col-md-3"><label class="form-label" for="cpf">CPF</label><input class="form-control" id="cpf" name="cpf" inputmode="numeric" required></div>
-        <div class="col-md-3"><label class="form-label" for="creditScore">Score</label><input class="form-control" id="creditScore" name="creditScore" type="number" min="0" max="1000" required></div>
-        <div class="col-md-4"><label class="form-label" for="currentInvoiceAmount">Fatura atual (R$)</label><input class="form-control" id="currentInvoiceAmount" name="currentInvoiceAmount" type="number" min="0" step="0.01" required></div>
-        <div class="col-md-4"><label class="form-label" for="totalLimit">Limite total (R$)</label><input class="form-control" id="totalLimit" name="totalLimit" type="number" min="0.01" step="0.01" required></div>
-        <div class="col-md-4"><label class="form-label" for="availableLimit">Limite disponível (R$)</label><input class="form-control" id="availableLimit" name="availableLimit" type="number" min="0" step="0.01" required></div>
-        <div class="col-md-3"><label class="form-label" for="latePayments">Atrasos</label><input class="form-control" id="latePayments" name="latePayments" type="number" min="0" required></div>
-        <div class="col-md-9"><label class="form-label" for="monthlySpending">Gastos dos últimos 3 meses (R$, separados por vírgula)</label><input class="form-control" id="monthlySpending" name="monthlySpending" placeholder="1500, 1700, 1800" required></div>
+<body class="app-body">
+  <header class="app-header">
+    <div class="app-header__inner">
+      <a class="brand" href="/" aria-label="Crédito Rotativo - início">
+        <span class="brand__mark"><i data-lucide="landmark" aria-hidden="true"></i></span>
+        <span><strong>Crédito Rotativo</strong><small>Operações de crédito</small></span>
+      </a>
+      <nav class="primary-nav" aria-label="Navegação principal">
+        <a class="primary-nav__link is-active" href="/" aria-current="page">
+          <i data-lucide="clipboard-check" aria-hidden="true"></i><span>Avaliar</span>
+        </a>
+        <a class="primary-nav__link" data-authority="SCOPE_credit:report" href="/report.html">
+          <i data-lucide="file-chart-column" aria-hidden="true"></i><span>Relatórios</span>
+        </a>
+        <a class="primary-nav__link" href="/swagger-ui/index.html">
+          <i data-lucide="braces" aria-hidden="true"></i><span>API</span>
+        </a>
+      </nav>
+      <div class="session-area">
+        <span class="session-status"><span aria-hidden="true"></span>Sessão ativa</span>
+        <button class="icon-button icon-button--header" id="logout" type="button" aria-label="Sair" title="Sair">
+          <i data-lucide="log-out" aria-hidden="true"></i>
+        </button>
       </div>
-      <div class="mt-4"><button class="btn btn-primary" type="submit">Avaliar crédito</button></div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="page-heading">
+      <div>
+        <p class="section-kicker">Nova solicitação</p>
+        <h1>Avaliação de crédito</h1>
+        <p>Registre os dados cadastrais e financeiros para processar uma nova decisão.</p>
+      </div>
+      <div class="page-heading__context" aria-label="Contexto da operação">
+        <i data-lucide="shield-check" aria-hidden="true"></i>
+        <span><small>Processamento</small><strong>Seguro e auditável</strong></span>
+      </div>
+    </div>
+
+    <div id="feedback" class="feedback-region" aria-live="polite"></div>
+
+    <form id="evaluation-form" data-authority="SCOPE_credit:write" class="workspace-panel" novalidate>
+      <section class="form-section" aria-labelledby="customer-section-title">
+        <div class="form-section__heading">
+          <span class="section-icon"><i data-lucide="user-round" aria-hidden="true"></i></span>
+          <div><h2 id="customer-section-title">Dados do cliente</h2><p>Identificação e perfil de crédito.</p></div>
+        </div>
+        <div class="form-grid form-grid--customer">
+          <div class="field field--wide">
+            <label for="name">Nome completo</label>
+            <input class="form-control" id="name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="cpf">CPF</label>
+            <input class="form-control" id="cpf" name="cpf" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="Somente números" required>
+          </div>
+          <div class="field">
+            <label for="creditScore">Score de crédito</label>
+            <input class="form-control" id="creditScore" name="creditScore" type="number" min="0" max="1000" placeholder="0 a 1000" required>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="financial-section-title">
+        <div class="form-section__heading">
+          <span class="section-icon section-icon--financial"><i data-lucide="wallet-cards" aria-hidden="true"></i></span>
+          <div><h2 id="financial-section-title">Informações financeiras</h2><p>Limites, fatura e comportamento de pagamento.</p></div>
+        </div>
+        <div class="form-grid form-grid--financial">
+          <div class="field field--currency">
+            <label for="currentInvoiceAmount">Fatura atual</label>
+            <div class="input-prefix"><span>R$</span><input class="form-control" id="currentInvoiceAmount" name="currentInvoiceAmount" type="number" min="0" step="0.01" required></div>
+          </div>
+          <div class="field field--currency">
+            <label for="totalLimit">Limite total</label>
+            <div class="input-prefix"><span>R$</span><input class="form-control" id="totalLimit" name="totalLimit" type="number" min="0.01" step="0.01" required></div>
+          </div>
+          <div class="field field--currency">
+            <label for="availableLimit">Limite disponível</label>
+            <div class="input-prefix"><span>R$</span><input class="form-control" id="availableLimit" name="availableLimit" type="number" min="0" step="0.01" required></div>
+          </div>
+          <div class="field">
+            <label for="latePayments">Pagamentos em atraso</label>
+            <input class="form-control" id="latePayments" name="latePayments" type="number" min="0" placeholder="0" required>
+          </div>
+          <div class="field field--spending">
+            <label for="monthlySpending">Gastos dos últimos três meses</label>
+            <input class="form-control" id="monthlySpending" name="monthlySpending" placeholder="Ex.: 1500, 1700, 1800" required>
+            <small>Informe três valores em reais, separados por vírgula.</small>
+          </div>
+        </div>
+      </section>
+
+      <footer class="form-actions">
+        <span><i data-lucide="info" aria-hidden="true"></i>A decisão será registrada para consulta e auditoria.</span>
+        <button class="btn btn-primary action-button" id="submit-evaluation" type="submit">
+          <i data-lucide="scan-search" aria-hidden="true"></i><span>Avaliar crédito</span>
+        </button>
+      </footer>
     </form>
-    <section id="decision" class="mt-4" aria-live="polite"></section>
+
+    <section id="decision" class="decision-region" aria-live="polite"></section>
   </main>
-  <script type="module">import { initialiseSession } from "/ts/session.ts"; initialiseSession();</script><script type="module" src="/ts/evaluation.ts"></script>
+
+  <script type="module">
+    import { initialiseSession } from "/ts/session.ts";
+    await initialiseSession();
+    window.lucide?.createIcons();
+  </script>
+  <script type="module" src="/ts/evaluation.ts"></script>
 </body>
 </html>

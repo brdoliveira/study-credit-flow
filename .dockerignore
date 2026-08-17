@@ -1,0 +1,10 @@
+.context/
+.git/
+.gradle/
+.idea/
+.env
+.DS_Store
+node_modules/
+build/*
+!build/libs/
+!build/libs/*.jar
