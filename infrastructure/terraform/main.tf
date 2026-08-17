@@ -52,8 +52,12 @@ module "service" {
 }
 
 module "observability" {
-  source       = "./modules/observability"
-  name         = var.name
-  cluster_name = module.service.cluster_name
-  service_name = module.service.service_name
+  source                   = "./modules/observability"
+  name                     = var.name
+  cluster_name             = module.service.cluster_name
+  service_name             = module.service.service_name
+  load_balancer_arn_suffix = module.service.load_balancer_arn_suffix
+  target_group_arn_suffix  = module.service.target_group_arn_suffix
+  service_log_group_name   = module.service.log_group_name
+  alarm_notification_email = var.alarm_notification_email
 }

@@ -67,9 +67,12 @@ Relatórios síncronos usam um instante final fixo para manter a paginação est
 - transactional outbox para evitar dual write, com backoff, limite de dez tentativas e estado terminal `FAILED`;
 - correlação em resposta, MDC, decisão e evento;
 - métricas sem CPF ou `evaluationId` como tag;
+- métricas de backlog, publicação da outbox e consumo Kafka com cardinalidade limitada;
 - rate limiting por IP no AWS WAF associado ao ALB;
 - liveness do processo separada da readiness de dependências;
 - erros técnicos sem stack trace no contrato HTTP.
+
+O perfil local de observabilidade conecta Prometheus e Alertmanager às métricas, Grafana aos dashboards e Tempo aos traces recebidos pelo OpenTelemetry Collector. Na referência AWS, um sidecar ADOT envia métricas ao CloudWatch e traces ao X-Ray; alarmes dimensionados para ALB/ECS e erros estruturados notificam um tópico SNS criptografado por uma CMK operacional rotacionada.
 
 ### Logs estruturados e diagnóstico
 

@@ -1,6 +1,7 @@
 package io.github.brdoliveira.creditflow.platform.config
 
 import io.github.brdoliveira.creditflow.platform.health.DependencyReadinessIndicator
+import io.github.brdoliveira.creditflow.platform.health.KafkaReadinessProbe
 import io.github.brdoliveira.creditflow.platform.health.RequiredDependencyProbe
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.BrokerPublisher
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.CreditEvaluationEventEffect
@@ -11,11 +12,13 @@ import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.Proc
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxSchedulingConfiguration
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxStore
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.PostgresOutboxStore
-import org.apache.kafka.clients.admin.AdminClient
-import org.apache.kafka.clients.admin.AdminClientConfig
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.AsyncProcessingMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.OutboxBacklogMetrics
+import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.health.contributor.HealthIndicator
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -23,7 +26,6 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.transaction.support.TransactionTemplate
 import tools.jackson.databind.ObjectMapper
-import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 
 /** Compõe adaptadores de mensageria, outbox e prontidão das dependências. */
@@ -53,7 +55,14 @@ class IntegrationConfiguration {
         objectMapper: ObjectMapper,
         processedEventStore: ProcessedEventStore,
         eventEffect: ObjectProvider<CreditEvaluationEventEffect>,
-    ) = CreditEvaluationKafkaListener(objectMapper, processedEventStore, eventEffect)
+        metrics: AsyncProcessingMetrics,
+    ) = CreditEvaluationKafkaListener(objectMapper, processedEventStore, eventEffect, metrics)
+
+    /** Mantém gauges de backlog e falhas terminais da outbox. */
+    @Bean
+    @ConditionalOnProperty(name = ["credit.outbox.scheduling-enabled"], havingValue = "true", matchIfMissing = true)
+    fun outboxBacklogMetrics(registry: MeterRegistry, jdbcTemplate: JdbcTemplate) =
+        OutboxBacklogMetrics(registry, jdbcTemplate)
 
     /** Verifica PostgreSQL e Kafka sem misturá-los à liveness do processo. */
     @Bean("dependencyReadiness")
@@ -63,13 +72,7 @@ class IntegrationConfiguration {
     ): HealthIndicator = DependencyReadinessIndicator(
         mapOf(
             "postgres" to RequiredDependencyProbe { dataSource.connection.use { it.isValid(2) } },
-            "kafka" to RequiredDependencyProbe {
-                AdminClient.create(
-                    mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers),
-                ).use { client ->
-                    client.describeCluster().clusterId().get(2, TimeUnit.SECONDS).isNotBlank()
-                }
-            },
+            "kafka" to KafkaReadinessProbe(bootstrapServers),
         ),
     )
 }

@@ -55,6 +55,17 @@
           }
         }
       ]
+    },
+    {
+      "clientId": "credit-observability",
+      "name": "Credit observability collector",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "${PROMETHEUS_CLIENT_SECRET}",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "protocol": "openid-connect"
     }
   ],
   "users": [
@@ -97,6 +108,12 @@
       "enabled": true,
       "realmRoles": ["credit:admin"],
       "credentials": [{ "type": "password", "value": "${CREDIT_DEMO_PASSWORD}", "temporary": false }]
+    },
+    {
+      "username": "service-account-credit-observability",
+      "enabled": true,
+      "serviceAccountClientId": "credit-observability",
+      "realmRoles": ["credit:admin"]
     }
   ]
 }

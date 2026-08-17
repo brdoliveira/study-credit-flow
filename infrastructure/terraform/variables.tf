@@ -16,6 +16,11 @@ variable "desired_count" {
   type    = number
   default = 2
 }
+variable "alarm_notification_email" {
+  description = "Optional email subscribed to operational CloudWatch alarms."
+  type        = string
+  default     = ""
+}
 variable "tags" {
   type    = map(string)
   default = { Project = "credito-rotativo", ManagedBy = "terraform" }

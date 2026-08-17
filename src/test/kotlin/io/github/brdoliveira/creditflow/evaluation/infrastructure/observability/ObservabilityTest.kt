@@ -1,6 +1,7 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.observability
 
 import io.github.brdoliveira.creditflow.platform.health.DependencyReadinessIndicator
+import io.github.brdoliveira.creditflow.platform.health.KafkaReadinessProbe
 import io.github.brdoliveira.creditflow.platform.health.RequiredDependencyProbe
 import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.GlobalExceptionHandler
@@ -13,6 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class ObservabilityTest {
     @Test
@@ -44,12 +46,21 @@ class ObservabilityTest {
         metrics.recordEvaluation("REJECTED", Duration.ofMillis(10))
         metrics.recordTechnicalError("DEPENDENCY")
         metrics.recordRuleFailure("MINIMUM_SCORE")
+        val asyncMetrics = MicrometerAsyncProcessingMetrics(registry)
+        asyncMetrics.recordOutbox(OutboxOutcome.PUBLISHED)
+        asyncMetrics.recordOutbox(OutboxOutcome.RETRY)
+        asyncMetrics.recordKafka(KafkaOutcome.PROCESSED)
+        asyncMetrics.recordKafka(KafkaOutcome.DUPLICATE)
 
         assertEquals(1.0, registry.counter("credit.evaluations", "decision", "APPROVED").count())
         assertEquals(1.0, registry.counter("credit.evaluations", "decision", "REJECTED").count())
         assertEquals(2, registry.timer("credit.evaluation.duration").count())
         assertEquals(1.0, registry.counter("credit.evaluation.errors", "type", "DEPENDENCY").count())
         assertEquals(1.0, registry.counter("credit.rule.failures", "rule", "MINIMUM_SCORE").count())
+        assertEquals(1.0, registry.counter("credit.outbox.events", "outcome", "published").count())
+        assertEquals(1.0, registry.counter("credit.outbox.events", "outcome", "retry").count())
+        assertEquals(1.0, registry.counter("credit.kafka.events", "outcome", "processed").count())
+        assertEquals(1.0, registry.counter("credit.kafka.events", "outcome", "duplicate").count())
     }
 
     @Test
@@ -63,6 +74,18 @@ class ObservabilityTest {
         assertEquals("UP", ready.status.code)
         assertEquals("DOWN", unavailable.status.code)
         assertEquals(listOf("postgres"), unavailable.details["unavailableDependencies"])
+    }
+
+    @Test
+    fun `Kafka readiness returns promptly when the broker is unavailable`() {
+        val startedAt = System.nanoTime()
+        val available = runCatching {
+            KafkaReadinessProbe("127.0.0.1:1", Duration.ofMillis(100)).isAvailable()
+        }.getOrDefault(false)
+        val elapsed = Duration.ofNanos(System.nanoTime() - startedAt)
+
+        assertFalse(available)
+        assertTrue(elapsed < Duration.ofSeconds(2), "Kafka readiness took $elapsed")
     }
 
     @Test

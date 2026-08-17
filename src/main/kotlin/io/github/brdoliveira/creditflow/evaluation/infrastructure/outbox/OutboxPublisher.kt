@@ -2,6 +2,8 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox
 
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.CreditEvaluationEventProducer
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.TransientBrokerException
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.AsyncProcessingMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.OutboxOutcome
 import io.github.brdoliveira.creditflow.platform.observability.CorrelationLogContext
 import org.slf4j.LoggerFactory
 import java.time.Clock
@@ -16,6 +18,7 @@ class OutboxPublisher(
     private val retryBaseDelay: Duration = Duration.ofSeconds(1),
     private val maximumRetryDelay: Duration = Duration.ofMinutes(5),
     private val maximumAttempts: Int = 10,
+    private val metrics: AsyncProcessingMetrics = AsyncProcessingMetrics.NONE,
 ) {
     init {
         require(maximumAttempts > 0) { "maximumAttempts must be positive" }
@@ -31,6 +34,7 @@ class OutboxPublisher(
                 try {
                     producer.publish(pending.event)
                     outboxStore.markPublished(pending.eventId, now)
+                    metrics.recordOutbox(OutboxOutcome.PUBLISHED)
                 } catch (error: TransientBrokerException) {
                     handleTransientFailure(pending, now, error)
                 } catch (error: Exception) {
@@ -41,6 +45,7 @@ class OutboxPublisher(
                         now,
                         "Permanent publication failure (${error.javaClass.simpleName})",
                     )
+                    metrics.recordOutbox(OutboxOutcome.FAILED)
                     logger.error(
                         "Outbox publication failed permanently: eventId={}, attempt={}, failureType={}",
                         pending.eventId,
@@ -61,6 +66,7 @@ class OutboxPublisher(
                 now,
                 "Retry limit reached (${error.javaClass.simpleName})",
             )
+            metrics.recordOutbox(OutboxOutcome.FAILED)
             logger.error(
                 "Outbox retry limit reached: eventId={}, attempt={}, failureType={}",
                 pending.eventId,
@@ -76,6 +82,7 @@ class OutboxPublisher(
             nextAttemptAt,
             "Broker publication failed (${error.javaClass.simpleName})",
         )
+        metrics.recordOutbox(OutboxOutcome.RETRY)
         logger.warn(
             "Outbox publication rescheduled: eventId={}, attempt={}, nextAttemptAt={}, failureType={}",
             pending.eventId,

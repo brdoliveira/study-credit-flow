@@ -1,0 +1,72 @@
+groups:
+  - name: credit-flow-slos
+    rules:
+      - alert: CreditFlowUnavailable
+        expr: up{job="credit-flow"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Credit Flow is unavailable to Prometheus
+          runbook: docs/observability.md#creditflowunavailable
+
+      - alert: CreditFlowErrorBudgetBurn
+        expr: |
+          sum(rate(http_server_requests_seconds_count{job="credit-flow",status=~"5.."}[5m]))
+          /
+          clamp_min(sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])), 0.001)
+          > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: HTTP 5xx rate is above the 1 percent SLO
+          runbook: docs/observability.md#creditflowerrorbudgetburn
+
+      - alert: CreditFlowP99LatencyHigh
+        expr: |
+          histogram_quantile(0.99,
+            sum by (le) (rate(http_server_requests_seconds_bucket{job="credit-flow"}[5m]))
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: HTTP p99 latency is above one second
+          runbook: docs/observability.md#creditflowp99latencyhigh
+
+  - name: credit-flow-async
+    rules:
+      - alert: CreditFlowOutboxTerminalFailure
+        expr: credit_outbox_failed{job="credit-flow"} > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: The outbox contains terminal failures
+          runbook: docs/observability.md#creditflowoutboxterminalfailure
+
+      - alert: CreditFlowOutboxBacklog
+        expr: credit_outbox_backlog{job="credit-flow"} > 100 or credit_outbox_oldest_pending_age_seconds{job="credit-flow"} > 60
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: The outbox backlog is growing or stale
+          runbook: docs/observability.md#creditflowoutboxbacklog
+
+      - alert: CreditFlowOutboxPublicationFailures
+        expr: increase(credit_outbox_events_total{job="credit-flow",outcome="failed"}[5m]) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: An outbox event reached terminal publication failure
+          runbook: docs/observability.md#creditflowoutboxterminalfailure
+
+      - alert: CreditFlowKafkaConsumptionFailures
+        expr: increase(credit_kafka_events_total{job="credit-flow",outcome="failed"}[5m]) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: Kafka event consumption is failing
+          runbook: docs/observability.md#creditflowkafkaconsumptionfailures

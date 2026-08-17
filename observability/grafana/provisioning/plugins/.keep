@@ -1,0 +1,1 @@
+# Grafana expects the provisioning directory to exist even when no plugins are provisioned.

@@ -19,6 +19,7 @@ import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCreditEvaluationReportGenerator
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.mapper.CreditEvaluationWebMapper
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.MicrometerAsyncProcessingMetrics
 import io.micrometer.core.instrument.MeterRegistry
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -88,6 +89,10 @@ class ApplicationConfiguration {
     /** Fornece as métricas técnicas e de negócio. */
     @Bean
     fun creditMetrics(registry: MeterRegistry) = CreditMetrics(registry)
+
+    /** Fornece métricas de publicação e consumo assíncronos. */
+    @Bean
+    fun asyncProcessingMetrics(registry: MeterRegistry) = MicrometerAsyncProcessingMetrics(registry)
 
     /** Compõe criação, idempotência e métricas. */
     @Bean

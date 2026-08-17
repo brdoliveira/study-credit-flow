@@ -2,6 +2,8 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging
 
 import io.github.brdoliveira.creditflow.evaluation.application.event.CreditEvaluationCompleted
 import io.github.brdoliveira.creditflow.platform.observability.CorrelationLogContext
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.AsyncProcessingMetrics
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.KafkaOutcome
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
@@ -13,6 +15,7 @@ class CreditEvaluationKafkaListener(
     objectMapper: ObjectMapper,
     processedEventStore: ProcessedEventStore,
     eventEffect: ObjectProvider<CreditEvaluationEventEffect>,
+    private val metrics: AsyncProcessingMetrics = AsyncProcessingMetrics.NONE,
 ) {
     private val consumer = IdempotentCreditEvaluationConsumer(
         processedEventStore,
@@ -36,6 +39,7 @@ class CreditEvaluationKafkaListener(
     private fun consume(event: CreditEvaluationCompleted): ConsumptionResult =
         CorrelationLogContext.withCorrelationId(event.correlationId) {
             val result = runCatching { consumer.consume(event) }.getOrElse { error ->
+                metrics.recordKafka(KafkaOutcome.FAILED)
                 logger.error(
                     "Kafka evaluation consumption failed: eventId={}, failureType={}",
                     event.eventId,
@@ -44,8 +48,14 @@ class CreditEvaluationKafkaListener(
                 throw error
             }
             when (result) {
-                ConsumptionResult.PROCESSED -> logger.debug("Kafka evaluation event processed: eventId={}", event.eventId)
-                ConsumptionResult.DUPLICATE_ACKNOWLEDGED -> logger.info("Kafka evaluation event duplicated: eventId={}", event.eventId)
+                ConsumptionResult.PROCESSED -> {
+                    metrics.recordKafka(KafkaOutcome.PROCESSED)
+                    logger.debug("Kafka evaluation event processed: eventId={}", event.eventId)
+                }
+                ConsumptionResult.DUPLICATE_ACKNOWLEDGED -> {
+                    metrics.recordKafka(KafkaOutcome.DUPLICATE)
+                    logger.info("Kafka evaluation event duplicated: eventId={}", event.eventId)
+                }
             }
             result
         }

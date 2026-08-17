@@ -6,6 +6,8 @@ Esta configuração representa VPC com sub-redes privadas, ALB HTTPS, ECS/Fargat
 
 - Banco, brokers e tasks ficam apenas nas sub-redes privadas; somente o ALB recebe tráfego externo por HTTPS.
 - O AWS WAF associado ao ALB bloqueia cada IP que ultrapassa 2.000 requisições na janela padrão de cinco minutos.
+- CloudWatch monitora `5xx`, latência p99, targets, CPU, memória e logs estruturados; os alarmes publicam no tópico SNS informado pelos outputs.
+- O sidecar ADOT recebe OTLP da aplicação e envia traces ao X-Ray. Defina `alarm_notification_email` para criar uma assinatura de e-mail ou integre o tópico SNS ao sistema de incidentes.
 - Dados, logs, broker e segredos usam KMS; credenciais do Aurora são gerenciadas pelo Secrets Manager, não por variáveis em texto.
 - Aurora mantém 14 dias de backup, proteção contra exclusão, snapshot final e duas instâncias em zonas distintas.
 - As policies dão somente `GetSecretValue` e `kms:Decrypt` aos recursos nomeados. Permissões de negócio devem ficar em uma task role separada.

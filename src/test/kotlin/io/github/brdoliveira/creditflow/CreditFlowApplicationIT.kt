@@ -4,6 +4,7 @@ import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvalu
 import io.github.brdoliveira.creditflow.evaluation.application.EvaluateCreditCommand
 import io.github.brdoliveira.creditflow.evaluation.application.FindCreditEvaluationUseCase
 import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxPublisher
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -18,6 +19,7 @@ import java.time.Instant
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @SpringBootTest
@@ -26,6 +28,7 @@ class CreditFlowApplicationIT @Autowired constructor(
     private val createEvaluation: CreateCreditEvaluationUseCase,
     private val findEvaluation: FindCreditEvaluationUseCase,
     private val generateReport: GenerateCreditEvaluationReportUseCase,
+    private val outboxPublisher: OutboxPublisher,
 ) {
     @MockitoBean
     private lateinit var jwtDecoder: JwtDecoder
@@ -42,6 +45,7 @@ class CreditFlowApplicationIT @Autowired constructor(
         assertEquals(correlationId, created.correlationId)
         assertEquals(created.evaluationId, restored?.evaluationId)
         assertTrue(pdf.take(4).toByteArray().contentEquals("%PDF".toByteArray()))
+        assertNotNull(outboxPublisher)
     }
 
     private fun command(correlationId: String) = EvaluateCreditCommand(

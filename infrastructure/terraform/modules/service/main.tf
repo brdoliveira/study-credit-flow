@@ -142,7 +142,59 @@ resource "aws_iam_role_policy" "secret" {
     Version = "2012-10-17"
     Statement = [
       { Effect = "Allow", Action = ["secretsmanager:GetSecretValue"], Resource = var.secret_arn },
-      { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn }
+      { Effect = "Allow", Action = ["kms:Decrypt"], Resource = var.kms_key_arn },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "${aws_cloudwatch_log_group.service.arn}:*"
+      }
+    ]
+  })
+}
+resource "aws_iam_role" "task" {
+  name = "${var.name}-task"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Service = "ecs-tasks.amazonaws.com" }
+      Action    = "sts:AssumeRole"
+    }]
+  })
+}
+resource "aws_iam_role_policy" "telemetry" {
+  role = aws_iam_role.task.id
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords",
+          "xray:GetSamplingRules",
+          "xray:GetSamplingTargets",
+          "xray:GetSamplingStatisticSummaries"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["cloudwatch:PutMetricData"]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents"
+        ]
+        Resource = "${aws_cloudwatch_log_group.service.arn}:*"
+      }
     ]
   })
 }
@@ -153,21 +205,46 @@ resource "aws_ecs_task_definition" "this" {
   cpu                      = 1024
   memory                   = 2048
   execution_role_arn       = aws_iam_role.execution.arn
-  container_definitions = jsonencode([{
-    name         = var.name
-    image        = var.container_image
-    essential    = true
-    portMappings = [{ containerPort = 8080 }]
-    secrets      = [{ name = "APPLICATION_CONFIG", valueFrom = var.secret_arn }]
-    logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-group         = aws_cloudwatch_log_group.service.name
-        awslogs-region        = data.aws_region.current.name
-        awslogs-stream-prefix = "app"
+  task_role_arn            = aws_iam_role.task.arn
+  container_definitions = jsonencode([
+    {
+      name         = var.name
+      image        = var.container_image
+      essential    = true
+      portMappings = [{ containerPort = 8080 }]
+      secrets      = [{ name = "APPLICATION_CONFIG", valueFrom = var.secret_arn }]
+      environment = [
+        { name = "OTEL_TRACING_ENABLED", value = "true" },
+        { name = "OTEL_METRICS_ENABLED", value = "true" },
+        { name = "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT", value = "http://localhost:4318/v1/traces" },
+        { name = "OTEL_EXPORTER_OTLP_METRICS_ENDPOINT", value = "http://localhost:4318/v1/metrics" },
+        { name = "MANAGEMENT_TRACING_SAMPLING_PROBABILITY", value = "0.1" }
+      ]
+      dependsOn = [{ containerName = "aws-otel-collector", condition = "START" }]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.service.name
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "app"
+        }
+      }
+    },
+    {
+      name      = "aws-otel-collector"
+      image     = "public.ecr.aws/aws-observability/aws-otel-collector:v0.49.0"
+      essential = true
+      command   = ["--config=/etc/ecs/ecs-default-config.yaml"]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.service.name
+          awslogs-region        = data.aws_region.current.name
+          awslogs-stream-prefix = "otel"
+        }
       }
     }
-  }])
+  ])
 }
 resource "aws_ecs_service" "this" {
   name            = var.name
@@ -190,3 +267,6 @@ output "service_sg_id" { value = aws_security_group.service.id }
 output "cluster_name" { value = aws_ecs_cluster.this.name }
 output "service_name" { value = aws_ecs_service.this.name }
 output "load_balancer_dns" { value = aws_lb.this.dns_name }
+output "load_balancer_arn_suffix" { value = aws_lb.this.arn_suffix }
+output "target_group_arn_suffix" { value = aws_lb_target_group.this.arn_suffix }
+output "log_group_name" { value = aws_cloudwatch_log_group.service.name }

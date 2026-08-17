@@ -17,6 +17,12 @@ test('@spec:AC-076 Terraform representa rede privada, entrada protegida, ECS, Au
     assert.match(all, new RegExp(marker));
   }
   assert.match(read('infrastructure/terraform/outputs.tf'), /cost_drivers/);
+  for (const marker of ['LoadBalancer = var.load_balancer_arn_suffix', 'TargetGroup  = var.target_group_arn_suffix', 'alarm_actions', 'aws_sns_topic', 'aws_cloudwatch_dashboard', 'TargetResponseTime', 'UnHealthyHostCount', 'MemoryUtilization', 'aws_cloudwatch_log_metric_filter']) {
+    assert.match(all, new RegExp(marker), `missing operational observability marker: ${marker}`);
+  }
+  assert.match(all, /aws-otel-collector:v0\.49\.0/);
+  assert.match(all, /xray:PutTraceSegments/);
+  assert.match(all, /logs:PutLogEvents/);
 });
 
 test('@spec:AC-077 Terraform aplica defaults seguros e documenta backup, HA, least privilege e migrations', () => {

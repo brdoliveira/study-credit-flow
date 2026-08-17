@@ -10,6 +10,7 @@ Aplicação demonstrativa para avaliar concessão de crédito rotativo de forma 
 - mensageria compatível com Kafka e transactional outbox;
 - PDF gerado no backend com PDFBox;
 - métricas Prometheus, correlação, liveness e readiness;
+- tracing OpenTelemetry com Tempo local e ADOT/X-Ray na referência AWS;
 - rastreabilidade mecânica entre spec, tarefas e testes em `.spec/`.
 
 A arquitetura e o caminho para AWS estão em [docs/architecture.md](docs/architecture.md). As decisões e seus trade-offs estão em [docs/adrs](docs/adrs).
@@ -71,6 +72,17 @@ Este é o roteiro principal para uma demonstração sem conhecimento prévio. Os
 6. Execute `./scripts/demo.ps1` para abrir a jornada visual e receber os passos para login, criação, histórico, PDF, evento e métricas.
 
 Para encerrar preservando os volumes, execute `docker compose down`. A remoção de volumes é deliberadamente omitida do fluxo normal porque apaga os dados locais.
+
+### Observabilidade local
+
+A pilha opcional adiciona Prometheus, Alertmanager, Grafana, OpenTelemetry Collector e Tempo sem expor portas além do loopback. Preencha as variáveis de observabilidade do `.env` e execute:
+
+```bash
+./scripts/observability.sh validate
+./scripts/observability.sh start
+```
+
+O Grafana fica em `http://localhost:3000`, com dashboard, Prometheus e Tempo provisionados. Alertas, SLOs, testes de falha e runbooks estão em [docs/observability.md](docs/observability.md).
 
 ### Prova reproduzível a partir de volumes limpos
 
