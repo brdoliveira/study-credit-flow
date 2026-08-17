@@ -1175,55 +1175,55 @@
       "codigo": "VERIFY_OBSOLETO",
       "feature": "credito-rotativo",
       "ref": "—",
-      "ocorrencias": 5,
+      "ocorrencias": 6,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-019": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-019",
-      "ocorrencias": 20,
+      "ocorrencias": 24,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-020": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-020",
-      "ocorrencias": 10,
+      "ocorrencias": 12,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-021": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-021",
-      "ocorrencias": 20,
+      "ocorrencias": 24,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-022": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-022",
-      "ocorrencias": 5,
+      "ocorrencias": 6,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-026": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-026",
-      "ocorrencias": 10,
+      "ocorrencias": 12,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-030": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -1355,208 +1355,208 @@
       "codigo": "REF_MALFORMADA",
       "feature": "neutralizacao-marca",
       "ref": "T-028",
-      "ocorrencias": 6,
+      "ocorrencias": 8,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
       "codigo": "AC_SEM_PROVA",
       "feature": "neutralizacao-marca",
       "ref": "AC-080",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-081": {
       "codigo": "AC_SEM_PROVA",
       "feature": "neutralizacao-marca",
       "ref": "AC-081",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-056": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-056",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-057": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-057",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-058": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-058",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-059": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-059",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-060": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-060",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-061": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-061",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-062": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-062",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-063": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-063",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-064": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-064",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-076": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-076",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::prontidao-entrega::AC-077": {
       "codigo": "AC_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "AC-077",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "VERIFY_OBSOLETO::prontidao-entrega::—": {
       "codigo": "VERIFY_OBSOLETO",
       "feature": "prontidao-entrega",
       "ref": "—",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-082": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-082",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:13.999Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.377Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-083": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-083",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.377Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-084": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-084",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-085": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-085",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-086": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-086",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-087": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-087",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-088": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-088",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-089": {
       "codigo": "AC_SEM_PROVA",
       "feature": "arquitetura-kotlin",
       "ref": "AC-089",
-      "ocorrencias": 2,
+      "ocorrencias": 3,
       "primeiraVez": "2026-08-17T02:44:54.089Z",
-      "ultimaVez": "2026-08-17T02:47:14.000Z",
-      "gitRev": "79728a1"
+      "ultimaVez": "2026-08-17T02:48:11.378Z",
+      "gitRev": "d3f49f5"
     },
     "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationResult.kt": {
       "codigo": "ARQUIVO_ORFAO",
