@@ -35,14 +35,7 @@ class CreditEvaluationKafkaListener(
 
     private fun consume(event: CreditEvaluationCompleted): ConsumptionResult =
         CorrelationLogContext.withCorrelationId(event.correlationId) {
-            try {
-                val result = consumer.consume(event)
-                when (result) {
-                    ConsumptionResult.PROCESSED -> logger.debug("Kafka evaluation event processed: eventId={}", event.eventId)
-                    ConsumptionResult.DUPLICATE_ACKNOWLEDGED -> logger.info("Kafka evaluation event duplicated: eventId={}", event.eventId)
-                }
-                result
-            } catch (error: RuntimeException) {
+            val result = runCatching { consumer.consume(event) }.getOrElse { error ->
                 logger.error(
                     "Kafka evaluation consumption failed: eventId={}, failureType={}",
                     event.eventId,
@@ -50,6 +43,11 @@ class CreditEvaluationKafkaListener(
                 )
                 throw error
             }
+            when (result) {
+                ConsumptionResult.PROCESSED -> logger.debug("Kafka evaluation event processed: eventId={}", event.eventId)
+                ConsumptionResult.DUPLICATE_ACKNOWLEDGED -> logger.info("Kafka evaluation event duplicated: eventId={}", event.eventId)
+            }
+            result
         }
 
     private companion object {
