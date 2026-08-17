@@ -1,17 +1,24 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.idempotency
 
+import tools.jackson.core.JacksonException
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
 import java.security.MessageDigest
 
-/** Calcula SHA-256 estável sobre JSON, ignorando espaços e a ordem das propriedades. */
+/** Calcula SHA-256 estável sobre JSON ou sobre uma representação canônica opaca. */
 class CanonicalRequestHasher(
     private val objectMapper: ObjectMapper = ObjectMapper(),
 ) {
     /** Retorna o hash hexadecimal da representação canônica da requisição. */
     fun hash(requestBody: String): String = MessageDigest.getInstance("SHA-256")
-        .digest(canonicalize(requestBody).toByteArray(Charsets.UTF_8))
+        .digest(canonicalizeIfJson(requestBody).toByteArray(Charsets.UTF_8))
         .joinToString("") { "%02x".format(it) }
+
+    private fun canonicalizeIfJson(source: String): String = try {
+        canonicalize(source)
+    } catch (_: JacksonException) {
+        source
+    }
 
     /** Converte o corpo JSON para sua representação canônica. */
     fun canonicalize(requestBody: String): String = canonicalize(objectMapper.readTree(requestBody))

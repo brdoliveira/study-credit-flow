@@ -8,6 +8,7 @@ import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.CreditEvaluationEntity
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.PostgresCreditEvaluationRepository
 import io.github.brdoliveira.creditflow.infrastructure.privacy.CpfProtector
 import jakarta.persistence.EntityManager
@@ -19,6 +20,7 @@ import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase
+import org.springframework.boot.persistence.autoconfigure.EntityScan
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -32,6 +34,7 @@ import tools.jackson.databind.ObjectMapper
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@EntityScan(basePackageClasses = [CreditEvaluationEntity::class])
 @Testcontainers
 @ExtendWith(SpringExtension::class)
 class PostgresCreditEvaluationRepositoryIT @Autowired constructor(

@@ -80,7 +80,9 @@ class IdempotencyIT @Autowired constructor(
 
         assertThatThrownBy { repository.execute(key, "{\"score\":650}") { result("evaluation-2") } }
             .isInstanceOf(IdempotencyKeyConflictException::class.java)
-        assertThat(repository.execute(key, "{\"score\":720}") { error("must replay") }).isEqualTo(original)
+        val replay = repository.execute(key, "{\"score\":720}") { error("must replay") }
+        assertThat(replay.result).isEqualTo(original.result)
+        assertThat(replay.replayed).isTrue()
     }
 
     @Test
