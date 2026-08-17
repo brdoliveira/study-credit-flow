@@ -1355,10 +1355,10 @@
       "codigo": "REF_MALFORMADA",
       "feature": "neutralizacao-marca",
       "ref": "T-028",
-      "ocorrencias": 18,
+      "ocorrencias": 20,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T04:39:27.833Z",
-      "gitRev": "9bdd834"
+      "ultimaVez": "2026-08-17T05:23:41.329Z",
+      "gitRev": "ddb7fa3"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
       "codigo": "AC_SEM_PROVA",
@@ -2232,6 +2232,24 @@
       "primeiraVez": "2026-08-17T03:51:30.396Z",
       "ultimaVez": "2026-08-17T04:36:35.614Z",
       "gitRev": "d9aa204"
+    },
+    "ARQUIVO_INEXISTENTE::renomear-infraestrutura-platform::T-041": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "renomear-infraestrutura-platform",
+      "ref": "T-041",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T05:23:41.329Z",
+      "ultimaVez": "2026-08-17T05:23:41.329Z",
+      "gitRev": "ddb7fa3"
+    },
+    "AC_SEM_TESTE::renomear-infraestrutura-platform::AC-096": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "renomear-infraestrutura-platform",
+      "ref": "AC-096",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:23:41.329Z",
+      "ultimaVez": "2026-08-17T05:23:41.329Z",
+      "gitRev": "ddb7fa3"
     }
   }
 }
