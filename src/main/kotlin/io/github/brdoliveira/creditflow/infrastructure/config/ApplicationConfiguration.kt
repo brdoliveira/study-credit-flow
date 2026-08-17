@@ -37,6 +37,11 @@ import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxSchedulingCo
 import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxStore
 import io.github.brdoliveira.creditflow.infrastructure.outbox.PostgresOutboxStore
 import io.github.brdoliveira.creditflow.infrastructure.report.PdfCreditEvaluationReportGenerator
+import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase as ConsolidatedListCreditEvaluationsUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository as ConsolidatedCreditEvaluationRepository
+import io.github.brdoliveira.creditflow.evaluation.application.report.CreditEvaluationReportGenerator as ConsolidatedReportGenerator
+import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCreditEvaluationReportGenerator as ConsolidatedPdfReportGenerator
 import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationReportService
 import io.github.brdoliveira.creditflow.infrastructure.web.DefaultCreditEvaluationReportService
 import io.micrometer.core.instrument.MeterRegistry
@@ -139,6 +144,23 @@ class ApplicationConfiguration {
 
     @Bean
     fun pdfCreditEvaluationReportGenerator() = PdfCreditEvaluationReportGenerator()
+
+    /** Expõe o caso de uso consolidado de listagem para os adaptadores da avaliação. */
+    @Bean
+    fun consolidatedListCreditEvaluationsUseCase(repository: ConsolidatedCreditEvaluationRepository) =
+        ConsolidatedListCreditEvaluationsUseCase(repository)
+
+    /** Expõe o gerador PDF que recebe exclusivamente modelos do domínio. */
+    @Bean
+    fun consolidatedReportGenerator(): ConsolidatedReportGenerator = ConsolidatedPdfReportGenerator()
+
+    /** Expõe o caso de uso consolidado de geração do relatório. */
+    @Bean
+    fun generateCreditEvaluationReportUseCase(
+        list: ConsolidatedListCreditEvaluationsUseCase,
+        generator: ConsolidatedReportGenerator,
+        clock: Clock,
+    ) = GenerateCreditEvaluationReportUseCase(list, generator, clock)
 
     @Bean
     fun reportDataSource(repository: CreditEvaluationRepository): CreditEvaluationReportDataSource =
