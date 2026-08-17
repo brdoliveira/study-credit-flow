@@ -1,7 +1,9 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging
 
 import io.github.brdoliveira.creditflow.evaluation.application.event.CreditEvaluationCompleted
+import io.github.brdoliveira.creditflow.platform.observability.CorrelationLogContext
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.kafka.annotation.KafkaListener
 import tools.jackson.databind.ObjectMapper
@@ -24,10 +26,33 @@ class CreditEvaluationKafkaListener(
     )
     /** Consome uma mensagem entregue pelo tópico de avaliações concluídas. */
     fun onMessage(record: ConsumerRecord<String, String>) {
-        consumer.consume(reader.readValue<CreditEvaluationCompleted>(record.value()))
+        consume(reader.readValue(record.value()))
     }
 
     /** Consome diretamente um payload, permitindo validar a integração sem o broker. */
     internal fun onPayload(payload: String): ConsumptionResult =
-        consumer.consume(reader.readValue<CreditEvaluationCompleted>(payload))
+        consume(reader.readValue(payload))
+
+    private fun consume(event: CreditEvaluationCompleted): ConsumptionResult =
+        CorrelationLogContext.withCorrelationId(event.correlationId) {
+            try {
+                val result = consumer.consume(event)
+                when (result) {
+                    ConsumptionResult.PROCESSED -> logger.debug("Kafka evaluation event processed: eventId={}", event.eventId)
+                    ConsumptionResult.DUPLICATE_ACKNOWLEDGED -> logger.info("Kafka evaluation event duplicated: eventId={}", event.eventId)
+                }
+                result
+            } catch (error: RuntimeException) {
+                logger.error(
+                    "Kafka evaluation consumption failed: eventId={}, failureType={}",
+                    event.eventId,
+                    error.javaClass.simpleName,
+                )
+                throw error
+            }
+        }
+
+    private companion object {
+        val logger = LoggerFactory.getLogger(CreditEvaluationKafkaListener::class.java)
+    }
 }
