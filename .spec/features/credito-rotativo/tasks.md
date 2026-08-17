@@ -9,17 +9,17 @@
 
 ## T-002 — Implementar domínio e motor extensível de regras [concluida]
 - Refs: US-002, AC-004, AC-005, AC-006, AC-007, AC-008, AC-009, AC-010, AC-011
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluationContext.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleResult.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditDecision.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/CreditRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RuleEngine.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MinimumScoreRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/AvailableLimitRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngineTest.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluationContext.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleResult.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditDecision.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/CreditRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RuleEngine.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MinimumScoreRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/AvailableLimitRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RuleEngineTest.kt
 - Notas: todas as regras executam; severidades BLOCKING e WARNING.
 
 ## T-003 — Implementar cálculo do crédito [concluida]
 - Refs: US-003, AC-012, AC-013, AC-014
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculatorTest.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditLimitCalculatorTest.kt
 - Notas: depende da confirmação das premissas de fórmula e arredondamento.
 
 ## T-004 — Implementar caso de uso de avaliação [concluida]
 - Refs: US-001, US-004, AC-001, AC-003, AC-015, AC-016
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateCreditCommand.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluation.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/test/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateCreditCommand.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluation.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateRevolvingCreditUseCaseTest.kt
 - Notas: orquestra regras, decisão, cálculo e portas transacionais.
 
 ## T-005 — Implementar API REST e contrato de erros [concluida]
@@ -34,12 +34,12 @@
 
 ## T-007 — Implementar idempotência concorrente [concluida]
 - Refs: US-005, AC-018, AC-019, AC-020, AC-021
-- Arquivos: src/main/resources/db/migration/V2__credit_idempotency.sql, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/CanonicalRequestHasher.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/IdempotencyIT.kt
+- Arquivos: src/main/resources/db/migration/V2__credit_idempotency.sql, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/CanonicalRequestHasher.kt, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/IdempotencyIT.kt
 - Notas: validar chave, replay, conflito e corrida em banco real.
 
 ## T-008 — Implementar Outbox, publicação e consumo idempotente [concluida]
 - Refs: US-009, AC-033, AC-034, AC-035, AC-036
-- Arquivos: src/main/resources/db/migration/V3__credit_outbox.sql, src/main/kotlin/io/github/brdoliveira/creditflow/application/event/CreditEvaluationCompleted.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationMessagingIT.kt
+- Arquivos: src/main/resources/db/migration/V3__credit_outbox.sql, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/event/CreditEvaluationCompleted.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/messaging/CreditEvaluationMessagingIT.kt
 - Notas: broker local depende da confirmação de ASM-007.
 
 ## T-009 — Implementar autenticação e autorização [concluida]
@@ -59,7 +59,7 @@
 
 ## T-012 — Implementar observabilidade e resiliência [concluida]
 - Refs: US-010, AC-037, AC-038, AC-039, AC-040
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservabilityTest.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/observability/ObservabilityTest.kt
 - Notas: controlar cardinalidade e não registrar payload financeiro completo.
 
 ## T-013 — Preparar execução local em containers [concluida]

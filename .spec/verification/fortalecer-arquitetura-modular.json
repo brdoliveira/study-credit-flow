@@ -1,11 +1,47 @@
 {
   "feature": "fortalecer-arquitetura-modular",
-  "timestamp": "2026-08-17T03:51:29.972Z",
-  "gitRev": "4658e73",
+  "timestamp": "2026-08-17T04:36:31.899Z",
+  "gitRev": "d9aa204",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
-  "exitCode": 1,
-  "testsParsed": 0,
-  "results": {},
-  "principles": {}
+  "exitCode": 0,
+  "testsParsed": 112,
+  "results": {
+    "AC-090": {
+      "status": "pass",
+      "testName": "AC-090: Fronteiras de dependência são verificadas integralmente @spec:AC-090",
+      "method": "tap"
+    },
+    "AC-091": {
+      "status": "pass",
+      "testName": "AC-091 testes espelham os pacotes evaluation domain e application @spec:AC-091",
+      "method": "tap"
+    },
+    "AC-092": {
+      "status": "pass",
+      "testName": "AC-092 componentes específicos pertencem ao módulo evaluation @spec:AC-092",
+      "method": "tap"
+    },
+    "AC-093": {
+      "status": "pass",
+      "testName": "@spec:AC-093 AC-093 list is filtered by the domain decision status()",
+      "method": "tap"
+    },
+    "AC-094": {
+      "status": "pass",
+      "testName": "@spec:AC-094 AC-094 Kotlin event is the single source of the outbox payload contract()",
+      "method": "tap"
+    },
+    "AC-095": {
+      "status": "pass",
+      "testName": "AC-095: Documentação e contratos continuam coerentes @spec:AC-095",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
 }
