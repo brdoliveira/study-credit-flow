@@ -101,10 +101,13 @@ class IdempotentKafkaConsumerIT {
     )
 
     private companion object {
-        @Container val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine")
+        @Container
+        @JvmField
+        val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine")
         @JvmStatic
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
+            postgres.start()
             registry.add("spring.datasource.url", postgres::getJdbcUrl)
             registry.add("spring.datasource.username", postgres::getUsername)
             registry.add("spring.datasource.password", postgres::getPassword)

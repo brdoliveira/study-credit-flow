@@ -1,8 +1,13 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging
 
 import io.github.brdoliveira.creditflow.evaluation.application.event.CreditEvaluationCompleted
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxPublisher
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.PostgresOutboxStore
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.CreditEvaluationEntity
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.PostgresCreditEvaluationRepository
+import jakarta.persistence.EntityManager
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -19,6 +24,7 @@ import org.springframework.boot.SpringBootConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase
+import org.springframework.boot.persistence.autoconfigure.EntityScan
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaTemplate
@@ -46,6 +52,7 @@ import java.util.UUID
 private const val OUTBOX_TOPIC = "credit.evaluation.completed.v1"
 
 @DataJpaTest
+@EntityScan(basePackageClasses = [CreditEvaluationEntity::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 @EmbeddedKafka(partitions = 1, topics = [OUTBOX_TOPIC], bootstrapServersProperty = "spring.kafka.bootstrap-servers")
@@ -55,10 +62,12 @@ class OutboxKafkaIT @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
     private val transactionManager: PlatformTransactionManager,
     private val embeddedKafka: EmbeddedKafkaBroker,
+    private val entityManager: EntityManager,
 ) {
     private val objectMapper = ObjectMapper()
     private val kafkaTemplate = KafkaTemplate<String, String>(DefaultKafkaProducerFactory(producerProperties()))
     private val store = PostgresOutboxStore(jdbcTemplate, objectMapper)
+    private val repository = PostgresCreditEvaluationRepository(entityManager, objectMapper)
 
     @AfterEach
     fun cleanDatabase() {
@@ -71,7 +80,8 @@ class OutboxKafkaIT @Autowired constructor(
 
     @Test
     // @spec:AC-056
-    fun `AC-056 evaluation and outbox commit atomically in real PostgreSQL`() {
+    // @spec:AC-094
+    fun `AC-056 AC-094 evaluation and Kotlin event outbox commit atomically in real PostgreSQL`() {
         val committedId = UUID.randomUUID()
         newTransaction().executeWithoutResult { insertEvaluation(committedId) }
         assertThat(count("credit_evaluation", committedId)).isEqualTo(1)
@@ -144,10 +154,18 @@ class OutboxKafkaIT @Autowired constructor(
     }
 
     private fun insertEvaluation(evaluationId: UUID) {
-        jdbcTemplate.update(
-            """insert into credit_evaluation (evaluation_id, cpf_masked, decision, approved_amount, rule_version, rule_results, evaluated_at, duration_millis, correlation_id)
-               values (?, '***.***.***-09', 'APPROVED', 1200.50, '2026.08', '[]'::jsonb, ?, 12, ?)""",
-            evaluationId, Timestamp.from(Instant.parse("2026-08-16T12:00:00Z")), UUID.randomUUID().toString(),
+        repository.save(
+            CreditEvaluation(
+                evaluationId = evaluationId,
+                maskedCpf = "***.***.***-09",
+                decision = CreditDecisionStatus.APPROVED,
+                ruleResults = emptyList(),
+                approvedAmount = BigDecimal("1200.50"),
+                ruleSetVersion = "2026.08",
+                processedAt = Instant.parse("2026-08-16T12:00:00Z"),
+                processingTimeMs = 12,
+                correlationId = "opaque-correlation-id",
+            ),
         )
     }
 
@@ -186,16 +204,27 @@ class OutboxKafkaIT @Autowired constructor(
     private fun statusOf(eventId: UUID): String = jdbcTemplate.queryForObject(
         "select status from credit_outbox where event_id = ?", String::class.java, eventId,
     )!!
-    private fun event() = CreditEvaluationCompleted(
-        UUID.randomUUID(), 1, UUID.randomUUID(), "APPROVED", BigDecimal("1200.50"), "2026.08",
-        Instant.parse("2026-08-16T12:00:00Z"), "opaque-correlation-id",
-    )
+    private fun event(): CreditEvaluationCompleted {
+        val evaluationId = UUID.randomUUID()
+        return CreditEvaluationCompleted(
+            eventId = evaluationId,
+            evaluationId = evaluationId,
+            decision = "APPROVED",
+            approvedAmount = BigDecimal("1200.50"),
+            ruleVersion = "2026.08",
+            evaluatedAt = Instant.parse("2026-08-16T12:00:00Z"),
+            correlationId = "opaque-correlation-id",
+        )
+    }
 
     private companion object {
-        @Container val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine")
+        @Container
+        @JvmField
+        val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine")
         @JvmStatic
         @DynamicPropertySource
         fun postgresProperties(registry: DynamicPropertyRegistry) {
+            postgres.start()
             registry.add("spring.datasource.url", postgres::getJdbcUrl)
             registry.add("spring.datasource.username", postgres::getUsername)
             registry.add("spring.datasource.password", postgres::getPassword)

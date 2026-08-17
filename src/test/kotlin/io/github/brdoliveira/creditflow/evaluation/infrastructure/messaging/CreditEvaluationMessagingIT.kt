@@ -1,6 +1,5 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging
 
-import tools.jackson.databind.ObjectMapper
 import io.github.brdoliveira.creditflow.evaluation.application.event.CreditEvaluationCompleted
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxPublisher
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxStore
@@ -8,12 +7,15 @@ import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.Pending
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.nio.file.Path
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset
 import java.util.UUID
+import kotlin.io.path.readText
 import kotlin.test.assertFalse
+import tools.jackson.databind.ObjectMapper
 
 class CreditEvaluationMessagingIT {
     private val now = Instant.parse("2026-08-15T10:00:00Z")
@@ -22,10 +24,14 @@ class CreditEvaluationMessagingIT {
     @Test
     // @spec:AC-033
     fun `AC-033 evaluation insert is atomically accompanied by an outbox insert`() {
-        val migration = javaClass.getResource("/db/migration/V3__credit_outbox.sql")!!.readText()
+        val repository = Path.of(
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/" +
+                "PostgresCreditEvaluationRepository.kt",
+        ).readText()
+        val migration = javaClass.getResource("/db/migration/V5__explicit_credit_outbox.sql")!!.readText()
 
-        assertThat(migration).contains("AFTER INSERT ON credit_evaluation", "INSERT INTO credit_outbox")
-        assertThat(migration).contains("NEW.evaluation_id", "REFERENCES credit_evaluation")
+        assertThat(repository).contains("@Transactional", "entityManager.persist", "INSERT_OUTBOX")
+        assertThat(migration).contains("DROP TRIGGER", "trg_credit_evaluation_outbox")
     }
 
     @Test

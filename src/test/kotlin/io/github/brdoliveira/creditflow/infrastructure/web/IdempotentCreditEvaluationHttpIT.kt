@@ -101,11 +101,13 @@ class IdempotentCreditEvaluationHttpIT @Autowired constructor(
 
     private companion object {
         @Container
+        @JvmField
         val postgres = PostgreSQLContainer<Nothing>("postgres:16-alpine")
 
         @JvmStatic
         @DynamicPropertySource
         fun postgresProperties(registry: DynamicPropertyRegistry) {
+            postgres.start()
             registry.add("spring.datasource.url", postgres::getJdbcUrl)
             registry.add("spring.datasource.username", postgres::getUsername)
             registry.add("spring.datasource.password", postgres::getPassword)

@@ -4,6 +4,7 @@ import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationF
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPage
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPageRequest
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationSort
+import io.github.brdoliveira.creditflow.evaluation.application.event.CreditEvaluationCompleted
 import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
@@ -39,6 +40,23 @@ class PostgresCreditEvaluationRepository(
                 evaluation.correlationId,
             ),
         )
+        entityManager.flush()
+        val event = CreditEvaluationCompleted(
+            eventId = evaluation.evaluationId,
+            evaluationId = evaluation.evaluationId,
+            decision = evaluation.decision.name,
+            approvedAmount = evaluation.approvedAmount,
+            ruleVersion = evaluation.ruleSetVersion,
+            evaluatedAt = evaluation.processedAt,
+            correlationId = evaluation.correlationId,
+        )
+        entityManager.createNativeQuery(INSERT_OUTBOX)
+            .setParameter("eventId", event.eventId)
+            .setParameter("evaluationId", event.evaluationId)
+            .setParameter("eventType", CreditEvaluationCompleted.TYPE)
+            .setParameter("eventVersion", event.eventVersion)
+            .setParameter("payload", objectMapper.writeValueAsString(event))
+            .executeUpdate()
         return evaluation
     }
 
@@ -99,4 +117,11 @@ class PostgresCreditEvaluationRepository(
 
     private fun readRules(value: String) =
         objectMapper.readValue(value, object : TypeReference<List<RuleResult>>() {})
+
+    private companion object {
+        const val INSERT_OUTBOX = """
+            insert into credit_outbox (event_id, evaluation_id, event_type, event_version, payload)
+            values (:eventId, :evaluationId, :eventType, :eventVersion, cast(:payload as jsonb))
+        """
+    }
 }
