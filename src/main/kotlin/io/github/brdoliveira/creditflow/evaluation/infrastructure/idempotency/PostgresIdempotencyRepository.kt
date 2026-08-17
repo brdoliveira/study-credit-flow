@@ -6,7 +6,7 @@ import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyK
 import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyRepository
 import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
 import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
-import io.github.brdoliveira.creditflow.infrastructure.idempotency.CanonicalRequestHasher
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.idempotency.CanonicalRequestHasher
 import jakarta.persistence.EntityManager
 import org.springframework.stereotype.Component
 import org.springframework.transaction.support.TransactionTemplate

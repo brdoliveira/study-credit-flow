@@ -12,9 +12,13 @@ creditflow
 │   │   └── rule
 │   ├── application
 │   │   ├── port
+│   │   ├── event
 │   │   └── report
 │   └── infrastructure
 │       ├── idempotency
+│       ├── messaging
+│       ├── observability
+│       ├── outbox
 │       ├── persistence
 │       ├── report
 │       └── web
@@ -22,21 +26,18 @@ creditflow
 │           ├── dto
 │           ├── error
 │           └── mapper
-├── application/event
 └── infrastructure
     ├── config
     ├── health
-    ├── messaging
-    ├── observability
-    ├── outbox
+    ├── observability (correlação)
     ├── privacy
     ├── security
     └── web
 ```
 
-Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/infrastructure/web/controller` e `evaluation/infrastructure/web/dto`. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
+Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event` e `evaluation/infrastructure`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature e seus testes espelham os pacotes de produção. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
 
-O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores implementam HTTP, PostgreSQL e relatório. Segurança, saúde, observabilidade, Kafka e outbox permanecem transversais.
+O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores da feature implementam HTTP, PostgreSQL, relatório, mensageria e outbox. Bootstrap Spring, segurança, saúde e correlação permanecem transversais.
 
 ## Fluxo da avaliação
 

@@ -2,15 +2,15 @@ package io.github.brdoliveira.creditflow.infrastructure.config
 
 import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
 import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
-import io.github.brdoliveira.creditflow.infrastructure.messaging.BrokerPublisher
-import io.github.brdoliveira.creditflow.infrastructure.messaging.CreditEvaluationEventEffect
-import io.github.brdoliveira.creditflow.infrastructure.messaging.CreditEvaluationKafkaListener
-import io.github.brdoliveira.creditflow.infrastructure.messaging.KafkaBrokerPublisher
-import io.github.brdoliveira.creditflow.infrastructure.messaging.PostgresProcessedEventStore
-import io.github.brdoliveira.creditflow.infrastructure.messaging.ProcessedEventStore
-import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxSchedulingConfiguration
-import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxStore
-import io.github.brdoliveira.creditflow.infrastructure.outbox.PostgresOutboxStore
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.BrokerPublisher
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.CreditEvaluationEventEffect
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.CreditEvaluationKafkaListener
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.KafkaBrokerPublisher
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.PostgresProcessedEventStore
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.ProcessedEventStore
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxSchedulingConfiguration
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.OutboxStore
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox.PostgresOutboxStore
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.springframework.beans.factory.ObjectProvider
