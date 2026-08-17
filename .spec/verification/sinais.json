@@ -14,55 +14,55 @@
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-002",
-      "ocorrencias": 33,
+      "ocorrencias": 43,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T22:42:58.638Z",
-      "gitRev": "3eb1262"
+      "ultimaVez": "2026-08-17T02:44:54.089Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-003": {
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-003",
-      "ocorrencias": 12,
+      "ocorrencias": 15,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T22:42:58.638Z",
-      "gitRev": "3eb1262"
+      "ultimaVez": "2026-08-17T02:44:54.089Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-004": {
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-004",
-      "ocorrencias": 8,
+      "ocorrencias": 11,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T21:36:43.450Z",
-      "gitRev": "cf367d7"
+      "ultimaVez": "2026-08-17T02:44:54.089Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-005": {
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-005",
-      "ocorrencias": 12,
+      "ocorrencias": 18,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T21:36:43.450Z",
-      "gitRev": "cf367d7"
+      "ultimaVez": "2026-08-17T02:44:54.089Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-006": {
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-006",
-      "ocorrencias": 12,
+      "ocorrencias": 15,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T21:36:43.450Z",
-      "gitRev": "cf367d7"
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-007": {
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-007",
-      "ocorrencias": 10,
+      "ocorrencias": 12,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T21:36:43.450Z",
-      "gitRev": "cf367d7"
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-008": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -86,10 +86,10 @@
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "credito-rotativo",
       "ref": "T-010",
-      "ocorrencias": 15,
+      "ocorrencias": 19,
       "primeiraVez": "2026-08-15T21:10:11.283Z",
-      "ultimaVez": "2026-08-15T22:42:58.638Z",
-      "gitRev": "3eb1262"
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::credito-rotativo::T-011": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -797,10 +797,10 @@
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "prontidao-entrega",
       "ref": "T-018",
-      "ocorrencias": 1,
+      "ocorrencias": 5,
       "primeiraVez": "2026-08-16T20:49:54.642Z",
-      "ultimaVez": "2026-08-16T20:49:54.642Z",
-      "gitRev": "555fc5c"
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::prontidao-entrega::T-019": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -824,10 +824,10 @@
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "prontidao-entrega",
       "ref": "T-021",
-      "ocorrencias": 6,
+      "ocorrencias": 8,
       "primeiraVez": "2026-08-16T20:49:54.643Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::prontidao-entrega::T-022": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -851,10 +851,10 @@
       "codigo": "ARQUIVO_INEXISTENTE",
       "feature": "prontidao-entrega",
       "ref": "T-024",
-      "ocorrencias": 7,
+      "ocorrencias": 10,
       "primeiraVez": "2026-08-16T20:49:54.643Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "ARQUIVO_INEXISTENTE::prontidao-entrega::T-025": {
       "codigo": "ARQUIVO_INEXISTENTE",
@@ -1175,55 +1175,775 @@
       "codigo": "VERIFY_OBSOLETO",
       "feature": "credito-rotativo",
       "ref": "—",
-      "ocorrencias": 2,
+      "ocorrencias": 5,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.001Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-019": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-019",
-      "ocorrencias": 8,
+      "ocorrencias": 20,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-020": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-020",
-      "ocorrencias": 4,
+      "ocorrencias": 10,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-021": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-021",
-      "ocorrencias": 8,
+      "ocorrencias": 20,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-022": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-022",
-      "ocorrencias": 2,
+      "ocorrencias": 5,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-026": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
       "feature": "prontidao-entrega",
       "ref": "T-026",
-      "ocorrencias": 4,
+      "ocorrencias": 10,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-16T21:51:44.002Z",
-      "gitRev": "f7d6984"
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-030": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-030",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.540Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-031": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-031",
+      "ocorrencias": 9,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-032": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-032",
+      "ocorrencias": 8,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-033": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-033",
+      "ocorrencias": 6,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-034": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-034",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "ARQUIVO_INEXISTENTE::arquitetura-kotlin::T-035": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "T-035",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-082": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-082",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-083": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-083",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-084": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-084",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-085": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-085",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-086": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-086",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-087": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-087",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-088": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-088",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "AC_SEM_TESTE::arquitetura-kotlin::AC-089": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-089",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T01:16:32.541Z",
+      "gitRev": "036f448"
+    },
+    "REF_MALFORMADA::neutralizacao-marca::T-028": {
+      "codigo": "REF_MALFORMADA",
+      "feature": "neutralizacao-marca",
+      "ref": "T-028",
+      "ocorrencias": 6,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "neutralizacao-marca",
+      "ref": "AC-080",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::neutralizacao-marca::AC-081": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "neutralizacao-marca",
+      "ref": "AC-081",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-056": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-056",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-057": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-057",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-058": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-058",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-059": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-059",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-060": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-060",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-061": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-061",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-062": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-062",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-063": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-063",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-064": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-064",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-076": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-076",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::prontidao-entrega::AC-077": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "prontidao-entrega",
+      "ref": "AC-077",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "VERIFY_OBSOLETO::prontidao-entrega::—": {
+      "codigo": "VERIFY_OBSOLETO",
+      "feature": "prontidao-entrega",
+      "ref": "—",
+      "ocorrencias": 3,
+      "primeiraVez": "2026-08-17T01:16:32.541Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-082": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-082",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:13.999Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-083": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-083",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-084": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-084",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-085": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-085",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-086": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-086",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-087": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-087",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-088": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-088",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "AC_SEM_PROVA::arquitetura-kotlin::AC-089": {
+      "codigo": "AC_SEM_PROVA",
+      "feature": "arquitetura-kotlin",
+      "ref": "AC-089",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T02:44:54.089Z",
+      "ultimaVez": "2026-08-17T02:47:14.000Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationResult.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationResult.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationUseCase.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationUseCase.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationFilter.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationFilter.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationPage.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationPage.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationPageRequest.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationPageRequest.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationSort.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationSort.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/IdempotentCreditEvaluationResult.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/IdempotentCreditEvaluationResult.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/CreditEvaluationMetrics.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/CreditEvaluationMetrics.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyExecution.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyExecution.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyKeyConflictException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyKeyConflictException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/InvalidIdempotencyKeyException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/InvalidIdempotencyKeyException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/MissingIdempotencyKeyException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/MissingIdempotencyKeyException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditDecisionStatus.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditDecisionStatus.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluationContext.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluationContext.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleSeverity.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleSeverity.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleStatus.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleStatus.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/ConfigurableCreditLimitCalculator.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/ConfigurableCreditLimitCalculator.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditCalculationPolicy.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditCalculationPolicy.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditLimitCalculator.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/CreditLimitCalculator.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/RiskBand.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/calculation/RiskBand.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/AvailableLimitRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/AvailableLimitRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/CreditRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/CreditRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/LimitCommitmentRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/LimitCommitmentRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MaxLatePaymentsRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MaxLatePaymentsRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MinimumScoreRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/MinimumScoreRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RecentSpendingTrendRule.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RecentSpendingTrendRule.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RuleEngine.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/rule/RuleEngine.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationSearchCriteria.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationSearchCriteria.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/RuleResponse.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/RuleResponse.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/EvaluationNotFoundException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/EvaluationNotFoundException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/FieldError.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/FieldError.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/InvalidFilterException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/InvalidFilterException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/IntegrationConfiguration.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/IntegrationConfiguration.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/RequiredDependencyProbe.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/RequiredDependencyProbe.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/BrokerPublisher.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/BrokerPublisher.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/ConsumptionResult.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/ConsumptionResult.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventEffect.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventEffect.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/ProcessedEventStore.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/ProcessedEventStore.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/TransientBrokerException.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/TransientBrokerException.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxStore.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxStore.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PendingOutboxEvent.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PendingOutboxEvent.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/ScheduledOutboxPublisher.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/ScheduledOutboxPublisher.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
+    },
+    "ARQUIVO_ORFAO::—::src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionResponse.kt": {
+      "codigo": "ARQUIVO_ORFAO",
+      "feature": "—",
+      "ref": "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionResponse.kt",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T02:44:54.090Z",
+      "ultimaVez": "2026-08-17T02:44:54.090Z",
+      "gitRev": "79728a1"
     }
   }
 }

@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "proximoId": 3,
+  "licoes": [
+    {
+      "id": "L-001",
+      "texto": "Ao mover pacotes, atualizar no mesmo commit os caminhos das tarefas históricas e mapear explicitamente cada novo arquivo para preservar a rastreabilidade.",
+      "chave": "ARQUIVO_INEXISTENTE::ao mover pacotes atualizar no mesmo commit os caminhos das tarefas historicas e mapear explicitamente cada novo arquivo para preservar a rastreabilidade",
+      "sinal": "ARQUIVO_INEXISTENTE",
+      "escopo": null,
+      "status": "candidata",
+      "recorrencia": 1,
+      "features": [
+        "arquitetura-kotlin"
+      ],
+      "evidencias": [
+        {
+          "fonte": "T-031",
+          "feature": "arquitetura-kotlin",
+          "quando": "2026-08-17T02:47:52.913Z",
+          "gitRev": "036f448"
+        }
+      ],
+      "penalidades": 0,
+      "criadaEm": "2026-08-17T02:47:52.913Z",
+      "ultimaVez": "2026-08-17T02:47:52.913Z"
+    },
+    {
+      "id": "L-002",
+      "texto": "Validar a disponibilidade do Docker antes do verify oficial, pois a falha precoce dos Testcontainers impede o runner encadeado de analisar até os testes independentes que passaram.",
+      "chave": "AC_SEM_PROVA::validar a disponibilidade do docker antes do verify oficial pois a falha precoce dos testcontainers impede o runner encadeado de analisar ate os testes independentes que passaram",
+      "sinal": "AC_SEM_PROVA",
+      "escopo": null,
+      "status": "candidata",
+      "recorrencia": 1,
+      "features": [
+        "arquitetura-kotlin"
+      ],
+      "evidencias": [
+        {
+          "fonte": "AC-088",
+          "feature": "arquitetura-kotlin",
+          "quando": "2026-08-17T02:47:53.185Z",
+          "gitRev": "79728a1"
+        }
+      ],
+      "penalidades": 0,
+      "criadaEm": "2026-08-17T02:47:53.185Z",
+      "ultimaVez": "2026-08-17T02:47:53.185Z"
+    }
+  ]
+}

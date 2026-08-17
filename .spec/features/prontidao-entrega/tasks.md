@@ -9,7 +9,7 @@
 
 ## T-018 — Corrigir a semântica HTTP da idempotência [concluida]
 - Refs: US-014, AC-053, AC-054, AC-055
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationUseCase.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/CreditEvaluationController.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
 - Notas: o controller precisa distinguir criação de replay sem comparar payloads fora do repositório.
 
 ## T-019 — Conectar Outbox PostgreSQL ao Kafka [concluida]
@@ -24,7 +24,7 @@
 
 ## T-021 — Integrar métricas e health checks ao runtime [concluida]
 - Refs: US-016, AC-061, AC-062, AC-063, AC-064
-- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreateCreditEvaluationUseCase.kt, src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/GlobalExceptionHandler.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/IntegrationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt
 - Notas: impedir dupla contagem e tags de alta cardinalidade.
 
 ## T-022 — Criar prova ponta a ponta do Docker Compose [concluida]
@@ -39,7 +39,7 @@
 
 ## T-024 — Tornar CI e supply chain reproduzíveis [concluida]
 - Refs: US-019, AC-071, AC-072, AC-073
-- Arquivos: .github/workflows/ci.yml, tools/onp-spec/onp-spec.mjs, tools/onp-spec/lib, package.json, package-lock.json, scripts/junit-to-tap.mjs, config/security/trivy.yaml, config/security/gitleaks.toml, test/ci-pipeline.test.mjs
+- Arquivos: .github/workflows/ci.yml, tools/onp-spec/onp-spec.mjs, package.json, package-lock.json, scripts/junit-to-tap.mjs, config/security/trivy.yaml, config/security/gitleaks.toml, test/ci-pipeline.test.mjs
 - Notas: versionar ou fixar o motor ONP no repositório; gerar SBOM e impedir imagem antes dos gates.
 
 ## T-025 — Publicar e testar o contrato OpenAPI [concluida]

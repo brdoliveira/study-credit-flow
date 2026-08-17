@@ -1,0 +1,11 @@
+{
+  "feature": "arquitetura-kotlin",
+  "timestamp": "2026-08-17T02:44:22.650Z",
+  "gitRev": "79728a1",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
+  "reporter": "tap",
+  "exitCode": 1,
+  "testsParsed": 0,
+  "results": {},
+  "principles": {}
+}
