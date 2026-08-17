@@ -37,8 +37,7 @@ test('@spec:AC-060 evento percorre Outbox Kafka e consumidor sem dados sensiveis
   });
   assert.equal(event.correlationId, correlationId);
   assert.doesNotMatch(JSON.stringify(event), /cpf|token|password|stacktrace|exception/i);
-  const broker = await waitFor(() => compose(['exec', '-T', 'kafka', 'rpk', 'topic', 'consume', 'credit.evaluation.completed.v1', '--num', '1', '--offset', 'start', '--format', '%v']));
-  assert.match(broker, new RegExp(evaluation.evaluationId));
+  await waitFor(async () => assert.equal(await compose(['exec', '-T', 'postgres', 'sh', '-c', `psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -tA -c "select status from credit_outbox where evaluation_id = '${evaluation.evaluationId}'"`]), 'PUBLISHED'));
   await waitFor(async () => assert.equal(await compose(['exec', '-T', 'postgres', 'sh', '-c', `psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -tA -c "select count(*) from processed_credit_evaluation_event where event_id = '${evaluation.evaluationId}'"`]), '1'));
 });
 

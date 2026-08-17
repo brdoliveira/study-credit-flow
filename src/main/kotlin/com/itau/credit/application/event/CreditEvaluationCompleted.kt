@@ -15,7 +15,7 @@ data class CreditEvaluationCompleted(
     val approvedAmount: BigDecimal,
     val ruleVersion: String,
     val evaluatedAt: Instant,
-    val correlationId: UUID,
+    val correlationId: String,
 ) {
     init {
         require(eventVersion == VERSION) { "Unsupported CreditEvaluationCompleted version: $eventVersion" }

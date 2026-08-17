@@ -84,7 +84,7 @@ class CreditEvaluationMessagingIT {
         approvedAmount = BigDecimal("1200.50"),
         ruleVersion = "2026.08",
         evaluatedAt = now,
-        correlationId = UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+        correlationId = "opaque-correlation-id",
     )
 
     private data class Retry(val attempts: Int, val nextAttemptAt: Instant, val reason: String)

@@ -4,7 +4,9 @@
 
 ## Evidência atual
 
-Ainda não há uma medição real neste checkout: o JSON está marcado como `not-executed`. Ele não comprova a capacidade até que o comando seja executado em ambiente isolado e com recursos documentados.
+O ensaio real de 2026-08-16 está registrado em `load-test-summary.json` e validou o commit `b8df8f2b1c700939f5adfd7fa8afdf91a2cdc845`. No ambiente isolado local documentado, a fase nominal sustentou 10.000,2 avaliações/minuto, p99 de 334,781119 ms, taxa de erro técnico igual a zero, 50.002 avaliações nominais concluídas e nenhuma iteração descartada. Todos os thresholds foram aprovados.
+
+Essa medição comprova somente o commit e o ambiente registrados no JSON; alterações posteriores exigem novo ensaio para renovar a evidência de capacidade.
 
 ## Registrar uma medição real
 

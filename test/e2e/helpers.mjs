@@ -56,16 +56,20 @@ export async function waitFor(assertion, timeoutMs = 30_000) {
   throw failure ?? new Error('Timed out');
 }
 
-export function compose(args) {
+export function compose(args, timeoutMs = 10_000) {
   const project = process.env.E2E_COMPOSE_PROJECT;
   if (!project) throw new Error('E2E_COMPOSE_PROJECT is required');
   return new Promise((resolve, reject) => {
-    const child = spawn('docker', ['compose', '--project-name', project, ...args], { stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn('docker', ['compose', '--project-name', project, ...args], {
+      stdio: ['ignore', 'pipe', 'pipe'], timeout: timeoutMs,
+    });
     let stdout = ''; let stderr = '';
     child.stdout.on('data', chunk => { stdout += chunk; });
     child.stderr.on('data', chunk => { stderr += chunk; });
     child.on('error', reject);
-    child.on('close', code => code === 0 ? resolve(stdout.trim()) : reject(new Error(stderr)));
+    child.on('close', (code, signal) => code === 0
+      ? resolve(stdout.trim())
+      : reject(new Error(stderr || `docker compose stopped with code ${code} and signal ${signal}`)));
   });
 }
 

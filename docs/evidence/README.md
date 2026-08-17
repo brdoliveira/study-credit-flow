@@ -10,7 +10,7 @@ Este índice é a fonte de consulta para a demonstração. Registre uma evidênc
 | Testes locais | `./gradlew.bat test --no-daemon` | `BUILD SUCCESSFUL` | `<YYYY-MM-DD>` | `<git rev-parse HEAD>` |
 | Testes de contrato/documentação | `node --test --test-reporter=tap "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"` | TAP sem falhas | `<YYYY-MM-DD>` | `<git rev-parse HEAD>` |
 | Relatório JUnit em TAP | `node scripts/junit-to-tap.mjs` | TAP sem falhas | `<YYYY-MM-DD>` | `<git rev-parse HEAD>` |
-| Carga nominal | `./scripts/run-load-test.ps1` | taxa, p99, erros técnicos, iterações e thresholds | `<YYYY-MM-DD>` | `<git rev-parse HEAD>` |
+| Carga nominal | `./scripts/run-load-test.ps1` | Aprovado: 10.000,2/min; p99 334,781119 ms; erro técnico 0%; 50.002 nominais; 0 descartadas | `2026-08-16` | `b8df8f2b1c700939f5adfd7fa8afdf91a2cdc845` |
 | Scans e gates de CI | GitHub Actions, job de qualidade | URL do job e artefatos SBOM/scans | `<YYYY-MM-DD>` | `<git rev-parse HEAD>` |
 
 O resultado de uma execução é específico ao commit e ao ambiente. Se o commit mudar, execute novamente e crie um novo registro; não reaproveite a data ou resultado anterior como se validasse a nova revisão.

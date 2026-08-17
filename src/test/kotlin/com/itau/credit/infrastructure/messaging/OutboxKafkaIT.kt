@@ -9,8 +9,10 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringBootConfiguration
@@ -48,6 +50,7 @@ private const val OUTBOX_TOPIC = "credit.evaluation.completed.v1"
 @Testcontainers
 @EmbeddedKafka(partitions = 1, topics = [OUTBOX_TOPIC], bootstrapServersProperty = "spring.kafka.bootstrap-servers")
 @ExtendWith(SpringExtension::class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OutboxKafkaIT @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
     private val transactionManager: PlatformTransactionManager,
@@ -62,6 +65,9 @@ class OutboxKafkaIT @Autowired constructor(
         jdbcTemplate.update("delete from credit_outbox")
         jdbcTemplate.update("delete from credit_evaluation")
     }
+
+    @AfterAll
+    fun closeProducer() = kafkaTemplate.destroy()
 
     @Test
     // @spec:AC-056
@@ -159,7 +165,9 @@ class OutboxKafkaIT @Autowired constructor(
         properties[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         properties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         properties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
-        return KafkaConsumer<String, String>(properties).also { it.subscribe(listOf(OUTBOX_TOPIC)) }
+        return KafkaConsumer<String, String>(properties).also {
+            embeddedKafka.consumeFromAnEmbeddedTopic(it, OUTBOX_TOPIC)
+        }
     }
 
     private fun producerProperties(): Map<String, Any> = mapOf(
@@ -180,7 +188,7 @@ class OutboxKafkaIT @Autowired constructor(
     )!!
     private fun event() = CreditEvaluationCompleted(
         UUID.randomUUID(), 1, UUID.randomUUID(), "APPROVED", BigDecimal("1200.50"), "2026.08",
-        Instant.parse("2026-08-16T12:00:00Z"), UUID.randomUUID(),
+        Instant.parse("2026-08-16T12:00:00Z"), "opaque-correlation-id",
     )
 
     private companion object {

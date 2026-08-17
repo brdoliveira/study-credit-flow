@@ -97,7 +97,7 @@ class IdempotentKafkaConsumerIT {
     private fun event() = CreditEvaluationCompleted(
         UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), 1,
         UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), "APPROVED", BigDecimal("1200.50"), "2026.08",
-        Instant.parse("2026-08-15T10:00:00Z"), UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc"),
+        Instant.parse("2026-08-15T10:00:00Z"), "opaque-correlation-id",
     )
 
     private companion object {
