@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "proximoId": 4,
+  "proximoId": 5,
   "licoes": [
     {
       "id": "L-001",
@@ -70,6 +70,36 @@
       "penalidades": 0,
       "criadaEm": "2026-08-17T05:31:27.431Z",
       "ultimaVez": "2026-08-17T05:31:27.431Z"
+    },
+    {
+      "id": "L-004",
+      "texto": "Após mudar código ou testes compartilhados, renove o verify de todas as features antes do audit --ci, pois as provas anteriores ficam obsoletas.",
+      "chave": "VERIFY_OBSOLETO::apos mudar codigo ou testes compartilhados renove o verify de todas as features antes do audit ci pois as provas anteriores ficam obsoletas",
+      "sinal": "VERIFY_OBSOLETO",
+      "escopo": null,
+      "status": "confirmada",
+      "recorrencia": 2,
+      "features": [
+        "arquitetura-kotlin",
+        "credito-rotativo"
+      ],
+      "evidencias": [
+        {
+          "fonte": "—",
+          "feature": "arquitetura-kotlin",
+          "quando": "2026-08-17T06:30:48.233Z",
+          "gitRev": "efadd36"
+        },
+        {
+          "fonte": "—",
+          "feature": "credito-rotativo",
+          "quando": "2026-08-17T06:30:52.587Z",
+          "gitRev": "efadd36"
+        }
+      ],
+      "penalidades": 0,
+      "criadaEm": "2026-08-17T06:30:48.233Z",
+      "ultimaVez": "2026-08-17T06:30:52.587Z"
     }
   ]
 }

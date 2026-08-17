@@ -7,7 +7,10 @@
 
 Corroboradas em múltiplas features. Aplique como guia.
 
-_nenhuma_
+### L-004 — Após mudar código ou testes compartilhados, renove o verify de todas as features antes do audit --ci, pois as provas anteriores ficam obsoletas.
+- sinal: `VERIFY_OBSOLETO` · recorrência: 2 feature(s) · penalidades: 0
+- features: arquitetura-kotlin, credito-rotativo
+- última evidência: — (credito-rotativo, 2026-08-17T06:30:52.587Z)
 
 ## Candidatas — em observação, NÃO aplicar ainda
 

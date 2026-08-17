@@ -1,0 +1,42 @@
+{
+  "feature": "diagnostico-operacional-logs",
+  "timestamp": "2026-08-17T06:29:00.746Z",
+  "gitRev": "efadd36",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
+  "reporter": "tap",
+  "exitCode": 0,
+  "testsParsed": 122,
+  "results": {
+    "AC-097": {
+      "status": "pass",
+      "testName": "@spec:AC-097 AC-097 unexpected HTTP failure emits one correlated error with safe diagnostic fields()",
+      "method": "tap"
+    },
+    "AC-098": {
+      "status": "pass",
+      "testName": "@spec:AC-098 AC-098 outbox retry logs correlated warning without serializing event payload()",
+      "method": "tap"
+    },
+    "AC-099": {
+      "status": "pass",
+      "testName": "@spec:AC-099 AC-099 Kafka consumption keeps correlation and logs processed duplicate and failure outcomes()",
+      "method": "tap"
+    },
+    "AC-100": {
+      "status": "pass",
+      "testName": "AC-100: Logs JSON estruturados têm identidade e correlação documentadas @spec:AC-100",
+      "method": "tap"
+    },
+    "AC-101": {
+      "status": "pass",
+      "testName": "AC-101: Documentação e configuração protegem dados sensíveis e volume nominal @spec:AC-101",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
+}
