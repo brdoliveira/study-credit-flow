@@ -1,17 +1,33 @@
 openapi: 3.0.3
 info:
-  title: Credit evaluations API
+  title: API de avaliações de crédito
   version: v1
-  description: Versioned contract for the revolving-credit evaluation service.
+  description: |
+    Contrato da API de análise de crédito rotativo.
+
+    As operações exigem autenticação OAuth2 e escopos específicos. Requisições de criação
+    são idempotentes e todas as respostas podem ser rastreadas pelo identificador de correlação.
 servers: [{ url: / }]
+tags:
+  - name: Avaliações de crédito
+    description: Criação, consulta e histórico das decisões de crédito.
+  - name: Relatórios
+    description: Exportação do histórico consolidado em PDF.
 security: [{ oauth2: [] }]
 paths:
   /api/v1/credit-evaluations:
     post:
-      summary: Create a credit evaluation
-      description: A completed request repeated with the same canonical payload and Idempotency-Key is returned as a replay without creating a second evaluation.
+      tags: [Avaliações de crédito]
+      summary: Criar uma avaliação de crédito
+      description: |
+        Avalia os dados financeiros informados e persiste a decisão resultante.
+
+        Uma requisição concluída pode ser repetida com o mesmo corpo e a mesma
+        `Idempotency-Key`. Nesse caso, a resposta original é devolvida sem criar outra
+        avaliação ou publicar outro evento. Reutilizar a chave com um corpo diferente
+        resulta em conflito (`409`).
       operationId: createCreditEvaluation
-      security: [{ oauth2: [credit:write] }]
+      security: [{ oauth2: ['credit:write'] }]
       parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }, { $ref: '#/components/parameters/CorrelationId' }]
       requestBody:
         required: true
@@ -20,95 +36,162 @@ paths:
             schema: { $ref: '#/components/schemas/CreditEvaluationRequest' }
             example: { name: Ana Silva, cpf: '52998224725', creditScore: 720, currentInvoiceAmount: 1800.00, totalLimit: 5000.00, availableLimit: 4000.00, latePayments: 0, monthlySpending: [1500.00, 1700.00, 1800.00] }
       responses:
-        '201': { description: Evaluation created., headers: { Location: { schema: { type: string, format: uri-reference } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
-        '200': { description: Replay; no new evaluation or event was created., headers: { Idempotent-Replay: { schema: { type: boolean }, description: true for a replay. }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '201': { description: Avaliação criada com sucesso., headers: { Location: { description: Endereço da avaliação criada., schema: { type: string, format: uri-reference } }, Idempotency-Replayed: { description: Indica que uma nova avaliação foi criada., schema: { type: boolean, example: false } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '200': { description: Requisição repetida; nenhuma nova avaliação ou evento foi criado., headers: { Idempotency-Replayed: { description: Indica que a resposta de uma avaliação existente foi reutilizada., schema: { type: boolean, example: true } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
         '400': { $ref: '#/components/responses/InvalidRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '409': { $ref: '#/components/responses/IdempotencyConflict' }
         '500': { $ref: '#/components/responses/InternalError' }
     get:
-      summary: List credit evaluations
+      tags: [Avaliações de crédito]
+      summary: Consultar avaliações de crédito
+      description: |
+        Retorna o histórico paginado de avaliações. Os filtros de decisão e período são
+        opcionais e podem ser combinados. O período considera as datas completas em UTC.
       operationId: listCreditEvaluations
-      security: [{ oauth2: [credit:read] }]
+      security: [{ oauth2: ['credit:read'] }]
       parameters: [{ $ref: '#/components/parameters/Decision' }, { $ref: '#/components/parameters/From' }, { $ref: '#/components/parameters/To' }, { $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Sort' }, { $ref: '#/components/parameters/Direction' }, { $ref: '#/components/parameters/CorrelationId' }]
       responses:
-        '200': { description: Paginated history., headers: { X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluationPage' } } } }
+        '200': { description: Histórico paginado encontrado com sucesso., headers: { X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluationPage' } } } }
         '400': { $ref: '#/components/responses/InvalidRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
   /api/v1/credit-evaluations/{evaluationId}:
     get:
-      summary: Get one credit evaluation
+      tags: [Avaliações de crédito]
+      summary: Consultar uma avaliação pelo identificador
+      description: Retorna a decisão persistida, os valores calculados e as regras aplicadas à avaliação solicitada.
       operationId: getCreditEvaluation
-      security: [{ oauth2: [credit:read] }]
-      parameters: [{ name: evaluationId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/CorrelationId' }]
+      security: [{ oauth2: ['credit:read'] }]
+      parameters: [{ name: evaluationId, in: path, required: true, description: Identificador UUID da avaliação., schema: { type: string, format: uuid }, example: d2719d1c-f0db-4c3d-9de2-4d7cfd6d4d7e }, { $ref: '#/components/parameters/CorrelationId' }]
       responses:
-        '200': { description: Persisted decision snapshot., content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '200': { description: Avaliação encontrada com sucesso., content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
         '404': { $ref: '#/components/responses/NotFound' }
   /api/v1/credit-evaluations/report.pdf:
     get:
-      summary: Download a PDF report
+      tags: [Relatórios]
+      summary: Baixar relatório de avaliações em PDF
+      description: |
+        Gera um relatório profissional com indicadores consolidados e o detalhamento das
+        avaliações que correspondem aos filtros informados. O arquivo possui cabeçalho,
+        tabela paginada e rodapé com numeração de páginas.
       operationId: downloadCreditEvaluationReport
-      security: [{ oauth2: [credit:report] }]
+      security: [{ oauth2: ['credit:report'] }]
       parameters: [{ $ref: '#/components/parameters/Decision' }, { $ref: '#/components/parameters/From' }, { $ref: '#/components/parameters/To' }, { $ref: '#/components/parameters/CorrelationId' }]
       responses:
-        '200': { description: PDF report using the supplied filters., headers: { Content-Disposition: { schema: { type: string } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/pdf: { schema: { type: string, format: binary } } } }
+        '200': { description: Relatório PDF gerado com os filtros informados., headers: { Content-Disposition: { description: Nome sugerido para o arquivo baixado., schema: { type: string, example: 'attachment; filename="credit-evaluations-20260817-165724.pdf"' } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/pdf: { schema: { type: string, format: binary } } } }
         '400': { $ref: '#/components/responses/InvalidRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
 components:
   securitySchemes:
-    oauth2: { type: oauth2, flows: { authorizationCode: { authorizationUrl: /oauth2/authorization/keycloak, tokenUrl: /login/oauth2/code/keycloak, scopes: { credit:read: Read credit evaluations., credit:write: Create credit evaluations., credit:report: Generate reports., credit:admin: Access administration endpoints. } } } }
+    oauth2: { type: oauth2, description: Autenticação por meio do realm credit-rotativo no Keycloak., flows: { authorizationCode: { authorizationUrl: /oauth2/authorization/keycloak, tokenUrl: /login/oauth2/code/keycloak, scopes: { 'credit:read': Consultar avaliações de crédito., 'credit:write': Criar avaliações de crédito., 'credit:report': Gerar relatórios de avaliações., 'credit:admin': Acessar operações administrativas. } } } }
   parameters:
-    IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, format: uuid }, description: UUID used to make a create request idempotent. }
-    CorrelationId: { name: X-Correlation-ID, in: header, required: false, schema: { type: string, maxLength: 128 }, description: The service generates one when absent or invalid. }
-    Decision: { name: decision, in: query, schema: { type: string, enum: [APPROVED, REJECTED] } }
-    From: { name: from, in: query, schema: { type: string, format: date } }
-    To: { name: to, in: query, schema: { type: string, format: date } }
-    Page: { name: page, in: query, schema: { type: integer, minimum: 0, default: 0 } }
-    Size: { name: size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
-    Sort: { name: sort, in: query, schema: { type: string, enum: [processedAt, decision, approvedAmount], default: processedAt } }
-    Direction: { name: direction, in: query, schema: { type: string, enum: [ASC, DESC], default: DESC } }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: UUID único que permite repetir a criação sem duplicar a avaliação.
+      schema: { type: string, format: uuid }
+      example: 765b50c3-23f2-4e34-8f48-8435e86a9479
+    CorrelationId:
+      name: X-Correlation-ID
+      in: header
+      required: false
+      description: Identificador usado para rastrear a requisição nos logs. Quando ausente ou inválido, o serviço gera um novo UUID.
+      schema: { type: string, maxLength: 128 }
+      example: trace-demo-001
+    Decision:
+      name: decision
+      in: query
+      required: false
+      description: Filtra pelo resultado da avaliação. Use `APPROVED` para aprovadas ou `REJECTED` para reprovadas.
+      schema: { type: string, enum: [APPROVED, REJECTED] }
+      example: APPROVED
+    From:
+      name: from
+      in: query
+      required: false
+      description: Data inicial inclusiva do período, no formato ISO `AAAA-MM-DD` e considerando UTC.
+      schema: { type: string, format: date }
+      example: '2026-08-15'
+    To:
+      name: to
+      in: query
+      required: false
+      description: Data final inclusiva do período, no formato ISO `AAAA-MM-DD` e considerando UTC. Não pode ser anterior a `from`.
+      schema: { type: string, format: date }
+      example: '2026-08-17'
+    Page:
+      name: page
+      in: query
+      required: false
+      description: Número da página, iniciado em zero.
+      schema: { type: integer, minimum: 0, default: 0 }
+      example: 0
+    Size:
+      name: size
+      in: query
+      required: false
+      description: Quantidade de avaliações por página. Aceita valores entre 1 e 100.
+      schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      example: 20
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Campo usado para ordenar o histórico.
+      schema: { type: string, enum: [processedAt, decision, approvedAmount], default: processedAt }
+      example: processedAt
+    Direction:
+      name: direction
+      in: query
+      required: false
+      description: Direção da ordenação. `ASC` ordena de forma crescente e `DESC` de forma decrescente.
+      schema: { type: string, enum: [ASC, DESC], default: DESC }
+      example: DESC
   headers:
-    CorrelationId: { description: Correlation identifier for support and tracing., schema: { type: string } }
+    CorrelationId: { description: Identificador de correlação para suporte e rastreamento., schema: { type: string }, example: trace-demo-001 }
   responses:
-    InvalidRequest: { description: Invalid body, filter, or idempotency key., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
-    Unauthorized: { description: Missing or invalid access token., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
-    Forbidden: { description: Token lacks the required OAuth2 scope., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
-    NotFound: { description: Evaluation was not found., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
-    IdempotencyConflict: { description: Idempotency-Key was used with a different payload., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
-    InternalError: { description: Unexpected internal failure., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    InvalidRequest: { description: Corpo, filtro ou chave de idempotência inválido., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Unauthorized: { description: Sessão ou token de acesso ausente ou inválido., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Forbidden: { description: Usuário autenticado sem o escopo OAuth2 exigido pela operação., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    NotFound: { description: Avaliação não encontrada para o identificador informado., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    IdempotencyConflict: { description: A Idempotency-Key informada já foi utilizada com outro conteúdo., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    InternalError: { description: Falha interna inesperada. Informe o correlationId ao suporte., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
   schemas:
     CreditEvaluationRequest:
       type: object
+      description: Dados cadastrais e financeiros necessários para calcular a decisão de crédito.
       required: [name, cpf, creditScore, currentInvoiceAmount, totalLimit, availableLimit, latePayments, monthlySpending]
       properties:
-        name: { type: string, minLength: 1, example: Ana Silva }
-        cpf: { type: string, pattern: '^\\d{11}$', example: '52998224725', description: CPF supplied only in a request; responses are masked. }
-        creditScore: { type: integer, minimum: 0, maximum: 1000, example: 720 }
-        currentInvoiceAmount: { type: number, minimum: 0, example: 1800.00 }
-        totalLimit: { type: number, minimum: 0.01, example: 5000.00 }
-        availableLimit: { type: number, minimum: 0, example: 4000.00 }
-        latePayments: { type: integer, minimum: 0, example: 0 }
-        monthlySpending: { type: array, minItems: 3, maxItems: 3, items: { type: number, minimum: 0 }, example: [1500.00, 1700.00, 1800.00] }
+        name: { type: string, minLength: 1, description: Nome completo do cliente., example: Ana Silva }
+        cpf: { type: string, pattern: '^\\d{11}$', description: 'CPF com 11 dígitos, sem pontuação. O valor só é recebido na criação e aparece mascarado nas respostas.', example: '52998224725' }
+        creditScore: { type: integer, minimum: 0, maximum: 1000, description: 'Pontuação de crédito do cliente, entre 0 e 1000.', example: 720 }
+        currentInvoiceAmount: { type: number, minimum: 0, description: Valor em reais da fatura atual., example: 1800.00 }
+        totalLimit: { type: number, minimum: 0.01, description: Limite total do cartão em reais., example: 5000.00 }
+        availableLimit: { type: number, minimum: 0, description: Parcela ainda disponível do limite em reais., example: 4000.00 }
+        latePayments: { type: integer, minimum: 0, description: Quantidade de pagamentos em atraso considerada pela análise., example: 0 }
+        monthlySpending: { type: array, minItems: 3, maxItems: 3, description: 'Gastos em reais nos últimos três meses, do mais antigo para o mais recente.', items: { type: number, minimum: 0 }, example: [1500.00, 1700.00, 1800.00] }
     CreditEvaluation:
       type: object
+      description: Resultado persistido de uma avaliação de crédito.
       required: [evaluationId, customerName, maskedCpf, decision, approvedAmount, ruleSetVersion, rules, processedAt, processingTimeMs, correlationId]
       properties:
-        evaluationId: { type: string, format: uuid, example: d2719d1c-f0db-4c3d-9de2-4d7cfd6d4d7e }
-        customerName: { type: string, example: Ana Silva }
-        maskedCpf: { type: string, example: '***.982.247-**' }
-        decision: { type: string, enum: [APPROVED, REJECTED] }
-        approvedAmount: { type: number, example: 2800.00 }
-        ruleSetVersion: { type: string, example: v1 }
-        rules: { type: array, items: { $ref: '#/components/schemas/Rule' } }
-        processedAt: { type: string, format: date-time }
-        processingTimeMs: { type: integer, format: int64 }
-        correlationId: { type: string, example: trace-demo-001 }
-    Rule: { type: object, required: [code, name, status, reason], properties: { code: { type: string, example: MINIMUM_SCORE }, name: { type: string, example: Minimum score }, status: { type: string, example: PASSED }, reason: { type: string, example: Score meets the threshold. } } }
-    CreditEvaluationPage: { type: object, required: [items, total, page, size, sort], properties: { items: { type: array, items: { $ref: '#/components/schemas/CreditEvaluation' } }, total: { type: integer, format: int64 }, page: { type: integer }, size: { type: integer }, sort: { type: string, example: processedAt,DESC } } }
-    ApiError: { type: object, required: [status, code, message, correlationId, path, fieldErrors], properties: { status: { type: integer, example: 400 }, code: { type: string, example: INVALID_REQUEST }, message: { type: string, example: Request validation failed }, correlationId: { type: string, example: trace-demo-001 }, path: { type: string, example: /api/v1/credit-evaluations }, fieldErrors: { type: array, items: { $ref: '#/components/schemas/ApiFieldError' } } } }
-    ApiFieldError: { type: object, properties: { field: { type: string, example: creditScore }, message: { type: string, example: must be less than or equal to 1000 } } }
+        evaluationId: { type: string, format: uuid, description: Identificador único da avaliação., example: d2719d1c-f0db-4c3d-9de2-4d7cfd6d4d7e }
+        customerName: { type: string, description: Nome do cliente avaliado., example: Ana Silva }
+        maskedCpf: { type: string, description: CPF mascarado para proteção dos dados pessoais., example: '***.982.247-**' }
+        decision: { type: string, description: Resultado final calculado pelas regras de crédito., enum: [APPROVED, REJECTED], example: APPROVED }
+        approvedAmount: { type: number, description: Valor de crédito aprovado em reais. É zero quando a decisão é reprovada., example: 2800.00 }
+        ruleSetVersion: { type: string, description: Versão do conjunto de regras utilizado no cálculo., example: v1 }
+        rules: { type: array, description: Resultado individual de cada regra de negócio avaliada., items: { $ref: '#/components/schemas/Rule' } }
+        processedAt: { type: string, format: date-time, description: Data e hora do processamento em UTC., example: '2026-08-17T15:45:00Z' }
+        processingTimeMs: { type: integer, format: int64, description: Tempo total do processamento em milissegundos., example: 12 }
+        correlationId: { type: string, description: Identificador usado para rastrear a operação nos logs., example: trace-demo-001 }
+    Rule: { type: object, description: Evidência de uma regra considerada na decisão., required: [code, name, status, reason], properties: { code: { type: string, description: Código estável da regra., example: MINIMUM_SCORE }, name: { type: string, description: Nome legível da regra., example: Pontuação mínima }, status: { type: string, description: Resultado da execução da regra., enum: [PASSED, FAILED], example: PASSED }, reason: { type: string, description: Justificativa objetiva para o resultado., example: A pontuação atende ao mínimo exigido. } } }
+    CreditEvaluationPage: { type: object, description: Página do histórico de avaliações., required: [items, total, page, size, sort], properties: { items: { type: array, description: Avaliações presentes na página atual., items: { $ref: '#/components/schemas/CreditEvaluation' } }, total: { type: integer, format: int64, description: Quantidade total de avaliações encontradas., example: 30 }, page: { type: integer, description: 'Número da página atual, iniciado em zero.', example: 0 }, size: { type: integer, description: Limite de avaliações por página., example: 20 }, sort: { type: string, description: Campo e direção aplicados na ordenação., example: 'processedAt,DESC' } } }
+    ApiError: { type: object, description: Erro padronizado devolvido pela API., required: [status, code, message, correlationId, path, fieldErrors], properties: { status: { type: integer, description: Código HTTP da resposta., example: 400 }, code: { type: string, description: Código estável para tratamento pelo cliente., example: INVALID_REQUEST }, message: { type: string, description: Resumo seguro e legível do problema., example: A validação da requisição falhou. }, correlationId: { type: string, description: Identificador para localizar a falha nos logs., example: trace-demo-001 }, path: { type: string, description: Caminho da operação que produziu o erro., example: /api/v1/credit-evaluations }, fieldErrors: { type: array, description: Erros específicos dos campos enviados., items: { $ref: '#/components/schemas/ApiFieldError' } } } }
+    ApiFieldError: { type: object, description: Detalhe de validação associado a um campo., properties: { field: { type: string, description: Nome do campo inválido., example: creditScore }, message: { type: string, description: Motivo da rejeição do valor., example: deve ser menor ou igual a 1000 } } }

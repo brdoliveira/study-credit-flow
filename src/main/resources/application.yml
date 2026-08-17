@@ -22,6 +22,13 @@ server:
   port: ${SERVER_PORT:8080}
   shutdown: graceful
 
+springdoc:
+  swagger-ui:
+    url: /openapi/credit-evaluations.yaml
+    disable-swagger-default-url: true
+    operations-sorter: method
+    tags-sorter: alpha
+
 credit:
   rules:
     minimum-score: 650

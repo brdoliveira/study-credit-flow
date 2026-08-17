@@ -47,10 +47,16 @@ class PdfCreditEvaluationReportTest {
     fun `AC-026 PDF exposes filters totals rates and auditable evaluation rows`() {
         val text = extractText(generator.generate(rows(), now, null, null, null))
 
-        assertTrue(text.contains("Filtros: decisao=todas"))
-        assertTrue(text.contains("Total: 2 | Aprovadas: 1 | Reprovadas: 1 | Taxa de aprovacao: 50.00%"))
-        assertTrue(text.contains("***.***.***-09 | APPROVED | 1200.50"))
+        assertTrue(text.contains("Relatório de avaliações de crédito"))
+        assertTrue(text.contains("Todas as decisões"))
+        assertTrue(text.contains("TOTAL DE AVALIAÇÕES"))
+        assertTrue(text.contains("TAXA DE APROVAÇÃO"))
+        assertTrue(text.contains("50,00%"))
+        assertTrue(text.contains("***.***.***-09"))
+        assertTrue(text.contains("Aprovada"))
+        assertTrue(text.contains("R$ 1.200,50"))
         assertTrue(text.contains("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"))
+        assertTrue(text.contains("Página 1 de 1"))
     }
 
     @Test
@@ -60,7 +66,29 @@ class PdfCreditEvaluationReportTest {
         val text = extractText(bytes)
 
         assertTrue(bytes.take(4).toByteArray().contentEquals("%PDF".toByteArray()))
-        assertTrue(text.contains("Total: 0 | Aprovadas: 0 | Reprovadas: 0 | Taxa de aprovacao: 0.00%"))
+        assertTrue(text.contains("Nenhuma avaliação encontrada"))
+        assertTrue(text.contains("0,00%"))
+    }
+
+    @Test
+    fun `report repeats table header and numbers every page`() {
+        val evaluations = (1..40).map { index ->
+            evaluation(
+                UUID.nameUUIDFromBytes("evaluation-$index".toByteArray()).toString(),
+                "***.***.***-${index.toString().padStart(2, '0').takeLast(2)}",
+                if (index % 2 == 0) CreditDecisionStatus.APPROVED else CreditDecisionStatus.REJECTED,
+                BigDecimal("1200.50"),
+            )
+        }
+        val bytes = generator.generate(evaluations, now, null, null, null)
+
+        Loader.loadPDF(bytes).use { document ->
+            val text = PDFTextStripper().getText(document)
+            assertTrue(document.numberOfPages > 1)
+            assertEquals(document.numberOfPages, Regex("CPF MASCARADO").findAll(text).count())
+            assertTrue(text.contains("Página 1 de ${document.numberOfPages}"))
+            assertTrue(text.contains("Página ${document.numberOfPages} de ${document.numberOfPages}"))
+        }
     }
 
     @Test

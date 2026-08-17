@@ -9,17 +9,25 @@ import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 /** Configura os metadados e o fluxo OAuth2 exibidos pelo Swagger. */
 @Configuration
-class OpenApiConfiguration {
+class OpenApiConfiguration : WebMvcConfigurer {
+    /** Publica o contrato versionado no endereco consumido pelo Swagger UI. */
+    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+        registry.addResourceHandler("/openapi/**")
+            .addResourceLocations("classpath:/openapi/")
+    }
+
     /** Cria a descrição OpenAPI da API de avaliações. */
     @Bean
     fun creditEvaluationsOpenApi(): OpenAPI = OpenAPI()
         .info(
             Info().title("Credit evaluations API")
                 .version("v1")
-                .description("The versioned contract is available at /openapi/credit-evaluations.yaml.")
+                .description("Contrato versionado disponivel em /openapi/credit-evaluations.yaml.")
         )
         .addSecurityItem(SecurityRequirement().addList("oauth2"))
         .schemaRequirement("oauth2", SecurityScheme().type(SecurityScheme.Type.OAUTH2).flows(OAuthFlows().authorizationCode(
