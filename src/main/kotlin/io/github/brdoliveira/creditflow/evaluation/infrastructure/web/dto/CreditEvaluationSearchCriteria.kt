@@ -1,6 +1,7 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto
 
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationSort
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.InvalidFilterException
 import java.time.LocalDate
 
@@ -38,6 +39,9 @@ data class CreditEvaluationSearchCriteria(
         "approvedAmount" to "ASC" -> CreditEvaluationSort.APPROVED_AMOUNT_ASC
         else -> CreditEvaluationSort.APPROVED_AMOUNT_DESC
     }
+
+    /** Converte a decisão HTTP validada para o estado do domínio. */
+    fun toDecision(): CreditDecisionStatus? = decision?.let(CreditDecisionStatus::valueOf)
 
     private fun valid(condition: Boolean, message: () -> String) {
         if (!condition) throw InvalidFilterException(message())

@@ -83,7 +83,7 @@ class CreditEvaluationController(
         criteria.validate(params.keys)
         val result = listEvaluations.execute(
             CreditEvaluationFilter(
-                decision,
+                criteria.toDecision(),
                 from?.atStartOfDay(ZoneOffset.UTC)?.toInstant(),
                 to?.plusDays(1)?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
             ),
