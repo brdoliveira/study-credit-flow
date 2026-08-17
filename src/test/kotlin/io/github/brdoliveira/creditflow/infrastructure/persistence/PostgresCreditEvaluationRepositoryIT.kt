@@ -82,8 +82,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     }
 
     @Test
-    // @spec:AC-022
-    fun `AC-022 list is filtered paginated and ordered`() {
+    // @spec:AC-093
+    fun `AC-093 list is filtered by the domain decision status`() {
         val first = snapshot(cpfProtector.mask("12345678909"), evaluatedAt = Instant.parse("2026-08-01T10:00:00Z"))
         val approved = snapshot(cpfProtector.mask("98765432100"), decision = CreditDecisionStatus.APPROVED, evaluatedAt = Instant.parse("2026-08-02T10:00:00Z"))
         val third = snapshot(cpfProtector.mask("11122233344"), decision = CreditDecisionStatus.APPROVED, evaluatedAt = Instant.parse("2026-08-03T10:00:00Z"))
@@ -91,7 +91,7 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
         entityManager.flush()
 
         val result = repository.findPage(
-            CreditEvaluationFilter(decision = "APPROVED", from = Instant.parse("2026-08-02T00:00:00Z")),
+            CreditEvaluationFilter(decision = CreditDecisionStatus.APPROVED, from = Instant.parse("2026-08-02T00:00:00Z")),
             CreditEvaluationPageRequest(page = 0, size = 1, sort = CreditEvaluationSort.EVALUATED_AT_ASC),
         )
         assertThat(result.total).isEqualTo(2)

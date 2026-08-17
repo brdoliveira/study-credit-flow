@@ -1,6 +1,7 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.controller
 
 import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.InvalidFilterException
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
@@ -34,7 +35,7 @@ class CreditEvaluationReportController(
         validate(filter, params.keys)
         val generatedAt = clock.instant()
         val bytes = generate.execute(
-            filter.decision,
+            filter.toDecision()?.name,
             filter.from?.atStartOfDay(ZoneOffset.UTC)?.toInstant(),
             filter.to?.plusDays(1)?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
             generatedAt,
@@ -76,4 +77,7 @@ private data class CreditEvaluationReportFilter(
         }
         require(from == null || to == null || !from.isAfter(to)) { "from must not be after to" }
     }
+
+    /** Converte a decisão HTTP validada para o estado do domínio. */
+    fun toDecision(): CreditDecisionStatus? = decision?.let(CreditDecisionStatus::valueOf)
 }

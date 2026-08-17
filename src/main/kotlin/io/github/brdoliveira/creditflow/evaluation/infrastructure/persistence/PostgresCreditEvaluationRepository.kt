@@ -92,7 +92,7 @@ class PostgresCreditEvaluationRepository(
         root: Root<CreditEvaluationEntity>,
         cb: CriteriaBuilder,
     ): List<Predicate> = buildList {
-        filter.decision?.let { add(cb.equal(root.get<String>("decision"), it)) }
+        filter.decision?.let { add(cb.equal(root.get<String>("decision"), it.name)) }
         filter.from?.let { add(cb.greaterThanOrEqualTo(root.get("evaluatedAt"), it)) }
         filter.to?.let { add(cb.lessThanOrEqualTo(root.get("evaluatedAt"), it)) }
     }

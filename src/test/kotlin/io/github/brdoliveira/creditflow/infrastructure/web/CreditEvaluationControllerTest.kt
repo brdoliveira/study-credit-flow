@@ -1,8 +1,10 @@
 package io.github.brdoliveira.creditflow.infrastructure.web
 
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto.CreditEvaluationSearchCriteria
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.GlobalExceptionHandler
 import io.github.brdoliveira.creditflow.support.CreditEvaluationControllerFixture
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -54,6 +56,16 @@ class CreditEvaluationControllerTest {
         mvc().perform(get("/api/v1/credit-evaluations?decision=APPROVED&from=2026-08-01&to=2026-08-15&page=1&size=10&sort=approvedAmount&direction=ASC"))
             .andExpect(status().isOk).andExpect(jsonPath("$.items").isArray()).andExpect(jsonPath("$.total").value(1))
             .andExpect(jsonPath("$.page").value(1)).andExpect(jsonPath("$.size").value(10)).andExpect(jsonPath("$.sort").value("approvedAmount,ASC"))
+    }
+
+    @Test
+    // @spec:AC-093
+    fun `AC-093 converts the accepted HTTP decision filter to a domain status`() {
+        val criteria = CreditEvaluationSearchCriteria("APPROVED", null, null, 0, 20, "processedAt", "DESC")
+
+        criteria.validate(setOf("decision"))
+
+        assertThat(criteria.toDecision()).isEqualTo(CreditDecisionStatus.APPROVED)
     }
 
     @Test
