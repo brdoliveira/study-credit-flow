@@ -1,0 +1,22 @@
+{
+  "feature": "renomear-infraestrutura-platform",
+  "timestamp": "2026-08-17T05:28:56.510Z",
+  "gitRev": "4cfa1c8",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
+  "reporter": "tap",
+  "exitCode": 0,
+  "testsParsed": 113,
+  "results": {
+    "AC-096": {
+      "status": "pass",
+      "testName": "AC-096: Plataforma compartilhada possui namespace proprio @spec:AC-096",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
+}
