@@ -1,8 +1,8 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.observability
 
-import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
-import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
-import io.github.brdoliveira.creditflow.infrastructure.observability.CorrelationIdFilter
+import io.github.brdoliveira.creditflow.platform.health.DependencyReadinessIndicator
+import io.github.brdoliveira.creditflow.platform.health.RequiredDependencyProbe
+import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
@@ -66,7 +66,7 @@ class RuntimeObservabilityIT {
     @Test
     // @spec:AC-064
     fun `AC-064 operational configuration separates probes from sensitive endpoints`() {
-        val security = java.io.File("src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt").readText()
+        val security = java.io.File("src/main/kotlin/io/github/brdoliveira/creditflow/platform/security/SecurityConfiguration.kt").readText()
         val observability = java.io.File("src/main/resources/application-observability.yml").readText()
 
         require(security.contains("/actuator/health/liveness\", \"/actuator/health/readiness\").permitAll()"))

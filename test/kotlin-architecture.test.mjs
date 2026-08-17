@@ -41,6 +41,25 @@ function dependencyViolations(files, forbidden) {
     .map((dependency) => `${rel(file)} imports ${dependency}`));
 }
 
+test('AC-096: Plataforma compartilhada possui namespace proprio @spec:AC-096', () => {
+  const platform = filesUnder('io/github/brdoliveira/creditflow/platform/');
+  const legacyInfrastructure = filesUnder('io/github/brdoliveira/creditflow/infrastructure/');
+  const evaluationInfrastructure = filesUnder('io/github/brdoliveira/creditflow/evaluation/infrastructure/');
+  assert.ok(platform.length > 0, 'o pacote compartilhado platform nao pode estar vazio');
+  assert.deepEqual(legacyInfrastructure.map(rel), [], 'o pacote global infrastructure deve ser removido');
+  assert.ok(evaluationInfrastructure.length > 0, 'os adaptadores da feature devem permanecer em evaluation.infrastructure');
+
+  const tests = walk(resolve('src/test/kotlin')).filter((file) => file.endsWith('.kt'));
+  const legacyDeclarations = [...kotlinFiles, ...tests]
+    .filter((file) => /^\s*(?:package|import)\s+io\.github\.brdoliveira\.creditflow\.infrastructure(?:\.|$)/m.test(source(file)))
+    .map((file) => file.replaceAll('\\', '/'));
+  assert.deepEqual(legacyDeclarations, [], 'declaracoes e imports devem usar creditflow.platform');
+
+  const documentation = `${readFileSync(resolve('docs/architecture.md'), 'utf8')}\n${readFileSync(resolve('docs/adrs/001-modular-monolith.md'), 'utf8')}`;
+  assert.match(documentation, /creditflow\/platform|creditflow\.platform|\bplatform\//,
+    'a documentacao deve nomear a plataforma compartilhada');
+});
+
 function kdocBefore(lines, index) {
   const windowStart = Math.max(0, index - 24);
   const localEnd = lines.slice(windowStart, index).findLastIndex((line) => line.includes('*/'));
@@ -130,8 +149,8 @@ test('AC-090: Fronteiras de dependência são verificadas integralmente @spec:AC
   assert.ok(domain.length > 0, 'o domínio real de evaluation não pode ser um diretório vazio');
   assert.ok(application.length > 0, 'a aplicação de evaluation não pode ser um diretório vazio');
 
-  const externalToDomain = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?(?:application|infrastructure)(?:\.|$)/;
-  const infrastructureToApplication = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?infrastructure(?:\.|$)/;
+  const externalToDomain = /^io\.github\.brdoliveira\.creditflow\.(?:(?:evaluation\.)?(?:application|infrastructure)|platform)(?:\.|$)/;
+  const infrastructureToApplication = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.infrastructure|platform)(?:\.|$)/;
   assert.deepEqual(
     dependencyViolations(domain, externalToDomain),
     [],

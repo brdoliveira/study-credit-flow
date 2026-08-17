@@ -26,7 +26,7 @@ creditflow
 │           ├── dto
 │           ├── error
 │           └── mapper
-└── infrastructure
+└── platform
     ├── config
     ├── health
     ├── observability (correlação)
@@ -35,9 +35,9 @@ creditflow
     └── web
 ```
 
-Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event` e `evaluation/infrastructure`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature — em especial `evaluation/infrastructure/messaging` e `evaluation/infrastructure/outbox`; bootstrap Spring, segurança, saúde e correlação permanecem transversais. Os testes de domínio e aplicação espelham os pacotes de produção, enquanto as integrações transversais preservam seus agrupamentos de contrato. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
+Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event`, `evaluation/infrastructure` e `creditflow/platform`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature — em especial `evaluation/infrastructure/messaging` e `evaluation/infrastructure/outbox`; bootstrap Spring, segurança, saúde e correlação ficam em `platform`. Os testes de domínio e aplicação espelham os pacotes de produção, enquanto as integrações transversais preservam seus agrupamentos de contrato. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
 
-O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores da feature implementam HTTP, PostgreSQL, relatório, mensageria e outbox. Bootstrap Spring, segurança, saúde e correlação permanecem transversais.
+O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores da feature implementam HTTP, PostgreSQL, relatório, mensageria e outbox. Bootstrap Spring, segurança, saúde e correlação permanecem transversais sob `platform`.
 
 ## Fluxo da avaliação
 

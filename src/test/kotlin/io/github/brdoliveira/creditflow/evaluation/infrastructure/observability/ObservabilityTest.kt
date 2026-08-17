@@ -1,8 +1,8 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.observability
 
-import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
-import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
-import io.github.brdoliveira.creditflow.infrastructure.observability.CorrelationIdFilter
+import io.github.brdoliveira.creditflow.platform.health.DependencyReadinessIndicator
+import io.github.brdoliveira.creditflow.platform.health.RequiredDependencyProbe
+import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.GlobalExceptionHandler
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.slf4j.MDC

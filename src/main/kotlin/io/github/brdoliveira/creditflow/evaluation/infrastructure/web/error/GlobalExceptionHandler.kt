@@ -3,7 +3,7 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error
 import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyKeyConflictException
 import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
 import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
-import io.github.brdoliveira.creditflow.infrastructure.observability.CorrelationIdFilter
+import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
