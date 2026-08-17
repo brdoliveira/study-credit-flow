@@ -64,7 +64,6 @@ class CreditEvaluationController(
     @GetMapping("/{evaluationId}")
     fun findById(
         @PathVariable evaluationId: UUID,
-        @RequestHeader(value = "X-Correlation-ID", required = false) correlationId: String?,
     ): CreditEvaluationResponse = findEvaluation.execute(evaluationId)?.let(mapper::toResponse)
         ?: throw EvaluationNotFoundException(evaluationId)
 
@@ -79,7 +78,6 @@ class CreditEvaluationController(
         @RequestParam(defaultValue = "processedAt") sort: String,
         @RequestParam(defaultValue = "DESC") direction: String,
         @RequestParam params: Map<String, String>,
-        @RequestHeader(value = "X-Correlation-ID", required = false) correlationId: String?,
     ): CreditEvaluationPageResponse {
         val criteria = CreditEvaluationSearchCriteria(decision, from, to, page, size, sort, direction)
         criteria.validate(params.keys)

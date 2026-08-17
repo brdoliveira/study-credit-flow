@@ -1,10 +1,17 @@
 package io.github.brdoliveira.creditflow.domain.rule
 
-import io.github.brdoliveira.creditflow.domain.model.CreditDecisionStatus
-import io.github.brdoliveira.creditflow.domain.model.CreditEvaluationContext
-import io.github.brdoliveira.creditflow.domain.model.RuleResult
-import io.github.brdoliveira.creditflow.domain.model.RuleSeverity
-import io.github.brdoliveira.creditflow.domain.model.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluationContext
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.AvailableLimitRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.CreditRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.LimitCommitmentRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.MaxLatePaymentsRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.MinimumScoreRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RecentSpendingTrendRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
 import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals

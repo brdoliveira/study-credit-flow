@@ -35,9 +35,19 @@ class PostgresIdempotencyRepository(
         val requestHash = requestHasher.hash(requestBody)
         val execution = transactionTemplate.execute<IdempotencyExecution?> {
             val timestamp = now()
-            entityManager.createNativeQuery("delete from credit_idempotency where idempotency_key = :key and expires_at <= :now").setParameter("key", parsed).setParameter("now", timestamp).executeUpdate()
-            entityManager.createNativeQuery("insert into credit_idempotency (idempotency_key, request_hash, expires_at) values (:key, :hash, :expiresAt) on conflict (idempotency_key) do nothing").setParameter("key", parsed).setParameter("hash", requestHash).setParameter("expiresAt", timestamp.plus(retention)).executeUpdate()
-            @Suppress("UNCHECKED_CAST") val row = entityManager.createNativeQuery("select request_hash, response_body from credit_idempotency where idempotency_key = :key for update").setParameter("key", parsed).singleResult as Array<Any?>
+            entityManager.createNativeQuery(DELETE_EXPIRED)
+                .setParameter("key", parsed)
+                .setParameter("now", timestamp)
+                .executeUpdate()
+            entityManager.createNativeQuery(RESERVE_KEY)
+                .setParameter("key", parsed)
+                .setParameter("hash", requestHash)
+                .setParameter("expiresAt", timestamp.plus(retention))
+                .executeUpdate()
+            @Suppress("UNCHECKED_CAST")
+            val row = entityManager.createNativeQuery(LOCK_KEY)
+                .setParameter("key", parsed)
+                .singleResult as Array<Any?>
             if (row[0] != requestHash) return@execute null
             (row[1] as String?)?.let { body ->
                 return@execute IdempotencyExecution(
@@ -63,5 +73,19 @@ class PostgresIdempotencyRepository(
         } catch (_: IllegalArgumentException) {
             throw InvalidIdempotencyKeyException()
         }
+    }
+
+    private companion object {
+        const val DELETE_EXPIRED =
+            "delete from credit_idempotency where idempotency_key = :key and expires_at <= :now"
+        const val RESERVE_KEY = """
+            insert into credit_idempotency (idempotency_key, request_hash, expires_at)
+            values (:key, :hash, :expiresAt)
+            on conflict (idempotency_key) do nothing
+        """
+        const val LOCK_KEY = """
+            select request_hash, response_body from credit_idempotency
+            where idempotency_key = :key for update
+        """
     }
 }

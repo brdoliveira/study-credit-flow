@@ -2,38 +2,55 @@
 
 ## Organização atual
 
-A solução é um monólito modular com dependências apontando para dentro:
+A solução é um monólito modular Spring Boot organizado pela feature principal de avaliação. As dependências de negócio apontam para dentro:
 
 ```text
-web / persistence / messaging / security / report
-                    ↓
-           application (casos de uso e portas)
-                    ↓
-              domain (regras e cálculo)
+creditflow
+├── evaluation
+│   ├── domain
+│   │   ├── calculation
+│   │   └── rule
+│   ├── application
+│   │   ├── port
+│   │   └── report
+│   └── infrastructure
+│       ├── idempotency
+│       ├── persistence
+│       ├── report
+│       └── web
+│           ├── controller
+│           ├── dto
+│           ├── error
+│           └── mapper
+├── application/event
+└── infrastructure
+    ├── config
+    ├── health
+    ├── messaging
+    ├── observability
+    ├── outbox
+    ├── privacy
+    ├── security
+    └── web
 ```
 
-O domínio não importa Spring nem JPA. A camada de aplicação orquestra a avaliação e define portas. Infraestrutura implementa HTTP, PostgreSQL, OAuth/OIDC, PDF, outbox, Kafka e observabilidade.
+Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/infrastructure/web/controller` e `evaluation/infrastructure/web/dto`. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
+
+O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores implementam HTTP, PostgreSQL e relatório. Segurança, saúde, observabilidade, Kafka e outbox permanecem transversais.
 
 ## Fluxo da avaliação
 
-```mermaid
-sequenceDiagram
-    participant O as Operador
-    participant A as API
-    participant R as Motor de regras
-    participant P as PostgreSQL
-    participant X as Outbox/Kafka
-    O->>A: POST + JWT + Idempotency-Key
-    A->>R: dados validados
-    R-->>A: todas as regras e decisão
-    A->>A: cálculo se elegível
-    A->>P: avaliação + resultado idempotente
-    P-->>X: registro de outbox na mesma transação
-    A-->>O: 201 + correlationId
-    X-->>X: publicação com retry e consumo idempotente
+```text
+controller → caso de uso → domínio
+                       ↓
+                portas de saída
+                       ↑
+          PostgreSQL / idempotência / PDF
 ```
 
-O CPF completo é usado somente durante o processamento necessário. Persistência, eventos, relatórios e respostas usam identificação mascarada; dados sensíveis adicionais devem ser cifrados com chaves externas.
+O controller valida o contrato HTTP e converte DTOs por meio do mapper. `CreateCreditEvaluationUseCase` coordena idempotência e métricas; `EvaluateRevolvingCreditUseCase` executa diretamente `RuleEngine` e `CreditLimitCalculator`, monta `CreditEvaluation` e solicita sua persistência. Os controllers não acessam repositórios, serializadores nem geradores de relatório.
+
+O CPF completo existe apenas durante o processamento necessário. Persistência, eventos, relatórios e respostas usam identificação mascarada. O modelo tipado do domínio é compartilhado com a aplicação; JSON e JPA ficam restritos aos adaptadores.
 
 ## Controles operacionais
 
@@ -42,7 +59,7 @@ O CPF completo é usado somente durante o processamento necessário. Persistênc
 - idempotência com retenção de 24 horas e detecção de payload divergente;
 - transactional outbox para evitar dual write;
 - correlação em resposta, MDC, decisão e evento;
-- métricas sem CPF/evaluationId como tag;
+- métricas sem CPF ou `evaluationId` como tag;
 - liveness do processo separada da readiness de dependências;
 - erros técnicos sem stack trace no contrato HTTP.
 
@@ -60,10 +77,8 @@ flowchart LR
     MSK --> C[Consumidores idempotentes]
 ```
 
-Começar com ECS/Fargate reduz a carga operacional sem impedir imagens OCI ou posterior migração para EKS. Aurora mantém consistência transacional para avaliação, idempotência e outbox; DynamoDB é uma opção futura para projeções ou idempotência de altíssimo volume, não a fonte de verdade inicial.
-
-Implantação recomendada: múltiplas tasks em duas ou mais AZs, autoscaling por CPU/latência/throughput, Aurora Multi-AZ com PITR, deploy canário ou blue/green, migrations como etapa controlada, segredos fora da imagem, tráfego privado, WAF/rate limit e alarmes por SLO. Relatórios grandes podem evoluir para geração assíncrona e armazenamento cifrado em S3 com URL assinada curta.
+ECS/Fargate reduz a carga operacional sem impedir uma migração posterior para EKS. Aurora preserva a consistência transacional de avaliação, idempotência e outbox. DynamoDB permanece uma opção futura para projeções ou idempotência de volume muito alto.
 
 ## Trade-offs e limites
 
-O monólito modular prioriza consistência e velocidade de evolução. Separar serviços cedo adicionaria transações distribuídas e operação sem uma fronteira de escala comprovada. A extração natural, se necessária, é publicação/relatórios, preservando eventos versionados. O teste de carga define um objetivo, mas somente um ensaio em infraestrutura dimensionada comprova capacidade.
+O monólito modular prioriza consistência e velocidade de evolução. Separar serviços cedo adicionaria transações distribuídas sem uma fronteira de escala comprovada. Publicação e relatórios são candidatos naturais a extração futura, preservando eventos versionados.

@@ -1,8 +1,12 @@
 package io.github.brdoliveira.creditflow.infrastructure.idempotency
 
-import io.github.brdoliveira.creditflow.application.port.IdempotencyKeyConflictException
-import io.github.brdoliveira.creditflow.application.port.InvalidIdempotencyKeyException
-import io.github.brdoliveira.creditflow.application.port.MissingIdempotencyKeyException
+import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationResult
+import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyKeyConflictException
+import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
+import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.idempotency.PostgresIdempotencyRepository
 import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -27,6 +31,9 @@ import java.util.concurrent.CyclicBarrier
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.math.BigDecimal
+import java.time.Instant
+import tools.jackson.databind.ObjectMapper
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -36,14 +43,14 @@ class IdempotencyIT @Autowired constructor(
     entityManager: EntityManager,
     transactionManager: PlatformTransactionManager,
 ) {
-    private val repository = PostgresIdempotencyRepository(entityManager, TransactionTemplate(transactionManager))
+    private val repository = PostgresIdempotencyRepository(entityManager, TransactionTemplate(transactionManager), ObjectMapper())
 
     @Test
     // @spec:AC-018
     fun `AC-018 missing or malformed idempotency key is rejected before an operation is created`() {
-        assertThatThrownBy { repository.execute(null, "{}") { "{\"evaluationId\":\"new\"}" } }
+        assertThatThrownBy { repository.execute(null, "{}") { result("new") } }
             .isInstanceOf(MissingIdempotencyKeyException::class.java)
-        assertThatThrownBy { repository.execute("not-a-uuid", "{}") { "{\"evaluationId\":\"new\"}" } }
+        assertThatThrownBy { repository.execute("not-a-uuid", "{}") { result("new") } }
             .isInstanceOf(InvalidIdempotencyKeyException::class.java)
     }
 
@@ -53,13 +60,15 @@ class IdempotencyIT @Autowired constructor(
         val calls = AtomicInteger()
         val key = UUID.randomUUID().toString()
         val original = repository.execute(key, "{\"score\":720,\"customer\":{\"name\":\"Ana\"}}") {
-            calls.incrementAndGet(); "{\"evaluationId\":\"evaluation-1\"}"
+            calls.incrementAndGet(); result("evaluation-1")
         }
         val replay = repository.execute(key, "{ \"customer\" : { \"name\" : \"Ana\" }, \"score\" : 720 }") {
-            calls.incrementAndGet(); "{\"evaluationId\":\"evaluation-2\"}"
+            calls.incrementAndGet(); result("evaluation-2")
         }
 
-        assertThat(replay).isEqualTo(original)
+        assertThat(replay.result).isEqualTo(original.result)
+        assertThat(original.replayed).isFalse()
+        assertThat(replay.replayed).isTrue()
         assertThat(calls.get()).isEqualTo(1)
     }
 
@@ -67,9 +76,9 @@ class IdempotencyIT @Autowired constructor(
     // @spec:AC-020
     fun `AC-020 divergent reuse is rejected and preserves the original result`() {
         val key = UUID.randomUUID().toString()
-        val original = repository.execute(key, "{\"score\":720}") { "{\"evaluationId\":\"evaluation-1\"}" }
+        val original = repository.execute(key, "{\"score\":720}") { result("evaluation-1") }
 
-        assertThatThrownBy { repository.execute(key, "{\"score\":650}") { "{\"evaluationId\":\"evaluation-2\"}" } }
+        assertThatThrownBy { repository.execute(key, "{\"score\":650}") { result("evaluation-2") } }
             .isInstanceOf(IdempotencyKeyConflictException::class.java)
         assertThat(repository.execute(key, "{\"score\":720}") { error("must replay") }).isEqualTo(original)
     }
@@ -88,17 +97,33 @@ class IdempotencyIT @Autowired constructor(
                     repository.execute(key, "{\"score\":720}") {
                         calls.incrementAndGet()
                         Thread.sleep(150)
-                        "{\"evaluationId\":\"evaluation-1\"}"
+                        result("evaluation-1")
                     }
                 })
             }.map { it.get(10, TimeUnit.SECONDS) }
 
-            assertThat(results).containsOnly("{\"evaluationId\":\"evaluation-1\"}")
+            assertThat(results.map { it.result.evaluation.evaluationId })
+                .containsOnly(UUID.nameUUIDFromBytes("evaluation-1".toByteArray()))
             assertThat(calls.get()).isEqualTo(1)
         } finally {
             executor.shutdownNow()
         }
     }
+
+    private fun result(seed: String): CreateCreditEvaluationResult = CreateCreditEvaluationResult(
+        CreditEvaluation(
+            UUID.nameUUIDFromBytes(seed.toByteArray()),
+            "***.***.***-09",
+            CreditDecisionStatus.APPROVED,
+            emptyList(),
+            BigDecimal("100.00"),
+            "2026.08",
+            Instant.parse("2026-08-01T10:00:00Z"),
+            10,
+            "correlation-id",
+        ),
+        seed,
+    )
 
     private companion object {
         @Container

@@ -3,7 +3,10 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import java.math.BigDecimal

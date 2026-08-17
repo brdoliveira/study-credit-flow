@@ -2,14 +2,17 @@ package io.github.brdoliveira.creditflow.infrastructure.observability
 
 import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
 import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationResponse
-import io.github.brdoliveira.creditflow.infrastructure.web.GlobalExceptionHandler
-import io.github.brdoliveira.creditflow.infrastructure.web.IdempotentCreditEvaluationResponse
-import io.github.brdoliveira.creditflow.infrastructure.web.RuleResponse
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.GlobalExceptionHandler
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.springframework.mock.web.MockHttpServletRequest
 import java.math.BigDecimal
-import java.time.OffsetDateTime
+import java.time.Instant
+import java.time.Duration
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -19,10 +22,8 @@ class RuntimeObservabilityIT {
     // @spec:AC-061
     fun `AC-061 runtime evaluation records decision duration and failed rules once`() {
         val registry = SimpleMeterRegistry()
-        val observer = ObservedCreditEvaluationService(CreditMetrics(registry))
-
-        observer.observe { IdempotentCreditEvaluationResponse(response(), replayed = false) }
-        observer.observe { IdempotentCreditEvaluationResponse(response(), replayed = true) }
+        val metrics = CreditMetrics(registry)
+        metrics.record(response(), Duration.ofMillis(10))
 
         assertEquals(1.0, registry.counter("credit.evaluations", "decision", "REJECTED").count())
         assertEquals(1, registry.timer("credit.evaluation.duration").count())
@@ -73,15 +74,14 @@ class RuntimeObservabilityIT {
         require(observability.contains("include: readinessState,dependencyReadiness"))
     }
 
-    private fun response() = CreditEvaluationResponse(
+    private fun response() = CreditEvaluation(
         UUID.randomUUID(),
-        "Cliente",
         "***.***.***-25",
-        "REJECTED",
+        CreditDecisionStatus.REJECTED,
+        listOf(RuleResult("MINIMUM_SCORE", "Minimum score", RuleSeverity.BLOCKING, RuleStatus.FAILED, "Score below threshold")),
         BigDecimal.ZERO,
         "2026.08",
-        listOf(RuleResponse("MINIMUM_SCORE", "Minimum score", "FAILED", "Score below threshold")),
-        OffsetDateTime.parse("2026-08-16T12:00:00Z"),
+        Instant.parse("2026-08-16T12:00:00Z"),
         10,
         "runtime-correlation",
     )

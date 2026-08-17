@@ -1,5 +1,20 @@
 package io.github.brdoliveira.creditflow.application.evaluation
 
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationFilter
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPage
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPageRequest
+import io.github.brdoliveira.creditflow.evaluation.application.EvaluateCreditCommand
+import io.github.brdoliveira.creditflow.evaluation.application.EvaluateRevolvingCreditUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluationContext
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.calculation.CreditLimitCalculator
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.CreditRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
 import java.math.BigDecimal
 import java.time.Clock
 import java.time.Instant
@@ -16,28 +31,24 @@ class EvaluateRevolvingCreditUseCaseTest {
     @Test
     // @spec:AC-001
     fun `AC-001 creates a single evaluation for a valid command`() {
-        val store = RecordingStore()
-        val result = useCase(passingRules(), store).execute(validCommand())
+        val repository = RecordingRepository()
+        val result = useCase(passingRule(), repository).execute(validCommand())
 
         assertEquals(fixedId, result.evaluationId)
-        assertEquals(1, store.snapshots.size)
-        assertEquals(CreditDecision.APPROVED, result.decision)
+        assertEquals(1, repository.evaluations.size)
+        assertEquals(CreditDecisionStatus.APPROVED, result.decision)
     }
 
     @Test
     // @spec:AC-003
     fun `AC-003 returns a rejected decision instead of a technical error`() {
-        val store = RecordingStore()
+        val repository = RecordingRepository()
         var calculatorCalled = false
-        val useCase = useCase(
-            RuleEvaluation("rules-v1", listOf(blockingFailure())),
-            store,
-            RevolvingCreditCalculator { calculatorCalled = true; BigDecimal("999.99") },
-        )
+        val calculator = calculator { calculatorCalled = true; BigDecimal("999.99") }
 
-        val result = useCase.execute(validCommand())
+        val result = useCase(blockingFailure(), repository, calculator).execute(validCommand())
 
-        assertEquals(CreditDecision.REJECTED, result.decision)
+        assertEquals(CreditDecisionStatus.REJECTED, result.decision)
         assertEquals(BigDecimal.ZERO, result.approvedAmount)
         assertEquals(false, calculatorCalled)
     }
@@ -45,14 +56,14 @@ class EvaluateRevolvingCreditUseCaseTest {
     @Test
     // @spec:AC-015
     fun `AC-015 returns all decision traceability fields with a masked CPF`() {
-        val result = useCase(passingRules(), RecordingStore()).execute(validCommand())
+        val result = useCase(passingRule(), RecordingRepository()).execute(validCommand())
 
         assertEquals(fixedId, result.evaluationId)
         assertEquals("***.***.***-09", result.maskedCpf)
-        assertEquals(CreditDecision.APPROVED, result.decision)
+        assertEquals(CreditDecisionStatus.APPROVED, result.decision)
         assertEquals(BigDecimal("700.00"), result.approvedAmount)
         assertEquals("rules-v1", result.ruleSetVersion)
-        assertEquals(1, result.executedRules.size)
+        assertEquals(1, result.ruleResults.size)
         assertEquals(instant, result.processedAt)
         assertEquals(0, result.processingTimeMs)
         assertEquals("corr-123", result.correlationId)
@@ -61,49 +72,45 @@ class EvaluateRevolvingCreditUseCaseTest {
     @Test
     // @spec:AC-016
     fun `AC-016 persists an immutable photograph of the completed decision`() {
-        val store = RecordingStore()
-        val rules = mutableListOf(passingRule())
-        val result = useCase(RuleEvaluation("rules-v1", rules), store).execute(validCommand())
-        rules += blockingFailure()
+        val repository = RecordingRepository()
+        val result = useCase(passingRule(), repository).execute(validCommand())
 
-        val persisted = store.snapshots.single()
-        assertEquals(result.evaluationId, persisted.evaluationId)
-        assertEquals(result.decision, persisted.decision)
-        assertEquals(result.approvedAmount, persisted.approvedAmount)
+        val persisted = repository.evaluations.single()
+        assertEquals(result, persisted)
         assertEquals("rules-v1", persisted.ruleSetVersion)
-        assertEquals(1, persisted.executedRules.size)
+        assertEquals(1, persisted.ruleResults.size)
         assertNotEquals("12345678909", persisted.maskedCpf)
     }
 
     private fun useCase(
-        evaluation: RuleEvaluation,
-        store: RecordingStore,
-        calculator: RevolvingCreditCalculator = RevolvingCreditCalculator { BigDecimal("700.00") },
+        rule: CreditRule,
+        repository: RecordingRepository,
+        calculator: CreditLimitCalculator = calculator { BigDecimal("700.00") },
     ) = EvaluateRevolvingCreditUseCase(
-        ruleEvaluator = CreditRuleEvaluator { evaluation },
-        creditCalculator = calculator,
-        snapshotStore = store,
+        ruleEngine = RuleEngine(listOf(rule)),
+        creditLimitCalculator = calculator,
+        repository = repository,
         clock = Clock.fixed(instant, ZoneOffset.UTC),
         idGenerator = { fixedId },
+        ruleSetVersion = "rules-v1",
     )
 
-    private fun passingRules() = RuleEvaluation("rules-v1", listOf(passingRule()))
+    private fun passingRule() = rule(RuleStatus.PASSED)
 
-    private fun passingRule() = ExecutedRule(
-        code = "MINIMUM_SCORE",
-        name = "Minimum score",
-        severity = RuleSeverity.BLOCKING,
-        status = RuleStatus.PASSED,
-        reason = "Score satisfies the configured threshold",
-    )
+    private fun blockingFailure() = rule(RuleStatus.FAILED)
 
-    private fun blockingFailure() = ExecutedRule(
-        code = "MINIMUM_SCORE",
-        name = "Minimum score",
-        severity = RuleSeverity.BLOCKING,
-        status = RuleStatus.FAILED,
-        reason = "Score is below the configured threshold",
-    )
+    private fun rule(status: RuleStatus) = object : CreditRule {
+        override val code = "MINIMUM_SCORE"
+        override val name = "Minimum score"
+        override val severity = RuleSeverity.BLOCKING
+        override fun evaluate(context: CreditEvaluationContext) = RuleResult(
+            code, name, severity, status, if (status == RuleStatus.PASSED) "passed" else "failed",
+        )
+    }
+
+    private fun calculator(block: () -> BigDecimal) = object : CreditLimitCalculator {
+        override fun calculate(availableLimit: BigDecimal, creditScore: Int, eligible: Boolean): BigDecimal = block()
+    }
 
     private fun validCommand() = EvaluateCreditCommand(
         customerName = "Maria Silva",
@@ -117,12 +124,14 @@ class EvaluateRevolvingCreditUseCaseTest {
         correlationId = "corr-123",
     )
 
-    private class RecordingStore : CreditEvaluationSnapshotStore {
-        val snapshots = mutableListOf<CreditEvaluationSnapshot>()
+    private class RecordingRepository : CreditEvaluationRepository {
+        val evaluations = mutableListOf<CreditEvaluation>()
 
-        override fun save(snapshot: CreditEvaluationSnapshot): CreditEvaluationSnapshot {
-            snapshots += snapshot
-            return snapshot
-        }
+        override fun save(evaluation: CreditEvaluation): CreditEvaluation = evaluation.also(evaluations::add)
+
+        override fun findById(evaluationId: UUID): CreditEvaluation? = evaluations.find { it.evaluationId == evaluationId }
+
+        override fun findPage(filter: CreditEvaluationFilter, page: CreditEvaluationPageRequest): CreditEvaluationPage =
+            CreditEvaluationPage(evaluations, evaluations.size.toLong(), page.page, page.size, page.sort)
     }
 }

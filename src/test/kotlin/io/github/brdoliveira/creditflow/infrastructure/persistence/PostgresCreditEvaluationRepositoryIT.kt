@@ -1,9 +1,14 @@
 package io.github.brdoliveira.creditflow.infrastructure.persistence
 
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationFilter
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationPageRequest
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationSnapshot
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationSort
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationFilter
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPageRequest
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationSort
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.PostgresCreditEvaluationRepository
 import io.github.brdoliveira.creditflow.infrastructure.privacy.CpfProtector
 import jakarta.persistence.EntityManager
 import org.assertj.core.api.Assertions.assertThat
@@ -23,6 +28,7 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
+import tools.jackson.databind.ObjectMapper
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -31,7 +37,7 @@ import java.util.UUID
 class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     private val entityManager: EntityManager,
 ) {
-    private val repository by lazy { PostgresCreditEvaluationRepository(entityManager) }
+    private val repository by lazy { PostgresCreditEvaluationRepository(entityManager, ObjectMapper()) }
     private val cpfProtector = CpfProtector()
 
     @Test
@@ -48,16 +54,19 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     @Test
     // @spec:AC-016
     fun `AC-016 decision snapshot remains queryable after persistence`() {
-        val snapshot = snapshot(cpfProtector.mask("12345678909"), ruleResults = "[{\"code\":\"MINIMUM_SCORE\",\"status\":\"PASSED\"}]")
+        val snapshot = snapshot(
+            cpfProtector.mask("12345678909"),
+            ruleResults = listOf(RuleResult("MINIMUM_SCORE", "Minimum score", RuleSeverity.BLOCKING, RuleStatus.PASSED, "passed")),
+        )
         repository.save(snapshot)
         entityManager.flush()
         entityManager.clear()
 
         val restored = repository.findById(snapshot.evaluationId)!!
-        assertThat(restored.decision).isEqualTo("APPROVED")
+        assertThat(restored.decision).isEqualTo(CreditDecisionStatus.APPROVED)
         assertThat(restored.approvedAmount).isEqualByComparingTo("1200.50")
-        assertThat(restored.ruleVersion).isEqualTo("2026.08")
-        assertThat(restored.ruleResults).contains("MINIMUM_SCORE")
+        assertThat(restored.ruleSetVersion).isEqualTo("2026.08")
+        assertThat(restored.ruleResults.map { it.code }).contains("MINIMUM_SCORE")
     }
 
     @Test
@@ -76,8 +85,8 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
     // @spec:AC-022
     fun `AC-022 list is filtered paginated and ordered`() {
         val first = snapshot(cpfProtector.mask("12345678909"), evaluatedAt = Instant.parse("2026-08-01T10:00:00Z"))
-        val approved = snapshot(cpfProtector.mask("98765432100"), decision = "APPROVED", evaluatedAt = Instant.parse("2026-08-02T10:00:00Z"))
-        val third = snapshot(cpfProtector.mask("11122233344"), decision = "APPROVED", evaluatedAt = Instant.parse("2026-08-03T10:00:00Z"))
+        val approved = snapshot(cpfProtector.mask("98765432100"), decision = CreditDecisionStatus.APPROVED, evaluatedAt = Instant.parse("2026-08-02T10:00:00Z"))
+        val third = snapshot(cpfProtector.mask("11122233344"), decision = CreditDecisionStatus.APPROVED, evaluatedAt = Instant.parse("2026-08-03T10:00:00Z"))
         listOf(first, approved, third).forEach(repository::save)
         entityManager.flush()
 
@@ -110,11 +119,11 @@ class PostgresCreditEvaluationRepositoryIT @Autowired constructor(
 
     private fun snapshot(
         maskedCpf: String,
-        decision: String = "APPROVED",
-        ruleResults: String = "[]",
+        decision: CreditDecisionStatus = CreditDecisionStatus.APPROVED,
+        ruleResults: List<RuleResult> = emptyList(),
         evaluatedAt: Instant = Instant.parse("2026-08-01T10:00:00Z"),
-    ) = CreditEvaluationSnapshot(
-        UUID.randomUUID(), maskedCpf, decision, BigDecimal("1200.50"), "2026.08", ruleResults, evaluatedAt, 42, UUID.randomUUID().toString(),
+    ) = CreditEvaluation(
+        UUID.randomUUID(), maskedCpf, decision, ruleResults, BigDecimal("1200.50"), "2026.08", evaluatedAt, 42, UUID.randomUUID().toString(),
     )
 
     private companion object {

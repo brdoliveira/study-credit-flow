@@ -1,6 +1,14 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto
 
-import jakarta.validation.constraints.*
+import jakarta.validation.constraints.AssertTrue
+import jakarta.validation.constraints.DecimalMin
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import java.math.BigDecimal
 
 /** Representa os dados enviados para uma nova avaliação de crédito. */
@@ -18,10 +26,18 @@ data class CreditEvaluationRequest(
     @AssertTrue(message = "cpf is invalid")
     fun isCpfValid(): Boolean {
         val value = cpf ?: return true
-        if (!value.matches(Regex("\\d{11}"))) return true
-        if (value.all { it == value.first() }) return false
+        return when {
+            !value.matches(Regex("\\d{11}")) -> true
+            value.all { it == value.first() } -> false
+            else -> hasValidCheckDigits(value)
+        }
+    }
+
+    private fun hasValidCheckDigits(value: String): Boolean {
         val digits = value.map(Char::digitToInt)
-        fun check(items: List<Int>, weight: Int) = (items.mapIndexed { i, d -> d * (weight - i) }.sum() % 11).let { if (it < 2) 0 else 11 - it }
+        fun check(items: List<Int>, weight: Int) =
+            (items.mapIndexed { index, digit -> digit * (weight - index) }.sum() % 11)
+                .let { if (it < 2) 0 else 11 - it }
         val first = check(digits.take(9), 10)
         return digits[9] == first && digits[10] == check(digits.take(9) + first, 11)
     }

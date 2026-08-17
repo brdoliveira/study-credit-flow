@@ -1,9 +1,9 @@
 package io.github.brdoliveira.creditflow
 
-import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportFilter
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationApiService
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationReportService
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationRequest
+import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.EvaluateCreditCommand
+import io.github.brdoliveira.creditflow.evaluation.application.FindCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.oauth2.jwt.JwtDecoder
@@ -23,8 +23,9 @@ import kotlin.test.assertTrue
 @SpringBootTest
 @Testcontainers
 class CreditFlowApplicationIT @Autowired constructor(
-    private val apiService: CreditEvaluationApiService,
-    private val reportService: CreditEvaluationReportService,
+    private val createEvaluation: CreateCreditEvaluationUseCase,
+    private val findEvaluation: FindCreditEvaluationUseCase,
+    private val generateReport: GenerateCreditEvaluationReportUseCase,
 ) {
     @MockitoBean
     private lateinit var jwtDecoder: JwtDecoder
@@ -33,17 +34,17 @@ class CreditFlowApplicationIT @Autowired constructor(
     // @spec:AC-001
     fun `AC-001 complete Spring context creates queries and reports one evaluation`() {
         val correlationId = "operation-context-1"
-        val created = apiService.evaluate(request(), UUID.randomUUID().toString(), correlationId)
-        val restored = apiService.findById(created.evaluationId, correlationId)
-        val pdf = reportService.generate(CreditEvaluationReportFilter(), Instant.parse("2026-08-16T12:00:00Z"), correlationId)
+        val created = createEvaluation.execute(command(correlationId), UUID.randomUUID().toString()).result.evaluation
+        val restored = findEvaluation.execute(created.evaluationId)
+        val pdf = generateReport.execute(generatedAt = Instant.parse("2026-08-16T12:00:00Z"))
 
-        assertEquals("APPROVED", created.decision)
+        assertEquals("APPROVED", created.decision.name)
         assertEquals(correlationId, created.correlationId)
         assertEquals(created.evaluationId, restored?.evaluationId)
         assertTrue(pdf.take(4).toByteArray().contentEquals("%PDF".toByteArray()))
     }
 
-    private fun request() = CreditEvaluationRequest(
+    private fun command(correlationId: String) = EvaluateCreditCommand(
         "Ana",
         "52998224725",
         720,
@@ -52,6 +53,7 @@ class CreditFlowApplicationIT @Autowired constructor(
         BigDecimal("4000.00"),
         0,
         listOf(BigDecimal("1500.00"), BigDecimal("1700.00"), BigDecimal("1800.00")),
+        correlationId,
     )
 
     private companion object {

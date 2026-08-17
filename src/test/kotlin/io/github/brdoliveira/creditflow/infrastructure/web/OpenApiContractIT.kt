@@ -1,5 +1,6 @@
 package io.github.brdoliveira.creditflow.infrastructure.web
 
+import io.github.brdoliveira.creditflow.support.CreditEvaluationControllerFixture
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -11,8 +12,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import java.math.BigDecimal
-import java.time.OffsetDateTime
 import java.util.UUID
 
 class OpenApiContractIT {
@@ -43,13 +42,6 @@ class OpenApiContractIT {
     }
 
     private fun contract(): String = ClassPathResource("openapi/credit-evaluations.yaml").inputStream.bufferedReader().use { it.readText() }
-    private fun mvc(): MockMvc = MockMvcBuilders.standaloneSetup(CreditEvaluationController(FakeService())).build()
+    private fun mvc(): MockMvc = MockMvcBuilders.standaloneSetup(CreditEvaluationControllerFixture.controller()).build()
     private fun validRequest() = """{"name":"Ana Silva","cpf":"52998224725","creditScore":720,"currentInvoiceAmount":1800.00,"totalLimit":5000.00,"availableLimit":4000.00,"latePayments":0,"monthlySpending":[1500.00,1700.00,1800.00]}"""
-
-    private inner class FakeService : CreditEvaluationApiService {
-        private val response = CreditEvaluationResponse(evaluationId, "Ana Silva", "***.982.247-**", "APPROVED", BigDecimal("2800.00"), "v1", listOf(RuleResponse("MINIMUM_SCORE", "Minimum score", "PASSED", "Score meets the threshold")), OffsetDateTime.parse("2026-08-15T10:00:00Z"), 21, "trace-demo-001")
-        override fun evaluate(request: CreditEvaluationRequest, idempotencyKey: String, correlationId: String): CreditEvaluationResponse = response
-        override fun findById(evaluationId: UUID, correlationId: String): CreditEvaluationResponse = response
-        override fun list(criteria: CreditEvaluationSearchCriteria, correlationId: String): CreditEvaluationPageResponse = CreditEvaluationPageResponse(listOf(response), 1, criteria.page, criteria.size, "${criteria.sort},${criteria.direction}")
-    }
 }

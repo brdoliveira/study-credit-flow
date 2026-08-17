@@ -1,12 +1,28 @@
 package io.github.brdoliveira.creditflow.infrastructure.security
 
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationApiService
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationController
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationPageResponse
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationRequest
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationResponse
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationSearchCriteria
-import io.github.brdoliveira.creditflow.infrastructure.web.RuleResponse
+import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationResult
+import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationFilter
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPage
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPageRequest
+import io.github.brdoliveira.creditflow.evaluation.application.EvaluateRevolvingCreditUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.FindCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationMetrics
+import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository
+import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyExecution
+import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyRepository
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluationContext
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleSeverity
+import io.github.brdoliveira.creditflow.evaluation.domain.RuleStatus
+import io.github.brdoliveira.creditflow.evaluation.domain.calculation.CreditLimitCalculator
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.CreditRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.controller.CreditEvaluationController
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.mapper.CreditEvaluationWebMapper
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.doThrow
 import org.junit.jupiter.api.BeforeEach
@@ -27,7 +43,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import java.math.BigDecimal
-import java.time.OffsetDateTime
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.util.UUID
 
 @WebMvcTest(controllers = [CreditEvaluationController::class])
@@ -111,25 +129,48 @@ class SecurityProbeController {
 @TestConfiguration(proxyBeanMethods = false)
 class SecurityTestServices {
     @Bean
-    fun creditEvaluationApiService(): CreditEvaluationApiService = object : CreditEvaluationApiService {
-        override fun evaluate(request: CreditEvaluationRequest, idempotencyKey: String, correlationId: String) = response()
-
-        override fun findById(evaluationId: UUID, correlationId: String) = response(evaluationId)
-
-        override fun list(criteria: CreditEvaluationSearchCriteria, correlationId: String) =
-            CreditEvaluationPageResponse(emptyList(), 0, criteria.page, criteria.size, criteria.sort)
-
-        private fun response(evaluationId: UUID = UUID.randomUUID()) = CreditEvaluationResponse(
-            evaluationId,
-            "Ana",
-            "***.***.***-25",
-            "APPROVED",
-            BigDecimal("2800.00"),
-            "v1",
-            listOf(RuleResponse("MINIMUM_SCORE", "Minimum score", "PASSED", "Score meets the threshold")),
-            OffsetDateTime.parse("2026-08-15T10:00:00Z"),
-            21,
-            "trace-1",
-        )
+    fun creditEvaluationRepository(): CreditEvaluationRepository = object : CreditEvaluationRepository {
+        override fun save(evaluation: CreditEvaluation) = evaluation
+        override fun findById(evaluationId: UUID) = evaluation(evaluationId)
+        override fun findPage(filter: CreditEvaluationFilter, page: CreditEvaluationPageRequest) =
+            CreditEvaluationPage(emptyList(), 0, page.page, page.size, page.sort)
     }
+
+    @Bean
+    fun createCreditEvaluationUseCase(repository: CreditEvaluationRepository): CreateCreditEvaluationUseCase {
+        val rule = object : CreditRule {
+            override val code = "MINIMUM_SCORE"
+            override val name = "Minimum score"
+            override val severity = RuleSeverity.BLOCKING
+            override fun evaluate(context: CreditEvaluationContext) =
+                RuleResult(code, name, severity, RuleStatus.PASSED, "passed")
+        }
+        val calculator = object : CreditLimitCalculator {
+            override fun calculate(availableLimit: BigDecimal, creditScore: Int, eligible: Boolean) = BigDecimal("2800.00")
+        }
+        val evaluator = EvaluateRevolvingCreditUseCase(
+            RuleEngine(listOf(rule)), calculator, repository,
+            Clock.fixed(Instant.parse("2026-08-15T10:00:00Z"), ZoneOffset.UTC),
+        )
+        val idempotency = object : IdempotencyRepository {
+            override fun execute(key: String?, requestBody: String, operation: () -> CreateCreditEvaluationResult) =
+                IdempotencyExecution(operation(), replayed = false)
+        }
+        return CreateCreditEvaluationUseCase(evaluator, idempotency, CreditEvaluationMetrics { _, _ -> })
+    }
+
+    @Bean
+    fun findCreditEvaluationUseCase(repository: CreditEvaluationRepository) = FindCreditEvaluationUseCase(repository)
+
+    @Bean
+    fun listCreditEvaluationsUseCase(repository: CreditEvaluationRepository) = ListCreditEvaluationsUseCase(repository)
+
+    @Bean
+    fun creditEvaluationWebMapper() = CreditEvaluationWebMapper()
+
+    private fun evaluation(evaluationId: UUID) = CreditEvaluation(
+        evaluationId, "***.***.***-25", CreditDecisionStatus.APPROVED,
+        listOf(RuleResult("MINIMUM_SCORE", "Minimum score", RuleSeverity.BLOCKING, RuleStatus.PASSED, "passed")),
+        BigDecimal("2800.00"), "v1", Instant.parse("2026-08-15T10:00:00Z"), 21, "trace-1",
+    )
 }

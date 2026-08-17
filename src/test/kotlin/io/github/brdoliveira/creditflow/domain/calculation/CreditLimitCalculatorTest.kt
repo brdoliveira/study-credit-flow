@@ -1,5 +1,6 @@
 package io.github.brdoliveira.creditflow.domain.calculation
 
+import io.github.brdoliveira.creditflow.evaluation.domain.calculation.ConfigurableCreditLimitCalculator
 import java.math.BigDecimal
 import kotlin.test.Test
 import kotlin.test.assertEquals

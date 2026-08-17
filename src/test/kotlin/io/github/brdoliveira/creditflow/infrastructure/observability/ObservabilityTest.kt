@@ -2,7 +2,7 @@ package io.github.brdoliveira.creditflow.infrastructure.observability
 
 import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
 import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
-import io.github.brdoliveira.creditflow.infrastructure.web.GlobalExceptionHandler
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.GlobalExceptionHandler
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import org.slf4j.MDC
 import org.springframework.mock.web.MockHttpServletRequest
