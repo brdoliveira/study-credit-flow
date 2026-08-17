@@ -4,9 +4,7 @@ import java.math.BigDecimal
 import java.time.Instant
 import java.util.UUID
 
-/**
- * Public, versioned event contract. Deliberately contains no customer identifier.
- */
+/** Contrato versionado do evento, sem qualquer identificador direto do cliente. */
 data class CreditEvaluationCompleted(
     val eventId: UUID,
     val eventVersion: Int = VERSION,

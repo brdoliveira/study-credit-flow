@@ -7,11 +7,12 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-/** Waits for the broker acknowledgement before returning control to the Outbox. */
+/** Aguarda a confirmação do broker antes de devolver o controle à outbox. */
 class KafkaBrokerPublisher(
     private val kafkaTemplate: KafkaTemplate<String, String>,
     private val acknowledgementTimeout: Duration = Duration.ofSeconds(10),
 ) : BrokerPublisher {
+    /** Publica a mensagem e converte falhas recuperáveis em erro transitório. */
     override fun publish(topic: String, key: String, payload: String) {
         try {
             kafkaTemplate.send(topic, key, payload).get(acknowledgementTimeout.toMillis(), TimeUnit.MILLISECONDS)

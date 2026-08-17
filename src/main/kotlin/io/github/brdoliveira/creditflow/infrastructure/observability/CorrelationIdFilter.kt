@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.util.UUID
 
+/** Normaliza e propaga o identificador de correlação durante toda a requisição. */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class CorrelationIdFilter : OncePerRequestFilter() {
+    /** Aplica o identificador aos cabeçalhos, à requisição e ao contexto de logs. */
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val correlationId = normalizeCorrelationId(request.getHeader(HEADER_NAME))
         val wrappedRequest = CorrelatedRequest(request, correlationId)
@@ -41,6 +43,7 @@ class CorrelationIdFilter : OncePerRequestFilter() {
         const val MDC_KEY = "correlationId"
         private val VALID_ID = Regex("[A-Za-z0-9._-]{1,128}")
 
+        /** Preserva identificadores válidos ou cria um novo UUID. */
         fun normalizeCorrelationId(value: String?): String =
             value?.takeIf(VALID_ID::matches) ?: UUID.randomUUID().toString()
     }

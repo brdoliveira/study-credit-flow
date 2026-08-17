@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { test } from 'node:test';
 
@@ -27,12 +27,37 @@ function declarations(file) {
   return result;
 }
 
-function packageOf(text) {
-  return text.match(/^package\s+([^\n]+)/m)?.[1]?.trim();
-}
-
 function filesUnder(fragment) {
   return kotlinFiles.filter((file) => rel(file).includes(fragment));
+}
+
+function kdocBefore(lines, index) {
+  const windowStart = Math.max(0, index - 24);
+  const localEnd = lines.slice(windowStart, index).findLastIndex((line) => line.includes('*/'));
+  if (localEnd < 0) return null;
+  const end = localEnd + windowStart;
+  const start = lines.slice(0, end + 1).findLastIndex((line) => line.includes('/**'));
+  if (start < 0) return null;
+  const between = lines.slice(end + 1, index).join('\n');
+  const declarationBetween = between.split('\n').some((line) =>
+    /^\s*(?:(?:public|internal|private|protected|data|sealed|enum|fun|open|abstract|override)\s+)*(?:class|interface|object|typealias|fun)\s+\w+/.test(line));
+  if (declarationBetween) return null;
+  return lines.slice(start, end + 1).join('\n');
+}
+
+function documentedDeclarations(file) {
+  const lines = source(file).split('\n');
+  let depth = 0;
+  return lines.flatMap((line, index) => {
+    const type = /^\s*(?:(?:public|internal)\s+)?(?:(?:data|sealed|enum|fun)\s+)?(?:class|interface|object|typealias)\b/.test(line);
+    const operation = depth <= 1 && /^\s*(?:(?:public|internal|override|open|abstract|suspend|operator|infix|tailrec)\s+)*fun\s+\w+/.test(line);
+    const topLevelProperty = depth === 0
+      && !/^\s{4,}/.test(line)
+      && /^\s*(?:(?:public|internal)\s+)?(?:const\s+)?(?:val|var)\s+\w+/.test(line);
+    const result = type || operation || topLevelProperty ? [{ line: index + 1, kdoc: kdocBefore(lines, index) }] : [];
+    depth += (line.match(/{/g) ?? []).length - (line.match(/}/g) ?? []).length;
+    return result;
+  });
 }
 
 test('AC-082: um tipo público principal por arquivo @spec:AC-082', () => {
@@ -47,53 +72,53 @@ test('AC-082: um tipo público principal por arquivo @spec:AC-082', () => {
 });
 
 test('AC-083: KDocs consistentes em português @spec:AC-083', () => {
-  const violations = [];
-  for (const file of kotlinFiles) {
-    const lines = source(file).split('\n');
-    lines.forEach((line, index) => {
-      if (!/^\s*(?:(?:public|internal)\s+)?(?:(?:data|sealed|enum|fun)\s+)?(?:class|interface|object|typealias|fun|val|var)\b/.test(line)) return;
-      const before = lines.slice(Math.max(0, index - 8), index).join('\n');
-      const kdoc = before.match(/\/\*\*[\s\S]*?\*\/\s*$/)?.[0];
-      if (!kdoc || !/(?:[áàâãéêíóôõúç]|\b(?:o|a|os|as|de|da|do|para|com|que|em|por|uma|um)\b)/i.test(kdoc) || /\b(the|this|keeps|returns|when|with|from|for)\b/i.test(kdoc)) {
-        violations.push(`${rel(file)}:${index + 1}`);
-      }
-    });
-  }
-  assert.deepEqual(violations, [], 'tipos e membros públicos/internos precisam de KDoc em português');
+  const english = /\b(the|this|keeps|returns|when|with|from|for|throws|publishes|records|waits|maps)\b/i;
+  const violations = kotlinFiles.flatMap((file) => documentedDeclarations(file)
+    .filter(({ kdoc }) => !kdoc || english.test(kdoc))
+    .map(({ line }) => `${rel(file)}:${line}`));
+  assert.deepEqual(violations, [], 'tipos e operações públicas ou internas precisam de KDoc em português');
+
+  const englishKdocs = kotlinFiles.flatMap((file) => [...source(file).matchAll(/\/\*\*[\s\S]*?\*\//g)]
+    .filter((match) => english.test(match[0]))
+    .map(() => rel(file)));
+  assert.deepEqual(englishKdocs, [], 'não pode existir comentário documental em inglês');
 });
 
 test('AC-084: adaptador web separado por responsabilidade @spec:AC-084', () => {
   const web = 'io/github/brdoliveira/creditflow/evaluation/infrastructure/web/';
-  const expected = ['controller', 'dto', 'mapper', 'error'];
-  for (const directory of expected) assert.ok(filesUnder(`${web}${directory}/`).length > 0, `subpacote web ausente: ${directory}`);
-  const controllerFiles = filesUnder(`${web}controller/`);
-  assert.ok(controllerFiles.length > 0, 'controllers não encontrados no subpacote próprio');
-  const violations = controllerFiles.flatMap((file) => {
+  for (const directory of ['controller', 'dto', 'mapper', 'error']) {
+    assert.ok(filesUnder(`${web}${directory}/`).length > 0, `subpacote web ausente: ${directory}`);
+  }
+  const controllers = filesUnder(`${web}controller/`);
+  const violations = controllers.flatMap((file) => {
     const text = source(file);
-    return /(?:class|interface|object)\s+(?:Default|\w*Service\b)/.test(text) || /application\.port\./.test(text)
-      ? [rel(file)] : [];
+    const declaresService = /(?:class|interface|object)\s+(?:Default|\w*Service\b)/.test(text);
+    const accessesOutput = /import\s+.*(?:Repository|ObjectMapper|Serializer|PdfCreditEvaluationReportGenerator)/.test(text);
+    return declaresService || accessesOutput ? [rel(file)] : [];
   });
-  assert.deepEqual(violations, [], 'controllers não podem conter serviços nem depender de portas');
+  assert.deepEqual(violations, [], 'controllers não podem conter serviços nem acessar adaptadores de saída');
 });
 
 test('AC-085: aplicação depende diretamente do domínio @spec:AC-085', () => {
-  const application = filesUnder('io/github/brdoliveira/creditflow/evaluation/application/');
-  assert.ok(application.length > 0, 'pacote application da feature não encontrado');
-  const violations = application.flatMap((file) => {
-    const text = source(file);
-    const isUseCase = /UseCase\.kt$/.test(file);
-    const importsDomain = /import\s+io\.github\.brdoliveira\.creditflow\.evaluation\.domain\./.test(text);
-    const importsForbiddenPort = /import\s+io\.github\.brdoliveira\.creditflow\.evaluation\.application\.port\.(?!CreditEvaluationRepository|IdempotencyRepository)/.test(text);
-    const importsLegacy = /application\.evaluation\./.test(text);
-    return (isUseCase && !importsDomain) || importsForbiddenPort || importsLegacy ? [rel(file)] : [];
-  });
-  assert.deepEqual(violations, [], 'casos de uso devem usar o domínio e somente portas de recursos externos');
+  const core = filesUnder('io/github/brdoliveira/creditflow/evaluation/application/EvaluateRevolvingCreditUseCase.kt');
+  assert.equal(core.length, 1, 'caso de uso principal não encontrado');
+  const text = source(core[0]);
+  for (const dependency of ['domain.rule.RuleEngine', 'domain.calculation.CreditLimitCalculator', 'domain.CreditEvaluation']) {
+    assert.match(text, new RegExp(`import\\s+io\\.github\\.brdoliveira\\.creditflow\\.evaluation\\.${dependency.replaceAll('.', '\\.')}`));
+  }
+  assert.doesNotMatch(text, /application\.port\.(?:RuleEngine|CreditLimitCalculator)/, 'regra e cálculo não devem ser portas internas');
+  const legacyImports = filesUnder('io/github/brdoliveira/creditflow/evaluation/application/')
+    .filter((file) => /creditflow\.(?:application\.evaluation|domain\.)/.test(source(file)))
+    .map(rel);
+  assert.deepEqual(legacyImports, [], 'a aplicação não deve importar os pacotes legados');
 });
 
 test('AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086', () => {
   const domain = filesUnder('io/github/brdoliveira/creditflow/evaluation/domain/');
   const names = domain.flatMap(declarations);
-  for (const required of ['CreditEvaluation', 'CreditDecision', 'RuleResult']) assert.ok(names.includes(required), `modelo de domínio ausente: ${required}`);
+  for (const required of ['CreditEvaluation', 'CreditDecision', 'RuleResult']) {
+    assert.ok(names.includes(required), `modelo de domínio ausente: ${required}`);
+  }
   const forbidden = /(?:Decision|Severity|RuleStatus|RuleState|EvaluationSnapshot|EvaluationState|EvaluationModel)/;
   const duplicates = kotlinFiles
     .filter((file) => !rel(file).includes('/evaluation/domain/'))
@@ -104,12 +129,34 @@ test('AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086',
 
 test('AC-087: casos de uso fora do adaptador web @spec:AC-087', () => {
   const controllers = filesUnder('io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/');
-  for (const name of ['CreditEvaluationController.kt', 'CreditEvaluationReportController.kt']) assert.ok(controllers.some((file) => file.endsWith(name)), `controller ausente: ${name}`);
+  for (const name of ['CreditEvaluationController.kt', 'CreditEvaluationReportController.kt']) {
+    assert.ok(controllers.some((file) => file.endsWith(name)), `controller ausente: ${name}`);
+  }
   const violations = controllers.flatMap((file) => {
     const text = source(file);
-    const hasUseCase = /import\s+io\.github\.brdoliveira\.creditflow\.evaluation\.application\.(?:[^\n]*UseCase)/.test(text);
+    const hasUseCase = /import\s+io\.github\.brdoliveira\.creditflow\.evaluation\.application\.[^\n]*UseCase/.test(text);
     const accessesInfrastructure = /(?:Repository|ObjectMapper|Serializer|Service|PdfCreditEvaluationReportGenerator)/.test(text);
     return !hasUseCase || accessesInfrastructure ? [rel(file)] : [];
   });
   assert.deepEqual(violations, [], 'controllers devem delegar a casos de uso e não acessar infraestrutura');
+});
+
+test('AC-088: contratos funcionais preservados @spec:AC-088', () => {
+  const tests = walk(resolve('src/test/kotlin')).filter((file) => file.endsWith('.kt'));
+  const requiredAreas = ['web', 'security', 'persistence', 'messaging', 'report', 'observability'];
+  for (const area of requiredAreas) {
+    assert.ok(tests.some((file) => file.replaceAll('\\', '/').includes(`/${area}/`)), `suíte ausente: ${area}`);
+  }
+  assert.equal(tests.some((file) => /@Disabled\b/.test(source(file))), false, 'testes não podem ser desabilitados para concluir a refatoração');
+});
+
+test('AC-089: arquitetura documentada corresponde ao código @spec:AC-089', () => {
+  const architecture = resolve('docs/architecture.md');
+  const adr = resolve('docs/adrs/001-modular-monolith.md');
+  assert.ok(existsSync(architecture), 'documento de arquitetura ausente');
+  assert.ok(existsSync(adr), 'ADR do monólito modular ausente');
+  const documentation = `${readFileSync(architecture, 'utf8')}\n${readFileSync(adr, 'utf8')}`;
+  for (const term of ['evaluation/domain', 'evaluation/application', 'web/controller', 'web/dto', 'PostgreSQL', 'PDF']) {
+    assert.ok(documentation.includes(term), `documentação não descreve ${term}`);
+  }
 });

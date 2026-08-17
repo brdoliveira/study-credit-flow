@@ -1,6 +1,6 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence
 
-import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecision
+import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.domain.RuleResult
 import jakarta.persistence.*
@@ -28,5 +28,15 @@ class CreditEvaluationEntity(
     constructor() : this(UUID(0, 0), "***.***.***-00", "REJECTED", BigDecimal.ZERO, "", "[]", Instant.EPOCH, 0, "")
 
     /** Converte a entidade para o modelo tipado, recebendo a desserialização do adaptador. */
-    fun toDomain(results: List<RuleResult>) = CreditEvaluation(evaluationId, maskedCpf, CreditDecision(CreditDecision.Status.valueOf(decision), results), approvedAmount, ruleVersion, evaluatedAt, durationMillis, correlationId)
+    fun toDomain(results: List<RuleResult>) = CreditEvaluation(
+        evaluationId = evaluationId,
+        maskedCpf = maskedCpf,
+        decision = CreditDecisionStatus.valueOf(decision),
+        ruleResults = results,
+        approvedAmount = approvedAmount,
+        ruleSetVersion = ruleVersion,
+        processedAt = evaluatedAt,
+        processingTimeMs = durationMillis,
+        correlationId = correlationId,
+    )
 }

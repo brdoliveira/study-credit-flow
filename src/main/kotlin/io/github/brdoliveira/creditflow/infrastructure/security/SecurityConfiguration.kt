@@ -20,12 +20,14 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import org.springframework.security.web.util.matcher.AnyRequestMatcher
 
+/** Configura autenticação OIDC, autorização por escopo, sessão, CSRF e HTTPS. */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfiguration(
     @Value("\${app.security.require-https:false}") private val requireHttps: Boolean
 ) {
+    /** Monta a cadeia de filtros de segurança da aplicação. */
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         val jwtAuthenticationConverter = JwtAuthenticationConverter().apply {

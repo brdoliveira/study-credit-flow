@@ -4,14 +4,16 @@ import tools.jackson.databind.JsonNode
 import tools.jackson.databind.ObjectMapper
 import java.security.MessageDigest
 
-/** Stable SHA-256 over JSON where whitespace and object member ordering have no meaning. */
+/** Calcula SHA-256 estável sobre JSON, ignorando espaços e a ordem das propriedades. */
 class CanonicalRequestHasher(
     private val objectMapper: ObjectMapper = ObjectMapper(),
 ) {
+    /** Retorna o hash hexadecimal da representação canônica da requisição. */
     fun hash(requestBody: String): String = MessageDigest.getInstance("SHA-256")
         .digest(canonicalize(requestBody).toByteArray(Charsets.UTF_8))
         .joinToString("") { "%02x".format(it) }
 
+    /** Converte o corpo JSON para sua representação canônica. */
     fun canonicalize(requestBody: String): String = canonicalize(objectMapper.readTree(requestBody))
 
     private fun canonicalize(node: JsonNode): String = when {

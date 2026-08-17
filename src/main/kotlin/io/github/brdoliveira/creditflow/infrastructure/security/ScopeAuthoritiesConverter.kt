@@ -5,12 +5,9 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.jwt.Jwt
 
-/**
- * Converts OAuth/OIDC scopes, including Keycloak realm roles used locally, to
- * Spring Security authorities. Keeping the application authorization model in
- * scopes makes it portable to another OIDC provider in production.
- */
+/** Converte escopos OAuth/OIDC e perfis locais em autoridades do Spring Security. */
 class ScopeAuthoritiesConverter : Converter<Jwt, Collection<GrantedAuthority>> {
+    /** Extrai somente os escopos autorizados pela aplicação. */
     override fun convert(jwt: Jwt): Collection<GrantedAuthority> =
         (jwt.scopeValues() + jwt.realmRoles())
             .filter { it in CREDIT_SCOPES }

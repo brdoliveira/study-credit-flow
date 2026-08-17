@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/session")
+/** Expõe os dados da sessão autenticada para o frontend. */
 class SessionController {
+    /** Retorna autenticação, perfis e token de proteção contra requisições forjadas. */
     @GetMapping
     fun current(authentication: Authentication, csrfToken: CsrfToken): SessionResponse = SessionResponse(
         authenticated = authentication.isAuthenticated,
@@ -16,5 +18,3 @@ class SessionController {
         csrfToken = csrfToken.token,
     )
 }
-
-data class SessionResponse(val authenticated: Boolean, val authorities: List<String>, val csrfToken: String)

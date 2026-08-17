@@ -5,8 +5,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority
 
-/** Maps the local Keycloak realm roles into the same authorities used by JWT clients. */
+/** Converte perfis do realm local nas mesmas autoridades usadas por clientes JWT. */
 class OidcSessionAuthoritiesMapper : GrantedAuthoritiesMapper {
+    /** Mapeia as autoridades OIDC para os escopos reconhecidos pela aplicação. */
     override fun mapAuthorities(authorities: Collection<GrantedAuthority>): Collection<GrantedAuthority> =
         authorities.flatMap { authority ->
             if (authority is OidcUserAuthority) authority.realmRoles().map(::SimpleGrantedAuthority) else listOf(authority)

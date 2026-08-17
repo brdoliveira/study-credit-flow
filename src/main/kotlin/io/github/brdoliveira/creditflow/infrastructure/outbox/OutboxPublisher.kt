@@ -1,29 +1,11 @@
 package io.github.brdoliveira.creditflow.infrastructure.outbox
 
-import io.github.brdoliveira.creditflow.application.event.CreditEvaluationCompleted
 import io.github.brdoliveira.creditflow.infrastructure.messaging.CreditEvaluationEventProducer
 import io.github.brdoliveira.creditflow.infrastructure.messaging.TransientBrokerException
 import java.time.Clock
 import java.time.Duration
-import java.time.Instant
-import java.util.UUID
 
-data class PendingOutboxEvent(
-    val eventId: UUID,
-    val event: CreditEvaluationCompleted,
-    val attempts: Int,
-)
-
-interface OutboxStore {
-    fun pending(now: Instant, limit: Int): List<PendingOutboxEvent>
-    fun markPublished(eventId: UUID, publishedAt: Instant)
-    fun reschedule(eventId: UUID, attempts: Int, nextAttemptAt: Instant, reason: String)
-}
-
-/**
- * Publishes only committed outbox records. A transient error never drops the event:
- * it remains pending and gets a bounded exponential retry delay.
- */
+/** Publica registros confirmados da outbox com retentativas exponenciais limitadas. */
 class OutboxPublisher(
     private val outboxStore: OutboxStore,
     private val producer: CreditEvaluationEventProducer,
@@ -31,6 +13,7 @@ class OutboxPublisher(
     private val retryBaseDelay: Duration = Duration.ofSeconds(1),
     private val maximumRetryDelay: Duration = Duration.ofMinutes(5),
 ) {
+    /** Publica até o limite informado de eventos pendentes. */
     fun publishPending(limit: Int = 100) {
         require(limit > 0) { "limit must be positive" }
         val now = clock.instant()

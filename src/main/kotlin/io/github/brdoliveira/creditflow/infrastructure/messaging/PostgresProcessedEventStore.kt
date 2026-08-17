@@ -4,10 +4,12 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.transaction.support.TransactionTemplate
 import java.util.UUID
 
+/** Registra no PostgreSQL os eventos consumidos com efeito transacional. */
 class PostgresProcessedEventStore(
     private val jdbcTemplate: JdbcTemplate,
     private val transactions: TransactionTemplate,
 ) : ProcessedEventStore {
+    /** Executa o efeito somente quando o identificador ainda não foi registrado. */
     override fun processOnce(eventId: UUID, effect: () -> Unit): Boolean = transactions.execute {
         val inserted = jdbcTemplate.update(
             """INSERT INTO processed_credit_evaluation_event (event_id)

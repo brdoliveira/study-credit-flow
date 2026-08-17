@@ -8,12 +8,13 @@ import java.time.Duration
 import java.time.Instant
 import java.util.UUID
 
-/** Claims rows before publishing so concurrent schedulers cannot publish the same lease. */
+/** Reserva registros antes da publicação para evitar concorrência entre agendadores. */
 class PostgresOutboxStore(
     private val jdbcTemplate: JdbcTemplate,
     private val objectMapper: ObjectMapper,
     private val leaseDuration: Duration = Duration.ofMinutes(1),
 ) : OutboxStore {
+    /** Reserva e devolve os eventos prontos para publicação. */
     override fun pending(now: Instant, limit: Int): List<PendingOutboxEvent> {
         require(limit > 0) { "limit must be positive" }
         val leaseUntil = now.plus(leaseDuration)
@@ -30,6 +31,7 @@ class PostgresOutboxStore(
         )
     }
 
+    /** Registra a publicação concluída do evento. */
     override fun markPublished(eventId: UUID, publishedAt: Instant) {
         jdbcTemplate.update(
             """update credit_outbox set status = 'PUBLISHED', published_at = ?, last_error = null
@@ -38,6 +40,7 @@ class PostgresOutboxStore(
         )
     }
 
+    /** Reagenda o evento depois de uma falha transitória. */
     override fun reschedule(eventId: UUID, attempts: Int, nextAttemptAt: Instant, reason: String) {
         jdbcTemplate.update(
             """update credit_outbox set status = 'PENDING', attempts = ?, next_attempt_at = ?, last_error = ?

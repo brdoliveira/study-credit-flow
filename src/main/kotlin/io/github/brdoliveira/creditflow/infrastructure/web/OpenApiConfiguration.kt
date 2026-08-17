@@ -10,8 +10,10 @@ import io.swagger.v3.oas.models.security.SecurityScheme
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+/** Configura os metadados e o fluxo OAuth2 exibidos pelo Swagger. */
 @Configuration
 class OpenApiConfiguration {
+    /** Cria a descrição OpenAPI da API de avaliações. */
     @Bean
     fun creditEvaluationsOpenApi(): OpenAPI = OpenAPI()
         .info(

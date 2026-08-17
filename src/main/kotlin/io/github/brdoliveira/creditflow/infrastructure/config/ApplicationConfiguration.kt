@@ -1,29 +1,23 @@
 package io.github.brdoliveira.creditflow.infrastructure.config
 
-import io.github.brdoliveira.creditflow.application.evaluation.CreditEvaluationSnapshotStore
-import io.github.brdoliveira.creditflow.application.evaluation.CreditEvaluationSnapshot as EvaluationSnapshot
-import io.github.brdoliveira.creditflow.application.evaluation.CreditRuleEvaluator
-import io.github.brdoliveira.creditflow.application.evaluation.EvaluateRevolvingCreditUseCase
-import io.github.brdoliveira.creditflow.application.evaluation.ExecutedRule
-import io.github.brdoliveira.creditflow.application.evaluation.RevolvingCreditCalculator
-import io.github.brdoliveira.creditflow.application.evaluation.RuleEvaluation
-import io.github.brdoliveira.creditflow.application.evaluation.RuleSeverity as ApplicationRuleSeverity
-import io.github.brdoliveira.creditflow.application.evaluation.RuleStatus as ApplicationRuleStatus
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationFilter
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationPageRequest
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationRepository
-import io.github.brdoliveira.creditflow.application.port.CreditEvaluationSnapshot as StoredSnapshot
-import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportDataSource
-import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportFilter
-import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportRow
-import io.github.brdoliveira.creditflow.domain.calculation.ConfigurableCreditLimitCalculator
-import io.github.brdoliveira.creditflow.domain.model.CreditEvaluationContext
-import io.github.brdoliveira.creditflow.domain.rule.AvailableLimitRule
-import io.github.brdoliveira.creditflow.domain.rule.LimitCommitmentRule
-import io.github.brdoliveira.creditflow.domain.rule.MaxLatePaymentsRule
-import io.github.brdoliveira.creditflow.domain.rule.MinimumScoreRule
-import io.github.brdoliveira.creditflow.domain.rule.RecentSpendingTrendRule
-import io.github.brdoliveira.creditflow.domain.rule.RuleEngine
+import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.EvaluateRevolvingCreditUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.FindCreditEvaluationUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository
+import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyRepository
+import io.github.brdoliveira.creditflow.evaluation.application.report.CreditEvaluationReportGenerator
+import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
+import io.github.brdoliveira.creditflow.evaluation.domain.calculation.ConfigurableCreditLimitCalculator
+import io.github.brdoliveira.creditflow.evaluation.domain.calculation.CreditLimitCalculator
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.AvailableLimitRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.LimitCommitmentRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.MaxLatePaymentsRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.MinimumScoreRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RecentSpendingTrendRule
+import io.github.brdoliveira.creditflow.evaluation.domain.rule.RuleEngine
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCreditEvaluationReportGenerator
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.mapper.CreditEvaluationWebMapper
 import io.github.brdoliveira.creditflow.infrastructure.health.DependencyReadinessIndicator
 import io.github.brdoliveira.creditflow.infrastructure.health.RequiredDependencyProbe
 import io.github.brdoliveira.creditflow.infrastructure.messaging.BrokerPublisher
@@ -36,19 +30,11 @@ import io.github.brdoliveira.creditflow.infrastructure.observability.CreditMetri
 import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxSchedulingConfiguration
 import io.github.brdoliveira.creditflow.infrastructure.outbox.OutboxStore
 import io.github.brdoliveira.creditflow.infrastructure.outbox.PostgresOutboxStore
-import io.github.brdoliveira.creditflow.infrastructure.report.PdfCreditEvaluationReportGenerator
-import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase as ConsolidatedListCreditEvaluationsUseCase
-import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository as ConsolidatedCreditEvaluationRepository
-import io.github.brdoliveira.creditflow.evaluation.application.report.CreditEvaluationReportGenerator as ConsolidatedReportGenerator
-import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
-import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCreditEvaluationReportGenerator as ConsolidatedPdfReportGenerator
-import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationReportService
-import io.github.brdoliveira.creditflow.infrastructure.web.DefaultCreditEvaluationReportService
 import io.micrometer.core.instrument.MeterRegistry
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.admin.AdminClientConfig
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.beans.factory.ObjectProvider
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.health.contributor.HealthIndicator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -58,135 +44,99 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.transaction.support.TransactionTemplate
 import tools.jackson.databind.ObjectMapper
 import java.time.Clock
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.sql.DataSource
 
+/** Compõe casos de uso, domínio e adaptadores transversais do Spring. */
 @Configuration(proxyBeanMethods = false)
 @Import(OutboxSchedulingConfiguration::class)
 class ApplicationConfiguration {
+    /** Fornece o relógio UTC compartilhado pelos casos de uso. */
     @Bean
     fun clock(): Clock = Clock.systemUTC()
 
+    /** Registra todas as regras ativas na ordem de execução. */
     @Bean
-    fun creditRuleEvaluator(): CreditRuleEvaluator {
-        val engine = RuleEngine(
-            listOf(
-                MinimumScoreRule(),
-                MaxLatePaymentsRule(),
-                AvailableLimitRule(),
-                LimitCommitmentRule(),
-                RecentSpendingTrendRule(),
-            )
-        )
-        return CreditRuleEvaluator { command ->
-            val decision = engine.evaluate(
-                CreditEvaluationContext(
-                    command.customerName,
-                    command.cpf,
-                    command.creditScore,
-                    command.currentInvoiceAmount,
-                    command.totalLimit,
-                    command.availableLimit,
-                    command.latePayments,
-                    command.monthlySpending,
-                )
-            )
-            RuleEvaluation(
-                RULE_VERSION,
-                decision.ruleResults.map { rule ->
-                    ExecutedRule(
-                        rule.code,
-                        rule.name,
-                        ApplicationRuleSeverity.valueOf(rule.severity.name),
-                        ApplicationRuleStatus.valueOf(rule.status.name),
-                        rule.reason,
-                    )
-                },
-            )
-        }
-    }
+    fun ruleEngine() = RuleEngine(
+        listOf(
+            MinimumScoreRule(),
+            MaxLatePaymentsRule(),
+            AvailableLimitRule(),
+            LimitCommitmentRule(),
+            RecentSpendingTrendRule(),
+        ),
+    )
 
+    /** Fornece a calculadora pura do domínio. */
     @Bean
-    fun revolvingCreditCalculator(): RevolvingCreditCalculator {
-        val calculator = ConfigurableCreditLimitCalculator()
-        return RevolvingCreditCalculator { command -> calculator.calculate(command.availableLimit, command.creditScore) }
-    }
+    fun creditLimitCalculator(): CreditLimitCalculator = ConfigurableCreditLimitCalculator()
 
-    @Bean
-    fun snapshotStore(repository: CreditEvaluationRepository, objectMapper: ObjectMapper): CreditEvaluationSnapshotStore =
-        object : CreditEvaluationSnapshotStore {
-            override fun save(snapshot: EvaluationSnapshot): EvaluationSnapshot {
-                repository.save(
-                    StoredSnapshot(
-                        snapshot.evaluationId,
-                        snapshot.maskedCpf,
-                        snapshot.decision.name,
-                        snapshot.approvedAmount,
-                        snapshot.ruleSetVersion,
-                        objectMapper.writeValueAsString(snapshot.executedRules),
-                        snapshot.processedAt,
-                        snapshot.processingTimeMs,
-                        snapshot.correlationId,
-                    )
-                )
-                return snapshot
-            }
-        }
-
+    /** Compõe o caso de uso que executa e persiste a avaliação. */
     @Bean
     fun evaluateRevolvingCreditUseCase(
-        ruleEvaluator: CreditRuleEvaluator,
-        calculator: RevolvingCreditCalculator,
-        snapshotStore: CreditEvaluationSnapshotStore,
+        ruleEngine: RuleEngine,
+        calculator: CreditLimitCalculator,
+        repository: CreditEvaluationRepository,
         clock: Clock,
-    ) = EvaluateRevolvingCreditUseCase(ruleEvaluator, calculator, snapshotStore, clock)
+    ) = EvaluateRevolvingCreditUseCase(ruleEngine, calculator, repository, clock, ruleSetVersion = RULE_VERSION)
 
+    /** Compõe o caso de uso de consulta por identificador. */
     @Bean
-    fun pdfCreditEvaluationReportGenerator() = PdfCreditEvaluationReportGenerator()
+    fun findCreditEvaluationUseCase(repository: CreditEvaluationRepository) =
+        FindCreditEvaluationUseCase(repository)
 
-    /** Expõe o caso de uso consolidado de listagem para os adaptadores da avaliação. */
+    /** Compõe o caso de uso de listagem. */
     @Bean
-    fun consolidatedListCreditEvaluationsUseCase(repository: ConsolidatedCreditEvaluationRepository) =
-        ConsolidatedListCreditEvaluationsUseCase(repository)
+    fun listCreditEvaluationsUseCase(repository: CreditEvaluationRepository) =
+        ListCreditEvaluationsUseCase(repository)
 
-    /** Expõe o gerador PDF que recebe exclusivamente modelos do domínio. */
+    /** Fornece o mapeador da fronteira HTTP. */
     @Bean
-    fun consolidatedReportGenerator(): ConsolidatedReportGenerator = ConsolidatedPdfReportGenerator()
+    fun creditEvaluationWebMapper() = CreditEvaluationWebMapper()
 
-    /** Expõe o caso de uso consolidado de geração do relatório. */
+    /** Fornece o gerador concreto de relatórios PDF. */
+    @Bean
+    fun creditEvaluationReportGenerator(): CreditEvaluationReportGenerator =
+        PdfCreditEvaluationReportGenerator()
+
+    /** Compõe a geração de relatório a partir da listagem paginada. */
     @Bean
     fun generateCreditEvaluationReportUseCase(
-        list: ConsolidatedListCreditEvaluationsUseCase,
-        generator: ConsolidatedReportGenerator,
+        list: ListCreditEvaluationsUseCase,
+        generator: CreditEvaluationReportGenerator,
         clock: Clock,
     ) = GenerateCreditEvaluationReportUseCase(list, generator, clock)
 
-    @Bean
-    fun reportDataSource(repository: CreditEvaluationRepository): CreditEvaluationReportDataSource =
-        CreditEvaluationReportDataSource { filter -> reportRows(repository, filter) }
-
-    @Bean
-    fun creditEvaluationReportService(
-        dataSource: CreditEvaluationReportDataSource,
-        generator: PdfCreditEvaluationReportGenerator,
-    ): CreditEvaluationReportService = DefaultCreditEvaluationReportService(dataSource, generator)
-
+    /** Fornece as métricas técnicas e de negócio. */
     @Bean
     fun creditMetrics(registry: MeterRegistry) = CreditMetrics(registry)
 
+    /** Compõe criação, idempotência e métricas. */
+    @Bean
+    fun createCreditEvaluationUseCase(
+        evaluator: EvaluateRevolvingCreditUseCase,
+        idempotencyRepository: IdempotencyRepository,
+        metrics: CreditMetrics,
+    ) = CreateCreditEvaluationUseCase(evaluator, idempotencyRepository, metrics)
+
+    /** Fornece o armazenamento PostgreSQL da Outbox. */
     @Bean
     fun outboxStore(jdbcTemplate: JdbcTemplate, objectMapper: ObjectMapper): OutboxStore =
         PostgresOutboxStore(jdbcTemplate, objectMapper)
 
+    /** Fornece o publicador síncrono para o broker Kafka. */
     @Bean
     fun brokerPublisher(kafkaTemplate: KafkaTemplate<String, String>): BrokerPublisher =
         KafkaBrokerPublisher(kafkaTemplate)
 
+    /** Fornece o armazenamento de eventos já processados. */
     @Bean
-    fun processedEventStore(jdbcTemplate: JdbcTemplate, transactions: TransactionTemplate): ProcessedEventStore =
-        PostgresProcessedEventStore(jdbcTemplate, transactions)
+    fun processedEventStore(
+        jdbcTemplate: JdbcTemplate,
+        transactions: TransactionTemplate,
+    ): ProcessedEventStore = PostgresProcessedEventStore(jdbcTemplate, transactions)
 
+    /** Compõe o listener Kafka idempotente. */
     @Bean
     fun creditEvaluationKafkaListener(
         objectMapper: ObjectMapper,
@@ -194,6 +144,7 @@ class ApplicationConfiguration {
         eventEffect: ObjectProvider<CreditEvaluationEventEffect>,
     ) = CreditEvaluationKafkaListener(objectMapper, processedEventStore, eventEffect)
 
+    /** Verifica PostgreSQL e Kafka sem misturá-los à liveness do processo. */
     @Bean("dependencyReadiness")
     fun dependencyReadiness(
         dataSource: DataSource,
@@ -202,44 +153,17 @@ class ApplicationConfiguration {
         mapOf(
             "postgres" to RequiredDependencyProbe { dataSource.connection.use { it.isValid(2) } },
             "kafka" to RequiredDependencyProbe {
-                AdminClient.create(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers)).use { client ->
+                AdminClient.create(
+                    mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers),
+                ).use { client ->
                     client.describeCluster().clusterId().get(2, TimeUnit.SECONDS).isNotBlank()
                 }
             },
-        )
+        ),
     )
 
+    /** Constantes de versionamento do conjunto de regras. */
     companion object {
         const val RULE_VERSION = "2026.08"
     }
-}
-
-private fun reportRows(
-    repository: CreditEvaluationRepository,
-    filter: CreditEvaluationReportFilter,
-): List<CreditEvaluationReportRow> {
-    val storedFilter = CreditEvaluationFilter(
-        filter.decision,
-        filter.from?.atStartOfDay(java.time.ZoneOffset.UTC)?.toInstant(),
-        filter.to?.plusDays(1)?.atStartOfDay(java.time.ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
-    )
-    val rows = mutableListOf<CreditEvaluationReportRow>()
-    var pageNumber = 0
-    do {
-        val page = repository.findPage(
-            storedFilter,
-            CreditEvaluationPageRequest(pageNumber, 100),
-        )
-        rows += page.items.map {
-            CreditEvaluationReportRow(
-                it.evaluationId,
-                it.maskedCpf,
-                it.decision,
-                it.approvedAmount,
-                it.evaluatedAt,
-            )
-        }
-        pageNumber++
-    } while (rows.size < page.total)
-    return rows
 }
