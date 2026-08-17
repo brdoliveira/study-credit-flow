@@ -158,11 +158,11 @@ Para clientes elegíveis: `min(limiteDisponível × 70% × fatorDeRisco, R$ 5.00
 
 ## Teste de carga
 
+O cenário k6 em `performance/k6/credit-evaluation.js` modela 10.000 avaliações/minuto, p99 abaixo de 1 segundo e menos de 1% de erros técnicos. No macOS e Linux, `./scripts/run-load-test.sh` executa automaticamente o teste em uma pilha Docker isolada e gera o relatório. Instruções e ressalvas estão em [performance/README.md](performance/README.md). O repositório valida o contrato do cenário; resultados de capacidade dependem do ambiente e não são simulados como evidência.
+
 ## Contrato OpenAPI
 
 Com a aplicação em execução, consulte o contrato versionado em `http://localhost:8080/openapi/credit-evaluations.yaml` ou a interface Swagger em `http://localhost:8080/swagger-ui/index.html`. Ambos seguem a política de autenticação da aplicação: use uma sessão ou token com o escopo OAuth2 exigido por cada operação. O contrato documenta filtros, paginação, erros correlacionáveis, `Idempotency-Key` e replay; os exemplos usam dados fictícios ou CPF mascarado.
-
-O cenário k6 em `performance/k6/credit-evaluation.js` modela 10.000 avaliações/minuto, p99 abaixo de 1 segundo e menos de 1% de erros técnicos. Instruções e ressalvas estão em [performance/README.md](performance/README.md). O repositório valida o contrato do cenário; resultados de capacidade dependem do ambiente e não são simulados como evidência.
 
 ## Limitações e próximos passos
 

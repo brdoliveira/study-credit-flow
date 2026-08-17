@@ -10,6 +10,7 @@ const scenarioPath = resolve(projectRoot, 'performance/k6/credit-evaluation.js')
 const payloadPath = resolve(projectRoot, 'src/test/resources/performance/valid-credit-evaluation.json');
 const summaryPath = resolve(projectRoot, 'performance/k6/summary.js');
 const runnerPath = resolve(projectRoot, 'scripts/run-load-test.ps1');
+const automaticRunnerPath = resolve(projectRoot, 'scripts/run-load-test.sh');
 const evidencePath = resolve(projectRoot, 'docs/evidence/load-test-summary.json');
 
 test('AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto e seus thresholds', () => {
@@ -72,4 +73,20 @@ test('AC-070 @spec:AC-070 contabiliza apenas transporte e respostas 5xx como err
   assert.match(scenario, /response\.status === 0 \|\| response\.status >= 500/);
   assert.match(scenario, /completedEvaluations\.add\(response\.status >= 200 && response\.status < 300\)/);
   assert.match(scenario, /result\.status >= 200 && result\.status < 300/);
+});
+
+test('runner automatico isola a pilha, autentica o k6, grava evidencia e limpa os recursos', () => {
+  const runner = readFileSync(automaticRunnerPath, 'utf8');
+
+  assert.match(runner, /LOAD_TEST_PROJECT:-credit-load/);
+  assert.match(runner, /APP_PORT:-18080/);
+  assert.match(runner, /\.\/gradlew bootJar --no-daemon/);
+  assert.match(runner, /protocol\/openid-connect\/token/);
+  assert.match(runner, /AUTHORIZATION="Bearer \$token"/);
+  assert.match(runner, /k6 run performance\/k6\/credit-evaluation\.js/);
+  assert.match(runner, /LOAD_TEST_EVIDENCE_FILE/);
+  assert.match(runner, /generateLoadTestPdfReport/);
+  assert.match(runner, /LOAD_TEST_PDF_FILE/);
+  assert.match(runner, /down --volumes --remove-orphans/);
+  assert.doesNotMatch(runner, /printf[^\n]*(?:LOAD_TEST_PASSWORD|AUTHORIZATION|\$token)/);
 });

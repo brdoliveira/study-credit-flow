@@ -12,6 +12,26 @@ O payload está em `src/test/resources/performance/valid-credit-evaluation.json`
 
 ## Executar
 
+### macOS e Linux — execução automática
+
+Com o Docker em execução, o runner automatiza todo o fluxo em uma pilha isolada: constrói e inicia os serviços, aguarda os health checks, obtém o token no Keycloak, executa o k6, grava o relatório e remove os containers e volumes.
+
+```bash
+./scripts/run-load-test.sh
+```
+
+Por padrão, a API isolada usa a porta `18080`, o Keycloak `18180`, o PostgreSQL `15432` e o Kafka `19092`, sem interferir na aplicação principal. A senha é lida de `CREDIT_DEMO_PASSWORD` no `.env`. As evidências ficam em `.context/load-test-summary.json` e `.context/load-test-report.pdf`; o PDF apresenta indicadores, gráfico comparativo, configuração e tabela dos critérios de aprovação.
+
+Para escolher outro arquivo ou manter a pilha depois da execução:
+
+```bash
+./scripts/run-load-test.sh --evidence docs/evidence/load-test-summary.json --pdf docs/evidence/load-test-report.pdf --keep-stack
+```
+
+Execute `./scripts/run-load-test.sh --help` para consultar as variáveis de configuração disponíveis.
+
+### PowerShell — API já iniciada
+
 No PowerShell, defina o endereço da API e, quando necessário, o cabeçalho de autorização. Não grave tokens em arquivos ou no histórico do repositório.
 
 ```powershell
@@ -46,7 +66,7 @@ A execução passa somente quando, na fase `nominal`:
 - não há `dropped_iterations`;
 - respostas válidas `2xx` (aprovadas ou reprovadas por regra de negócio) contam como processamento concluído.
 
-O código de saída do k6 é diferente de zero quando algum limiar falha. O runner grava `docs/evidence/load-test-summary.json` com commit, data UTC, ambiente, recursos, configuração, taxa observada, `dropped_iterations`, p99, `technical_error_rate` e resultado de cada threshold. Não use o placeholder versionado como prova: ele precisa ser substituído pela saída de uma execução real.
+O código de saída do k6 é diferente de zero quando algum limiar falha. O runner PowerShell grava `docs/evidence/load-test-summary.json`; o runner automático para macOS/Linux grava `.context/load-test-summary.json` por padrão. O relatório contém commit, data UTC, ambiente, recursos, configuração, taxa observada, `dropped_iterations`, p99, `technical_error_rate` e resultado de cada threshold. Não use o placeholder versionado como prova: ele precisa ser substituído pela saída de uma execução real.
 
 ## Verificar a configuração sem gerar carga
 

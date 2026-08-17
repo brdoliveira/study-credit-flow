@@ -10,6 +10,10 @@ plugins {
 group = "io.github.brdoliveira"
 version = "0.1.0-SNAPSHOT"
 
+springBoot {
+    mainClass.set("io.github.brdoliveira.creditflow.CreditFlowApplicationKt")
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -92,5 +96,23 @@ tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
         events("failed", "skipped")
+    }
+}
+
+val loadTestEvidence = providers.gradleProperty("loadTestEvidence")
+    .orElse(".context/load-test-summary.json")
+val loadTestPdf = providers.gradleProperty("loadTestPdf")
+    .orElse(".context/load-test-report.pdf")
+
+tasks.register<JavaExec>("generateLoadTestPdfReport") {
+    group = "verification"
+    description = "Gera o relatório PDF auditável a partir do resumo JSON do k6."
+    dependsOn("classes")
+    classpath = sourceSets.main.get().runtimeClasspath
+    mainClass.set("io.github.brdoliveira.creditflow.platform.report.LoadTestPdfReportCli")
+    inputs.file(loadTestEvidence)
+    outputs.file(loadTestPdf)
+    doFirst {
+        args(loadTestEvidence.get(), loadTestPdf.get())
     }
 }
