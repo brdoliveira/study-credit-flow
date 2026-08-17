@@ -1,0 +1,127 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-gates:
+    name: Specification, unit tests and source security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.14.0'
+          cache: npm
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Validate AWS reference infrastructure without provisioning
+        run: |
+          terraform fmt -check -recursive infrastructure/terraform
+          terraform -chdir=infrastructure/terraform init -backend=false
+          terraform -chdir=infrastructure/terraform validate
+
+      - name: Compile application
+        run: ./gradlew --no-daemon clean compileKotlin
+
+      - name: Run application and specification tests
+        run: ./gradlew --no-daemon test && node --test --test-reporter=tap "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts" && node scripts/junit-to-tap.mjs
+
+      - name: Verify specification with the repository motor
+        run: node tools/onp-spec/onp-spec.mjs verify prontidao-entrega
+
+      - name: Audit specification with the repository motor
+        run: node tools/onp-spec/onp-spec.mjs audit --ci
+
+      - name: Detect versioned secrets
+        run: docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:v8.18.4 detect --source . --config config/security/gitleaks.toml --no-banner --redact
+
+      - name: Scan source dependencies
+        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 fs --config config/security/trivy.yaml --exit-code 1 .
+
+      - name: Scan Terraform security defaults
+        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 config --severity HIGH,CRITICAL --exit-code 1 infrastructure/terraform
+
+  integration-gates:
+    name: Real PostgreSQL, Kafka and critical HTTP integration
+    needs: quality-gates
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_DB: credit_rotativo_ci
+      POSTGRES_USER: credit_ci
+      POSTGRES_PASSWORD: ci-only-postgres-password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ci-only-keycloak-password
+      CREDIT_DEMO_PASSWORD: ci-only-demo-password
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Start real PostgreSQL and Kafka
+        run: docker compose up --detach --wait postgres kafka
+
+      - name: Run critical HTTP integration tests
+        run: ./gradlew --no-daemon test --tests "*IT"
+
+      - name: Collect compose diagnostics on failure
+        if: failure()
+        run: docker compose logs postgres kafka
+
+      - name: Stop integration dependencies
+        if: always()
+        run: docker compose down --volumes
+
+  container-image:
+    name: Build, scan and inventory container image
+    needs: integration-gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build application artifact
+        run: ./gradlew --no-daemon bootJar
+
+      - name: Build container image
+        run: docker build --tag credito-rotativo:${{ github.sha }} .
+
+      - name: Scan container image
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 image --config config/security/trivy.yaml --exit-code 1 credito-rotativo:${{ github.sha }}
+
+      - name: Generate CycloneDX SBOM
+        run: mkdir -p artifacts && docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/workspace" anchore/syft:v1.18.0 credito-rotativo:${{ github.sha }} -o cyclonedx-json=/workspace/artifacts/sbom-${{ github.sha }}.cdx.json
+
+      - name: Upload versioned SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: artifacts/sbom-${{ github.sha }}.cdx.json
+          if-no-files-found: error

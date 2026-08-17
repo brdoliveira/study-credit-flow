@@ -1,0 +1,31 @@
+config:
+  validation: true
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+complexity:
+  LongMethod:
+    active: true
+    allowedLines: 60
+  TooManyFunctions:
+    active: true
+    allowedFunctionsPerFile: 20
+    allowedFunctionsPerClass: 15
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 180
+    excludes: ['**/test/**']
+  FunctionOnlyReturningConstant:
+    active: true
+    excludes: ['**/test/**']
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: true
+    max: 3

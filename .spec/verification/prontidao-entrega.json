@@ -1,0 +1,177 @@
+{
+  "feature": "prontidao-entrega",
+  "timestamp": "2026-08-17T13:52:57.594Z",
+  "gitRev": "674e11b",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
+  "reporter": "tap",
+  "exitCode": 0,
+  "testsParsed": 122,
+  "results": {
+    "AC-048": {
+      "status": "pass",
+      "testName": "@spec:AC-048 AC-048 redirects an interactive browser request to the corporate OIDC login()",
+      "method": "tap"
+    },
+    "AC-049": {
+      "status": "pass",
+      "testName": "@spec:AC-049 keeps credentials outside JavaScript and sends only a CSRF token",
+      "method": "tap"
+    },
+    "AC-050": {
+      "status": "pass",
+      "testName": "@spec:AC-050 AC-050 returns 401 for anonymous APIs and 403 when browser permissions are insufficient()",
+      "method": "tap"
+    },
+    "AC-051": {
+      "status": "pass",
+      "testName": "@spec:AC-051 AC-051 logout invalidates the local session and uses the approved post logout URL()",
+      "method": "tap"
+    },
+    "AC-052": {
+      "status": "pass",
+      "testName": "@spec:AC-052 AC-052 uses the same public issuer with an internal Keycloak backchannel()",
+      "method": "tap"
+    },
+    "AC-053": {
+      "status": "pass",
+      "testName": "@spec:AC-053 AC-053 first HTTP execution creates an evaluation and identifies a non-replay()",
+      "method": "tap"
+    },
+    "AC-054": {
+      "status": "pass",
+      "testName": "@spec:AC-054 AC-054 replayed HTTP execution returns the original body without another creation()",
+      "method": "tap"
+    },
+    "AC-055": {
+      "status": "pass",
+      "testName": "@spec:AC-055 AC-055 concurrent real HTTP calls converge and a divergent payload conflicts in PostgreSQL()",
+      "method": "tap"
+    },
+    "AC-056": {
+      "status": "pass",
+      "testName": "@spec:AC-056 AC-056 evaluation and Kotlin event outbox commit atomically in real PostgreSQL()",
+      "method": "tap"
+    },
+    "AC-057": {
+      "status": "pass",
+      "testName": "@spec:AC-057 AC-057 publisher waits for Kafka acknowledgement before confirming the Outbox()",
+      "method": "tap"
+    },
+    "AC-058": {
+      "status": "pass",
+      "testName": "@spec:AC-058 AC-058 transient broker failure persists sanitized retry and publishes after recovery()",
+      "method": "tap"
+    },
+    "AC-059": {
+      "status": "pass",
+      "testName": "@spec:AC-059 AC-059 Kafka duplicate delivery persists its marker and applies the effect only once()",
+      "method": "tap"
+    },
+    "AC-060": {
+      "status": "pass",
+      "testName": "@spec:AC-060 AC-060 event from producer to Kafka listener preserves the public contract without sensitive data()",
+      "method": "tap"
+    },
+    "AC-061": {
+      "status": "pass",
+      "testName": "@spec:AC-061 AC-061 runtime evaluation records decision duration and failed rules once()",
+      "method": "tap"
+    },
+    "AC-062": {
+      "status": "pass",
+      "testName": "@spec:AC-062 AC-062 global handler records one bounded technical metric per response()",
+      "method": "tap"
+    },
+    "AC-063": {
+      "status": "pass",
+      "testName": "@spec:AC-063 AC-063 readiness fails independently for postgres and kafka()",
+      "method": "tap"
+    },
+    "AC-064": {
+      "status": "pass",
+      "testName": "@spec:AC-064 AC-064 operational configuration separates probes from sensitive endpoints()",
+      "method": "tap"
+    },
+    "AC-065": {
+      "status": "pass",
+      "testName": "@spec:AC-065 roteiro documenta Compose limpo e serviços saudáveis",
+      "method": "tap"
+    },
+    "AC-066": {
+      "status": "pass",
+      "testName": "@spec:AC-066 roteiro conduz jornada visual ponta a ponta",
+      "method": "tap"
+    },
+    "AC-067": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados",
+      "method": "tap"
+    },
+    "AC-068": {
+      "status": "pass",
+      "testName": "AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto e seus thresholds",
+      "method": "tap"
+    },
+    "AC-069": {
+      "status": "pass",
+      "testName": "AC-069 @spec:AC-069 registra evidência rastreável e sanitizada a partir do resumo do k6",
+      "method": "tap"
+    },
+    "AC-070": {
+      "status": "pass",
+      "testName": "AC-070 @spec:AC-070 contabiliza apenas transporte e respostas 5xx como erro técnico",
+      "method": "tap"
+    },
+    "AC-071": {
+      "status": "pass",
+      "testName": "@spec:AC-045 @spec:AC-071 CI bloqueia mudança inválida e audita com o motor versionado",
+      "method": "tap"
+    },
+    "AC-072": {
+      "status": "pass",
+      "testName": "@spec:AC-072 integração real com PostgreSQL, Kafka e jornada HTTP bloqueia a imagem",
+      "method": "tap"
+    },
+    "AC-073": {
+      "status": "pass",
+      "testName": "@spec:AC-073 supply chain bloqueia segredos e vulnerabilidades e publica SBOM versionada",
+      "method": "tap"
+    },
+    "AC-074": {
+      "status": "pass",
+      "testName": "@spec:AC-074 OpenAPI descreve operações, contratos, escopos e exemplos mascarados",
+      "method": "tap"
+    },
+    "AC-075": {
+      "status": "pass",
+      "testName": "@spec:AC-075 Contrato OpenAPI acompanha métodos, status e cabeçalhos HTTP",
+      "method": "tap"
+    },
+    "AC-076": {
+      "status": "pass",
+      "testName": "@spec:AC-076 Terraform representa rede privada, entrada protegida, ECS, Aurora, eventos, segredos e observabilidade",
+      "method": "tap"
+    },
+    "AC-077": {
+      "status": "pass",
+      "testName": "@spec:AC-077 Terraform aplica defaults seguros e documenta backup, HA, least privilege e migrations",
+      "method": "tap"
+    },
+    "AC-078": {
+      "status": "pass",
+      "testName": "@spec:AC-078 README conduz demonstração e diagnóstico completos",
+      "method": "tap"
+    },
+    "AC-079": {
+      "status": "pass",
+      "testName": "@spec:AC-079 índice identifica comando, resultado, data e revisão validada",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
+}

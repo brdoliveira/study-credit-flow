@@ -1,0 +1,27 @@
+{
+  "feature": "neutralizacao-marca",
+  "timestamp": "2026-08-17T13:52:57.720Z",
+  "gitRev": "674e11b",
+  "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
+  "reporter": "tap",
+  "exitCode": 0,
+  "testsParsed": 122,
+  "results": {
+    "AC-080": {
+      "status": "pass",
+      "testName": "@spec:AC-080 árvore publicável não contém referência à marca original",
+      "method": "tap"
+    },
+    "AC-081": {
+      "status": "pass",
+      "testName": "@spec:AC-081 fontes Kotlin usam namespace autoral alinhado ao grupo Gradle",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
+}

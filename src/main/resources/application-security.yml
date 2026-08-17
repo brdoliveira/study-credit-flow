@@ -1,0 +1,40 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID:credit-bff}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET:}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile
+        provider:
+          keycloak:
+            authorization-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/credit-rotativo}/protocol/openid-connect/auth
+            token-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/credit-rotativo}/protocol/openid-connect/token
+            jwk-set-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/credit-rotativo}/protocol/openid-connect/certs
+            user-info-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/credit-rotativo}/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/credit-rotativo}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  security:
+    require-ssl: true
+  web:
+    resources:
+      add-mappings: false
+server:
+  forward-headers-strategy: framework
+  ssl:
+    enabled: true
+    enabled-protocols: TLSv1.2,TLSv1.3
+app:
+  security:
+    require-https: true

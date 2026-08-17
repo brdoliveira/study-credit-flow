@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "executionStatus": "completed",
+  "commit": "f9aa3b37569faa0f0de0dc6a1aee14c4e6e7c37d",
+  "executedAtUtc": "2026-08-16T23:15:20Z",
+  "environment": "isolated-docker-desktop-local",
+  "resources": "docker=12 CPU/7.7 GB; app=400 threads; hikari=40; postgres=16.4; redpanda=24.2.12; k6=0.54.0",
+  "configuration": {
+    "baseUrl": "http://host.docker.internal:8080",
+    "nominalRatePerMinute": 10000,
+    "nominalDuration": "5m",
+    "warmUpRatePerMinute": 1000,
+    "warmUpDuration": "1m"
+  },
+  "observed": {
+    "nominalRatePerMinute": 10000.2,
+    "p99Milliseconds": 334.781119,
+    "technicalErrorRate": 0,
+    "droppedIterations": 0,
+    "completedEvaluations": 51002
+  },
+  "thresholds": [
+    {
+      "metric": "checks{scenario:nominal}",
+      "threshold": "rate==1",
+      "passed": true
+    },
+    {
+      "metric": "dropped_iterations",
+      "threshold": "count==0",
+      "passed": true
+    },
+    {
+      "metric": "technical_error_rate{scenario:nominal}",
+      "threshold": "rate<0.01",
+      "passed": true
+    },
+    {
+      "metric": "iterations{scenario:nominal}",
+      "threshold": "count>=50000",
+      "passed": true
+    },
+    {
+      "metric": "http_req_duration{scenario:nominal}",
+      "threshold": "p(99)<1000",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "technicalErrorDefinition": "transport failures (status 0) and HTTP 5xx only; valid 2xx credit decisions are completed evaluations"
+}

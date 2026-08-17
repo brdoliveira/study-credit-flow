@@ -61,7 +61,7 @@
             "gradlew.bat",
             "gradle/wrapper/gradle-wrapper.properties",
             "onpspec.config.json",
-            "src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt"
+            "src/test/kotlin/io/github/brdoliveira/creditflow/spec/SpecificationContractTest.kt"
           ],
           "refs": [
             "US-012",
@@ -82,17 +82,17 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt",
-            "src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt",
-            "src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt",
-            "src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt",
-            "src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditEvaluationContext.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/RuleResult.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditDecision.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/CreditRule.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngine.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MinimumScoreRule.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MaxLatePaymentsRule.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/AvailableLimitRule.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/LimitCommitmentRule.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RecentSpendingTrendRule.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngineTest.kt"
           ],
           "refs": [
             "US-002",
@@ -119,10 +119,10 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculator.kt",
-            "src/main/kotlin/com/itau/credit/domain/calculation/ConfigurableCreditLimitCalculator.kt",
-            "src/main/kotlin/com/itau/credit/domain/calculation/CreditCalculationPolicy.kt",
-            "src/test/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculatorTest.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/ConfigurableCreditLimitCalculator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditCalculationPolicy.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculatorTest.kt"
           ],
           "refs": [
             "US-003",
@@ -144,10 +144,10 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCase.kt",
-            "src/main/kotlin/com/itau/credit/application/evaluation/EvaluateCreditCommand.kt",
-            "src/main/kotlin/com/itau/credit/application/evaluation/CreditEvaluationResult.kt",
-            "src/test/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCase.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateCreditCommand.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/CreditEvaluationResult.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt"
           ],
           "refs": [
             "US-001",
@@ -171,12 +171,12 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationRequest.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationResponse.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/ApiError.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationControllerTest.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationRequest.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationResponse.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/ApiError.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationControllerTest.kt"
           ],
           "refs": [
             "US-001",
@@ -205,11 +205,11 @@
           "esforco": "medium",
           "arquivos": [
             "src/main/resources/db/migration/V1__credit_evaluation.sql",
-            "src/main/kotlin/com/itau/credit/application/port/CreditEvaluationRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/persistence/CreditEvaluationEntity.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/privacy/CpfProtector.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/port/CreditEvaluationRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/CreditEvaluationEntity.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/privacy/CpfProtector.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt"
           ],
           "refs": [
             "US-004",
@@ -236,10 +236,10 @@
           "esforco": "medium",
           "arquivos": [
             "src/main/resources/db/migration/V2__credit_idempotency.sql",
-            "src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/idempotency/CanonicalRequestHasher.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/idempotency/IdempotencyIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/CanonicalRequestHasher.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/IdempotencyIT.kt"
           ],
           "refs": [
             "US-005",
@@ -263,11 +263,11 @@
           "esforco": "medium",
           "arquivos": [
             "src/main/resources/db/migration/V3__credit_outbox.sql",
-            "src/main/kotlin/com/itau/credit/application/event/CreditEvaluationCompleted.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationMessagingIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/event/CreditEvaluationCompleted.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationMessagingIT.kt"
           ],
           "refs": [
             "US-009",
@@ -290,10 +290,10 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/security/ScopeAuthoritiesConverter.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ScopeAuthoritiesConverter.kt",
             "src/main/resources/application-security.yml",
-            "src/test/kotlin/com/itau/credit/infrastructure/security/ApiSecurityTest.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ApiSecurityTest.kt",
             "docker/keycloak/realm-export.json"
           ],
           "refs": [
@@ -317,11 +317,11 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportGenerator.kt",
-            "src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportFilter.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportGenerator.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationReportController.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportTest.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportGenerator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportFilter.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportGenerator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationReportController.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportTest.kt"
           ],
           "refs": [
             "US-007",
@@ -350,7 +350,7 @@
             "src/main/resources/static/ts/api.ts",
             "src/main/resources/static/ts/evaluation.ts",
             "src/main/resources/static/ts/report.ts",
-            "src/test/kotlin/com/itau/credit/infrastructure/web/FrontendSmokeTest.kt"
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/FrontendSmokeTest.kt"
           ],
           "refs": [
             "US-011",
@@ -372,12 +372,12 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/infrastructure/observability/CorrelationIdFilter.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CorrelationIdFilter.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt",
             "src/main/resources/logback-spring.xml",
             "src/main/resources/application-observability.yml",
-            "src/test/kotlin/com/itau/credit/infrastructure/observability/ObservabilityTest.kt"
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservabilityTest.kt"
           ],
           "refs": [
             "US-010",

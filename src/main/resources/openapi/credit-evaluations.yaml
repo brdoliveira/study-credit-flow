@@ -1,0 +1,114 @@
+openapi: 3.0.3
+info:
+  title: Credit evaluations API
+  version: v1
+  description: Versioned contract for the revolving-credit evaluation service.
+servers: [{ url: / }]
+security: [{ oauth2: [] }]
+paths:
+  /api/v1/credit-evaluations:
+    post:
+      summary: Create a credit evaluation
+      description: A completed request repeated with the same canonical payload and Idempotency-Key is returned as a replay without creating a second evaluation.
+      operationId: createCreditEvaluation
+      security: [{ oauth2: [credit:write] }]
+      parameters: [{ $ref: '#/components/parameters/IdempotencyKey' }, { $ref: '#/components/parameters/CorrelationId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreditEvaluationRequest' }
+            example: { name: Ana Silva, cpf: '52998224725', creditScore: 720, currentInvoiceAmount: 1800.00, totalLimit: 5000.00, availableLimit: 4000.00, latePayments: 0, monthlySpending: [1500.00, 1700.00, 1800.00] }
+      responses:
+        '201': { description: Evaluation created., headers: { Location: { schema: { type: string, format: uri-reference } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '200': { description: Replay; no new evaluation or event was created., headers: { Idempotent-Replay: { schema: { type: boolean }, description: true for a replay. }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '400': { $ref: '#/components/responses/InvalidRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/IdempotencyConflict' }
+        '500': { $ref: '#/components/responses/InternalError' }
+    get:
+      summary: List credit evaluations
+      operationId: listCreditEvaluations
+      security: [{ oauth2: [credit:read] }]
+      parameters: [{ $ref: '#/components/parameters/Decision' }, { $ref: '#/components/parameters/From' }, { $ref: '#/components/parameters/To' }, { $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/Size' }, { $ref: '#/components/parameters/Sort' }, { $ref: '#/components/parameters/Direction' }, { $ref: '#/components/parameters/CorrelationId' }]
+      responses:
+        '200': { description: Paginated history., headers: { X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluationPage' } } } }
+        '400': { $ref: '#/components/responses/InvalidRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+  /api/v1/credit-evaluations/{evaluationId}:
+    get:
+      summary: Get one credit evaluation
+      operationId: getCreditEvaluation
+      security: [{ oauth2: [credit:read] }]
+      parameters: [{ name: evaluationId, in: path, required: true, schema: { type: string, format: uuid } }, { $ref: '#/components/parameters/CorrelationId' }]
+      responses:
+        '200': { description: Persisted decision snapshot., content: { application/json: { schema: { $ref: '#/components/schemas/CreditEvaluation' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/v1/credit-evaluations/report.pdf:
+    get:
+      summary: Download a PDF report
+      operationId: downloadCreditEvaluationReport
+      security: [{ oauth2: [credit:report] }]
+      parameters: [{ $ref: '#/components/parameters/Decision' }, { $ref: '#/components/parameters/From' }, { $ref: '#/components/parameters/To' }, { $ref: '#/components/parameters/CorrelationId' }]
+      responses:
+        '200': { description: PDF report using the supplied filters., headers: { Content-Disposition: { schema: { type: string } }, X-Correlation-ID: { $ref: '#/components/headers/CorrelationId' } }, content: { application/pdf: { schema: { type: string, format: binary } } } }
+        '400': { $ref: '#/components/responses/InvalidRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '403': { $ref: '#/components/responses/Forbidden' }
+components:
+  securitySchemes:
+    oauth2: { type: oauth2, flows: { authorizationCode: { authorizationUrl: /oauth2/authorization/keycloak, tokenUrl: /login/oauth2/code/keycloak, scopes: { credit:read: Read credit evaluations., credit:write: Create credit evaluations., credit:report: Generate reports., credit:admin: Access administration endpoints. } } } }
+  parameters:
+    IdempotencyKey: { name: Idempotency-Key, in: header, required: true, schema: { type: string, format: uuid }, description: UUID used to make a create request idempotent. }
+    CorrelationId: { name: X-Correlation-ID, in: header, required: false, schema: { type: string, maxLength: 128 }, description: The service generates one when absent or invalid. }
+    Decision: { name: decision, in: query, schema: { type: string, enum: [APPROVED, REJECTED] } }
+    From: { name: from, in: query, schema: { type: string, format: date } }
+    To: { name: to, in: query, schema: { type: string, format: date } }
+    Page: { name: page, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+    Size: { name: size, in: query, schema: { type: integer, minimum: 1, maximum: 100, default: 20 } }
+    Sort: { name: sort, in: query, schema: { type: string, enum: [processedAt, decision, approvedAmount], default: processedAt } }
+    Direction: { name: direction, in: query, schema: { type: string, enum: [ASC, DESC], default: DESC } }
+  headers:
+    CorrelationId: { description: Correlation identifier for support and tracing., schema: { type: string } }
+  responses:
+    InvalidRequest: { description: Invalid body, filter, or idempotency key., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Unauthorized: { description: Missing or invalid access token., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    Forbidden: { description: Token lacks the required OAuth2 scope., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    NotFound: { description: Evaluation was not found., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    IdempotencyConflict: { description: Idempotency-Key was used with a different payload., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    InternalError: { description: Unexpected internal failure., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+  schemas:
+    CreditEvaluationRequest:
+      type: object
+      required: [name, cpf, creditScore, currentInvoiceAmount, totalLimit, availableLimit, latePayments, monthlySpending]
+      properties:
+        name: { type: string, minLength: 1, example: Ana Silva }
+        cpf: { type: string, pattern: '^\\d{11}$', example: '52998224725', description: CPF supplied only in a request; responses are masked. }
+        creditScore: { type: integer, minimum: 0, maximum: 1000, example: 720 }
+        currentInvoiceAmount: { type: number, minimum: 0, example: 1800.00 }
+        totalLimit: { type: number, minimum: 0.01, example: 5000.00 }
+        availableLimit: { type: number, minimum: 0, example: 4000.00 }
+        latePayments: { type: integer, minimum: 0, example: 0 }
+        monthlySpending: { type: array, minItems: 3, maxItems: 3, items: { type: number, minimum: 0 }, example: [1500.00, 1700.00, 1800.00] }
+    CreditEvaluation:
+      type: object
+      required: [evaluationId, customerName, maskedCpf, decision, approvedAmount, ruleSetVersion, rules, processedAt, processingTimeMs, correlationId]
+      properties:
+        evaluationId: { type: string, format: uuid, example: d2719d1c-f0db-4c3d-9de2-4d7cfd6d4d7e }
+        customerName: { type: string, example: Ana Silva }
+        maskedCpf: { type: string, example: '***.982.247-**' }
+        decision: { type: string, enum: [APPROVED, REJECTED] }
+        approvedAmount: { type: number, example: 2800.00 }
+        ruleSetVersion: { type: string, example: v1 }
+        rules: { type: array, items: { $ref: '#/components/schemas/Rule' } }
+        processedAt: { type: string, format: date-time }
+        processingTimeMs: { type: integer, format: int64 }
+        correlationId: { type: string, example: trace-demo-001 }
+    Rule: { type: object, required: [code, name, status, reason], properties: { code: { type: string, example: MINIMUM_SCORE }, name: { type: string, example: Minimum score }, status: { type: string, example: PASSED }, reason: { type: string, example: Score meets the threshold. } } }
+    CreditEvaluationPage: { type: object, required: [items, total, page, size, sort], properties: { items: { type: array, items: { $ref: '#/components/schemas/CreditEvaluation' } }, total: { type: integer, format: int64 }, page: { type: integer }, size: { type: integer }, sort: { type: string, example: processedAt,DESC } } }
+    ApiError: { type: object, required: [status, code, message, correlationId, path, fieldErrors], properties: { status: { type: integer, example: 400 }, code: { type: string, example: INVALID_REQUEST }, message: { type: string, example: Request validation failed }, correlationId: { type: string, example: trace-demo-001 }, path: { type: string, example: /api/v1/credit-evaluations }, fieldErrors: { type: array, items: { $ref: '#/components/schemas/ApiFieldError' } } } }
+    ApiFieldError: { type: object, properties: { field: { type: string, example: creditScore }, message: { type: string, example: must be less than or equal to 1000 } } }

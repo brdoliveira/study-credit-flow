@@ -1,0 +1,154 @@
+{
+  "runId": "study-credit-flow-arquitetura-kotlin-mswjq7ge",
+  "feature": "arquitetura-kotlin",
+  "agent": "codex",
+  "modo": "sequencial",
+  "paralelizar": null,
+  "modeloForcado": "gpt-5.6-luna",
+  "esforcoForcado": "low",
+  "geradoEm": "2026-08-17 01:19",
+  "branchTrabalho": "spec/arquitetura-kotlin",
+  "baseDir": ".spec/features/arquitetura-kotlin",
+  "specDir": ".spec",
+  "repoName": "study-credit-flow",
+  "logsDir": "../onp-worktrees/study-credit-flow-arquitetura-kotlin-logs",
+  "ondas": [],
+  "faixas": [],
+  "sequenciais": [
+    {
+      "id": "T-030",
+      "titulo": "Proteger convenções arquiteturais com testes",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "test/kotlin-architecture.test.mjs",
+        ".spec/features/arquitetura-kotlin/spec.md",
+        ".spec/features/arquitetura-kotlin/design.md",
+        ".spec/features/arquitetura-kotlin/tasks.md"
+      ],
+      "refs": [
+        "US-024",
+        "AC-082",
+        "AC-083",
+        "AC-084",
+        "US-025",
+        "AC-085",
+        "AC-086",
+        "AC-087"
+      ]
+    },
+    {
+      "id": "T-031",
+      "titulo": "Consolidar domínio e núcleo da aplicação",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditEvaluation.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/CreditDecision.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain/RuleResult.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateCreditCommand.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/EvaluateRevolvingCreditUseCase.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/FindCreditEvaluationUseCase.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/ListCreditEvaluationsUseCase.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/CreditEvaluationRepository.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/port/IdempotencyRepository.kt"
+      ],
+      "refs": [
+        "US-025",
+        "AC-085",
+        "AC-086",
+        "AC-087",
+        "US-026",
+        "AC-088"
+      ]
+    },
+    {
+      "id": "T-032",
+      "titulo": "Separar o adaptador web e remover a fachada de serviço",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/CreditEvaluationController.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/CreditEvaluationReportController.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationRequest.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationResponse.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationPageResponse.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/mapper/CreditEvaluationWebMapper.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/GlobalExceptionHandler.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/ApiError.kt"
+      ],
+      "refs": [
+        "US-024",
+        "AC-082",
+        "AC-084",
+        "US-025",
+        "AC-087",
+        "US-026",
+        "AC-088"
+      ]
+    },
+    {
+      "id": "T-033",
+      "titulo": "Adaptar persistência, idempotência, relatório e configuração",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/CreditEvaluationEntity.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/PostgresCreditEvaluationRepository.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/idempotency/PostgresIdempotencyRepository.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/report/GenerateCreditEvaluationReportUseCase.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/report/CreditEvaluationReportGenerator.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/report/PdfCreditEvaluationReportGenerator.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt"
+      ],
+      "refs": [
+        "US-025",
+        "AC-086",
+        "AC-087",
+        "US-026",
+        "AC-088"
+      ]
+    },
+    {
+      "id": "T-034",
+      "titulo": "Separar tipos e padronizar KDocs em português",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "src/main/kotlin/io/github/brdoliveira/creditflow/CreditFlowApplication.kt",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/domain",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure",
+        "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure"
+      ],
+      "refs": [
+        "US-024",
+        "AC-082",
+        "AC-083",
+        "AC-084",
+        "US-026",
+        "AC-088"
+      ]
+    },
+    {
+      "id": "T-035",
+      "titulo": "Atualizar documentação e provar compatibilidade",
+      "modelo": "gpt-5.6-luna",
+      "esforco": "low",
+      "arquivos": [
+        "docs/architecture.md",
+        "docs/adrs/001-modular-monolith.md",
+        "src/test/kotlin",
+        "test/kotlin-architecture.test.mjs",
+        ".spec/verification/arquitetura-kotlin.json"
+      ],
+      "refs": [
+        "US-026",
+        "AC-088",
+        "AC-089"
+      ]
+    }
+  ],
+  "concluidas": [],
+  "avisos": []
+}

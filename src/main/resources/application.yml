@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: credit-flow
+  config:
+    import:
+      - optional:classpath:application-security.yml
+      - optional:classpath:application-observability.yml
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/credit_flow}
+    username: ${DB_USERNAME:credit_flow}
+    password: ${DB_PASSWORD:credit_flow_local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+credit:
+  rules:
+    minimum-score: 650
+    max-late-payments: 2
+    max-limit-commitment: 0.80
+    spending-trend-warning: 0.20
+  calculation:
+    available-limit-percentage: 0.70
+    maximum-revolving-credit: 5000.00
+    rounding-mode: HALF_EVEN
+  idempotency:
+    retention: PT24H

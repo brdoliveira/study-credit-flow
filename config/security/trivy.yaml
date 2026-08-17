@@ -1,0 +1,5 @@
+format: table
+severity: HIGH,CRITICAL
+ignore-unfixed: true
+scanners:
+  - vuln

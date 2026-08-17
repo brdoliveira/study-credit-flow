@@ -18,19 +18,19 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-001 | Preparar projeto Kotlin e testes de especificação | `gpt-5.6-terra` | medium | `settings.gradle.kts`, `build.gradle.kts`, `gradle.properties`, `gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.properties`, `onpspec.config.json`, `src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt` |
+| T-001 | Preparar projeto Kotlin e testes de especificação | `gpt-5.6-terra` | medium | `settings.gradle.kts`, `build.gradle.kts`, `gradle.properties`, `gradlew`, `gradlew.bat`, `gradle/wrapper/gradle-wrapper.properties`, `onpspec.config.json`, `src/test/kotlin/io/github/brdoliveira/creditflow/spec/SpecificationContractTest.kt` |
 
 #### faixa-2 — branch `spec/credito-rotativo-faixa-2` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-2`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-002 | Implementar domínio e motor extensível de regras | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt`, `src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt`, `src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt`, `src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt`, `src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt`, `src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt`, `src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt`, `src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt`, `src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt`, `src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt`, `src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt` |
+| T-002 | Implementar domínio e motor extensível de regras | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditEvaluationContext.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/RuleResult.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditDecision.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/CreditRule.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngine.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MinimumScoreRule.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MaxLatePaymentsRule.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/AvailableLimitRule.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/LimitCommitmentRule.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RecentSpendingTrendRule.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngineTest.kt` |
 
 #### faixa-3 — branch `spec/credito-rotativo-faixa-3` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-3`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-003 | Implementar cálculo do crédito | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculator.kt`, `src/main/kotlin/com/itau/credit/domain/calculation/ConfigurableCreditLimitCalculator.kt`, `src/main/kotlin/com/itau/credit/domain/calculation/CreditCalculationPolicy.kt`, `src/test/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculatorTest.kt` |
+| T-003 | Implementar cálculo do crédito | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculator.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/ConfigurableCreditLimitCalculator.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditCalculationPolicy.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculatorTest.kt` |
 
 ### Onda 2 — faixa-4 ∥ faixa-5 ∥ faixa-6
 
@@ -38,19 +38,19 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-004 | Implementar caso de uso de avaliação | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCase.kt`, `src/main/kotlin/com/itau/credit/application/evaluation/EvaluateCreditCommand.kt`, `src/main/kotlin/com/itau/credit/application/evaluation/CreditEvaluationResult.kt`, `src/test/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt` |
+| T-004 | Implementar caso de uso de avaliação | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCase.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateCreditCommand.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/CreditEvaluationResult.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt` |
 
 #### faixa-5 — branch `spec/credito-rotativo-faixa-5` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-5`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-005 | Implementar API REST e contrato de erros | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationRequest.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationResponse.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/ApiError.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt`, `src/test/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationControllerTest.kt` |
+| T-005 | Implementar API REST e contrato de erros | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationRequest.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationResponse.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/ApiError.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationControllerTest.kt` |
 
 #### faixa-6 — branch `spec/credito-rotativo-faixa-6` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-6`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-006 | Implementar persistência PostgreSQL e auditoria | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V1__credit_evaluation.sql`, `src/main/kotlin/com/itau/credit/application/port/CreditEvaluationRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/persistence/CreditEvaluationEntity.kt`, `src/main/kotlin/com/itau/credit/infrastructure/privacy/CpfProtector.kt`, `src/test/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt` |
+| T-006 | Implementar persistência PostgreSQL e auditoria | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V1__credit_evaluation.sql`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/port/CreditEvaluationRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/CreditEvaluationEntity.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/privacy/CpfProtector.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt` |
 
 ### Onda 3 — faixa-7 ∥ faixa-8 ∥ faixa-9
 
@@ -58,19 +58,19 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-007 | Implementar idempotência concorrente | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V2__credit_idempotency.sql`, `src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/idempotency/CanonicalRequestHasher.kt`, `src/test/kotlin/com/itau/credit/infrastructure/idempotency/IdempotencyIT.kt` |
+| T-007 | Implementar idempotência concorrente | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V2__credit_idempotency.sql`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/CanonicalRequestHasher.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/IdempotencyIT.kt` |
 
 #### faixa-8 — branch `spec/credito-rotativo-faixa-8` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-8`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-008 | Implementar Outbox, publicação e consumo idempotente | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V3__credit_outbox.sql`, `src/main/kotlin/com/itau/credit/application/event/CreditEvaluationCompleted.kt`, `src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt`, `src/test/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationMessagingIT.kt` |
+| T-008 | Implementar Outbox, publicação e consumo idempotente | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V3__credit_outbox.sql`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/event/CreditEvaluationCompleted.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationMessagingIT.kt` |
 
 #### faixa-9 — branch `spec/credito-rotativo-faixa-9` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-9`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-009 | Implementar autenticação e autorização | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt`, `src/main/kotlin/com/itau/credit/infrastructure/security/ScopeAuthoritiesConverter.kt`, `src/main/resources/application-security.yml`, `src/test/kotlin/com/itau/credit/infrastructure/security/ApiSecurityTest.kt`, `docker/keycloak/realm-export.json` |
+| T-009 | Implementar autenticação e autorização | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ScopeAuthoritiesConverter.kt`, `src/main/resources/application-security.yml`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ApiSecurityTest.kt`, `docker/keycloak/realm-export.json` |
 
 ### Onda 4 — faixa-10 ∥ faixa-11 ∥ faixa-12
 
@@ -78,19 +78,19 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-010 | Implementar relatório PDF | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportGenerator.kt`, `src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportFilter.kt`, `src/main/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportGenerator.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationReportController.kt`, `src/test/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportTest.kt` |
+| T-010 | Implementar relatório PDF | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportGenerator.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportFilter.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportGenerator.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationReportController.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportTest.kt` |
 
 #### faixa-11 — branch `spec/credito-rotativo-faixa-11` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-11`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-011 | Implementar frontend demonstrativo | `gpt-5.6-terra` | medium | `src/main/resources/static/index.html`, `src/main/resources/static/report.html`, `src/main/resources/static/css/app.css`, `src/main/resources/static/ts/api.ts`, `src/main/resources/static/ts/evaluation.ts`, `src/main/resources/static/ts/report.ts`, `src/test/kotlin/com/itau/credit/infrastructure/web/FrontendSmokeTest.kt` |
+| T-011 | Implementar frontend demonstrativo | `gpt-5.6-terra` | medium | `src/main/resources/static/index.html`, `src/main/resources/static/report.html`, `src/main/resources/static/css/app.css`, `src/main/resources/static/ts/api.ts`, `src/main/resources/static/ts/evaluation.ts`, `src/main/resources/static/ts/report.ts`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/FrontendSmokeTest.kt` |
 
 #### faixa-12 — branch `spec/credito-rotativo-faixa-12` — worktree `../onp-worktrees/study-credit-flow-credito-rotativo-faixa-12`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-012 | Implementar observabilidade e resiliência | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/infrastructure/observability/CorrelationIdFilter.kt`, `src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt`, `src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt`, `src/main/resources/logback-spring.xml`, `src/main/resources/application-observability.yml`, `src/test/kotlin/com/itau/credit/infrastructure/observability/ObservabilityTest.kt` |
+| T-012 | Implementar observabilidade e resiliência | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CorrelationIdFilter.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt`, `src/main/resources/logback-spring.xml`, `src/main/resources/application-observability.yml`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservabilityTest.kt` |
 
 ### Onda 5 — faixa-13 ∥ faixa-14 ∥ faixa-15
 

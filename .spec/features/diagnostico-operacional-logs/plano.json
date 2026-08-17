@@ -1,0 +1,130 @@
+{
+  "runId": "study-credit-flow-diagnostico-operacional-logs-mswtc2fh",
+  "feature": "diagnostico-operacional-logs",
+  "agent": "codex",
+  "modo": "paralelo",
+  "paralelizar": null,
+  "modeloForcado": null,
+  "esforcoForcado": null,
+  "geradoEm": "2026-08-17 05:48",
+  "branchTrabalho": "spec/diagnostico-operacional-logs",
+  "baseDir": ".spec/features/diagnostico-operacional-logs",
+  "specDir": ".spec",
+  "repoName": "study-credit-flow",
+  "logsDir": "../onp-worktrees/study-credit-flow-diagnostico-operacional-logs-logs",
+  "ondas": [
+    [
+      "faixa-1",
+      "faixa-2",
+      "faixa-3"
+    ],
+    [
+      "faixa-4"
+    ]
+  ],
+  "faixas": [
+    {
+      "id": "faixa-1",
+      "branch": "spec/diagnostico-operacional-logs-faixa-1",
+      "worktree": "../onp-worktrees/study-credit-flow-diagnostico-operacional-logs-faixa-1",
+      "tarefas": [
+        {
+          "id": "T-042",
+          "titulo": "Criar fundação segura de logging estruturado",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "high",
+          "arquivos": [
+            "src/main/resources/logback-spring.xml",
+            "src/main/resources/application-observability.yml",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/platform/observability/StructuredLoggingIT.kt"
+          ],
+          "refs": [
+            "US-033",
+            "AC-100",
+            "AC-101"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faixa-2",
+      "branch": "spec/diagnostico-operacional-logs-faixa-2",
+      "worktree": "../onp-worktrees/study-credit-flow-diagnostico-operacional-logs-faixa-2",
+      "tarefas": [
+        {
+          "id": "T-043",
+          "titulo": "Registrar falhas HTTP técnicas",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "medium",
+          "arquivos": [
+            "src/main/kotlin/io/github/brdoliveira/creditflow/platform/observability/SafeExceptionDetails.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/GlobalExceptionHandler.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/observability/ObservabilityTest.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/observability/RuntimeObservabilityIT.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/GlobalExceptionLoggingTest.kt"
+          ],
+          "refs": [
+            "US-031",
+            "AC-097",
+            "AC-101"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faixa-3",
+      "branch": "spec/diagnostico-operacional-logs-faixa-3",
+      "worktree": "../onp-worktrees/study-credit-flow-diagnostico-operacional-logs-faixa-3",
+      "tarefas": [
+        {
+          "id": "T-044",
+          "titulo": "Propagar e registrar contexto assíncrono",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "high",
+          "arquivos": [
+            "src/main/kotlin/io/github/brdoliveira/creditflow/platform/observability/CorrelationLogContext.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/outbox/OutboxPublisher.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/messaging/CreditEvaluationKafkaListener.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/messaging/AsyncOperationalLoggingTest.kt"
+          ],
+          "refs": [
+            "US-032",
+            "AC-098",
+            "AC-099",
+            "AC-101"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faixa-4",
+      "branch": "spec/diagnostico-operacional-logs-faixa-4",
+      "worktree": "../onp-worktrees/study-credit-flow-diagnostico-operacional-logs-faixa-4",
+      "tarefas": [
+        {
+          "id": "T-045",
+          "titulo": "Documentar operação e provar compatibilidade",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "medium",
+          "arquivos": [
+            "README.md",
+            "docs/architecture.md",
+            ".env.example",
+            "test/kotlin-architecture.test.mjs",
+            ".spec/verification/diagnostico-operacional-logs.json"
+          ],
+          "refs": [
+            "US-031",
+            "US-032",
+            "US-033",
+            "AC-100",
+            "AC-101"
+          ]
+        }
+      ]
+    }
+  ],
+  "sequenciais": [],
+  "concluidas": [],
+  "avisos": []
+}

@@ -1,0 +1,130 @@
+{
+  "runId": "study-credit-flow-fortalecer-arquitetura-modular-mswoei3v",
+  "feature": "fortalecer-arquitetura-modular",
+  "agent": "codex",
+  "modo": "paralelo",
+  "paralelizar": null,
+  "modeloForcado": null,
+  "esforcoForcado": null,
+  "geradoEm": "2026-08-17 03:30",
+  "branchTrabalho": "spec/fortalecer-arquitetura-modular",
+  "baseDir": ".spec/features/fortalecer-arquitetura-modular",
+  "specDir": ".spec",
+  "repoName": "study-credit-flow",
+  "logsDir": "../onp-worktrees/study-credit-flow-fortalecer-arquitetura-modular-logs",
+  "ondas": [
+    [
+      "faixa-1",
+      "faixa-2"
+    ]
+  ],
+  "faixas": [
+    {
+      "id": "faixa-1",
+      "branch": "spec/fortalecer-arquitetura-modular-faixa-1",
+      "worktree": "../onp-worktrees/study-credit-flow-fortalecer-arquitetura-modular-faixa-1",
+      "tarefas": [
+        {
+          "id": "T-036",
+          "titulo": "Impor todas as fronteiras arquiteturais",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "high",
+          "arquivos": [
+            "test/kotlin-architecture.test.mjs",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/spec/SpecificationContractTest.kt"
+          ],
+          "refs": [
+            "US-027",
+            "AC-090"
+          ]
+        },
+        {
+          "id": "T-037",
+          "titulo": "Consolidar a organização por feature",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "high",
+          "arquivos": [
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/event/CreditEvaluationCompleted.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/CanonicalRequestHasher.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/domain",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/application",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/evaluation",
+            "docs/architecture.md"
+          ],
+          "refs": [
+            "US-027",
+            "US-028",
+            "AC-091",
+            "AC-092"
+          ]
+        },
+        {
+          "id": "T-040",
+          "titulo": "Atualizar documentação e provar compatibilidade",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "medium",
+          "arquivos": [
+            "docs/architecture.md",
+            "docs/adrs/001-modular-monolith.md",
+            "test/kotlin-architecture.test.mjs",
+            "src/test/kotlin",
+            "test"
+          ],
+          "refs": [
+            "US-029",
+            "AC-095"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faixa-2",
+      "branch": "spec/fortalecer-arquitetura-modular-faixa-2",
+      "worktree": "../onp-worktrees/study-credit-flow-fortalecer-arquitetura-modular-faixa-2",
+      "tarefas": [
+        {
+          "id": "T-038",
+          "titulo": "Tipar o filtro de decisão de ponta a ponta",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "medium",
+          "arquivos": [
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/CreditEvaluationFilter.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/dto/CreditEvaluationSearchCriteria.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/CreditEvaluationController.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/controller/CreditEvaluationReportController.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/PostgresCreditEvaluationRepository.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationControllerTest.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt"
+          ],
+          "refs": [
+            "US-028",
+            "AC-093"
+          ]
+        },
+        {
+          "id": "T-039",
+          "titulo": "Tornar a classe Kotlin a fonte do evento da outbox",
+          "modelo": "gpt-5.6-terra",
+          "esforco": "high",
+          "arquivos": [
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/application/event/CreditEvaluationCompleted.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/PostgresCreditEvaluationRepository.kt",
+            "src/main/resources/db/migration/V5__explicit_credit_outbox.sql",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationMessagingIT.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt"
+          ],
+          "refs": [
+            "US-028",
+            "AC-094"
+          ]
+        }
+      ]
+    }
+  ],
+  "sequenciais": [],
+  "concluidas": [],
+  "avisos": []
+}
