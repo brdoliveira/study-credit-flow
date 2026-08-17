@@ -1355,10 +1355,10 @@
       "codigo": "REF_MALFORMADA",
       "feature": "neutralizacao-marca",
       "ref": "T-028",
-      "ocorrencias": 16,
+      "ocorrencias": 18,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T04:39:12.237Z",
-      "gitRev": "afa99fe"
+      "ultimaVez": "2026-08-17T04:39:27.833Z",
+      "gitRev": "9bdd834"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
       "codigo": "AC_SEM_PROVA",
