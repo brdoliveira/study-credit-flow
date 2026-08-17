@@ -55,13 +55,13 @@ jobs:
         run: node tools/onp-spec/onp-spec.mjs audit --ci
 
       - name: Detect versioned secrets
-        run: docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:v8.18.4 detect --source . --config config/security/gitleaks.toml --no-banner --redact
+        run: docker run --rm -v "$PWD:/repo" -w /repo zricethezav/gitleaks:v8.30.1 git --config config/security/gitleaks.toml --no-banner --redact .
 
       - name: Scan source dependencies
-        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 fs --config config/security/trivy.yaml --exit-code 1 .
+        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.74.0 fs --scanners vuln --config config/security/trivy.yaml --exit-code 1 .
 
       - name: Scan Terraform security defaults
-        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 config --severity HIGH,CRITICAL --exit-code 1 infrastructure/terraform
+        run: docker run --rm -v "$PWD:/repo" -w /repo aquasec/trivy:0.74.0 config --severity HIGH,CRITICAL --exit-code 1 infrastructure/terraform
 
   integration-gates:
     name: Real PostgreSQL, Kafka and critical HTTP integration
@@ -114,7 +114,7 @@ jobs:
         run: docker build --tag credito-rotativo:${{ github.sha }} .
 
       - name: Scan container image
-        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/repo" -w /repo aquasec/trivy:0.57.1 image --config config/security/trivy.yaml --exit-code 1 credito-rotativo:${{ github.sha }}
+        run: docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/repo" -w /repo aquasec/trivy:0.74.0 image --scanners vuln --config config/security/trivy.yaml --exit-code 1 credito-rotativo:${{ github.sha }}
 
       - name: Generate CycloneDX SBOM
         run: mkdir -p artifacts && docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "$PWD:/workspace" anchore/syft:v1.18.0 credito-rotativo:${{ github.sha }} -o cyclonedx-json=/workspace/artifacts/sbom-${{ github.sha }}.cdx.json

@@ -1,0 +1,2 @@
+# Fixture histórico que verifica a sanitização de logs, sem conter credencial real.
+dbf2de17afcb5ea828cd8d0eff6875c85507e9df:src/test/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/web/error/GlobalExceptionLoggingTest.kt:generic-api-key:38

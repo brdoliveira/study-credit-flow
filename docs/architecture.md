@@ -61,11 +61,13 @@ Relatórios síncronos usam um instante final fixo para manter a paginação est
 ## Controles operacionais
 
 - OIDC/JWT e autorização por escopo;
+- CSP restritiva e dependências visuais servidas pelo próprio artefato;
 - HTTPS obrigatório no perfil de produção;
 - idempotência com retenção de 24 horas e detecção de payload divergente;
 - transactional outbox para evitar dual write, com backoff, limite de dez tentativas e estado terminal `FAILED`;
 - correlação em resposta, MDC, decisão e evento;
 - métricas sem CPF ou `evaluationId` como tag;
+- rate limiting por IP no AWS WAF associado ao ALB;
 - liveness do processo separada da readiness de dependências;
 - erros técnicos sem stack trace no contrato HTTP.
 

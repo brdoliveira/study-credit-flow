@@ -18,6 +18,7 @@ test("@spec:AC-044 docker compose starts the application, PostgreSQL, identity p
   assert.match(compose, /kafka_data:/, "broker data must use an explicit volume");
   assert.match(compose, /docker\/keycloak\/realm-export\.json/, "Keycloak realm must be imported");
   assert.match(compose, /SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092/);
+  assert.equal((compose.match(/127\.0\.0\.1:\$\{/g) ?? []).length, 4, "local ports must bind only to loopback");
   assert.match(dockerfile, /actuator\/health\/readiness|ENTRYPOINT/, "application image must provide its runnable entrypoint");
 
   for (const variable of ["POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "KEYCLOAK_ADMIN", "KEYCLOAK_ADMIN_PASSWORD", "CREDIT_DEMO_PASSWORD"]) {

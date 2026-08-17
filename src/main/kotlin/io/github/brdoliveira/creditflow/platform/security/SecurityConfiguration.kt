@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter
+import org.springframework.security.web.header.writers.StaticHeadersWriter
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
 import org.springframework.security.web.util.matcher.AnyRequestMatcher
@@ -45,6 +47,13 @@ class SecurityConfiguration(
                     }
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) }
+            .headers { headers ->
+                headers.contentSecurityPolicy { policy -> policy.policyDirectives(CONTENT_SECURITY_POLICY) }
+                headers.referrerPolicy { policy ->
+                    policy.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)
+                }
+                headers.addHeaderWriter(StaticHeadersWriter("Permissions-Policy", PERMISSIONS_POLICY))
+            }
             .authorizeHttpRequests {
                 it
                     .requestMatchers("/oauth2/**", "/login/**", "/error").permitAll()
@@ -85,5 +94,10 @@ class SecurityConfiguration(
 
     private companion object {
         val SAFE_METHODS = setOf("GET", "HEAD", "TRACE", "OPTIONS")
+        const val CONTENT_SECURITY_POLICY =
+            "default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; " +
+                "form-action 'self'; frame-ancestors 'none'; img-src 'self' data:; " +
+                "object-src 'none'; script-src 'self'; style-src 'self'"
+        const val PERMISSIONS_POLICY = "camera=(), geolocation=(), microphone=(), payment=(), usb=()"
     }
 }

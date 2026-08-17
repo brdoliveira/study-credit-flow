@@ -2,6 +2,7 @@
 .git/
 .gradle/
 .idea/
+**/.terraform/
 .env
 .DS_Store
 node_modules/

@@ -41,8 +41,9 @@ test('@spec:AC-073 supply chain bloqueia segredos e vulnerabilidades e publica S
     read('config/security/gitleaks.toml'),
   ]);
 
-  assert.match(workflow, /gitleaks:v8\.18\.4/);
-  assert.match(workflow, /trivy:0\.57\.1/);
+  assert.match(workflow, /gitleaks:v8\.30\.1/);
+  assert.match(workflow, /gitleaks:v8\.30\.1 git/);
+  assert.match(workflow, /trivy:0\.74\.0/);
   assert.match(workflow, /syft:v1\.18\.0/);
   assert.match(workflow, /--exit-code 1/);
   assert.match(workflow, /sbom-\$\{\{ github\.sha \}\}\.cdx\.json/);

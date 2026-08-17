@@ -13,7 +13,7 @@ const all = [
 ].map(read).join('\n');
 
 test('@spec:AC-076 Terraform representa rede privada, entrada protegida, ECS, Aurora, eventos, segredos e observabilidade', () => {
-  for (const marker of ['aws_subnet" "private', 'aws_lb"', 'aws_ecs_service', 'aws_rds_cluster', 'aws_msk_cluster', 'aws_secretsmanager_secret', 'aws_kms_key', 'aws_cloudwatch', 'aws_appautoscaling']) {
+  for (const marker of ['aws_subnet" "private', 'aws_lb"', 'aws_wafv2_web_acl', 'rate_based_statement', 'aws_ecs_service', 'aws_rds_cluster', 'aws_msk_cluster', 'aws_secretsmanager_secret', 'aws_kms_key', 'aws_cloudwatch', 'aws_appautoscaling']) {
     assert.match(all, new RegExp(marker));
   }
   assert.match(read('infrastructure/terraform/outputs.tf'), /cost_drivers/);

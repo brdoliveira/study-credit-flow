@@ -5,6 +5,7 @@ Esta configuração representa VPC com sub-redes privadas, ALB HTTPS, ECS/Fargat
 ## Segurança e operação
 
 - Banco, brokers e tasks ficam apenas nas sub-redes privadas; somente o ALB recebe tráfego externo por HTTPS.
+- O AWS WAF associado ao ALB bloqueia cada IP que ultrapassa 2.000 requisições na janela padrão de cinco minutos.
 - Dados, logs, broker e segredos usam KMS; credenciais do Aurora são gerenciadas pelo Secrets Manager, não por variáveis em texto.
 - Aurora mantém 14 dias de backup, proteção contra exclusão, snapshot final e duas instâncias em zonas distintas.
 - As policies dão somente `GetSecretValue` e `kms:Decrypt` aos recursos nomeados. Permissões de negócio devem ficar em uma task role separada.

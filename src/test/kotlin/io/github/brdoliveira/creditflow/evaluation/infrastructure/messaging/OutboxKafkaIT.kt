@@ -9,13 +9,13 @@ import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.Cr
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.persistence.PostgresCreditEvaluationRepository
 import jakarta.persistence.EntityManager
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.extension.ExtendWith
@@ -34,6 +34,7 @@ import org.springframework.kafka.test.utils.KafkaTestUtils
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.context.transaction.AfterTransaction
 import org.springframework.transaction.PlatformTransactionManager
 import org.springframework.transaction.TransactionDefinition
 import org.springframework.transaction.support.TransactionTemplate
@@ -69,7 +70,7 @@ class OutboxKafkaIT @Autowired constructor(
     private val store = PostgresOutboxStore(jdbcTemplate, objectMapper)
     private val repository = PostgresCreditEvaluationRepository(entityManager, objectMapper)
 
-    @AfterEach
+    @AfterTransaction
     fun cleanDatabase() {
         jdbcTemplate.update("delete from credit_outbox")
         jdbcTemplate.update("delete from credit_evaluation")
@@ -98,14 +99,14 @@ class OutboxKafkaIT @Autowired constructor(
         insertOutbox(event)
         val publisher = OutboxPublisher(
             store, CreditEvaluationEventProducer(KafkaBrokerPublisher(kafkaTemplate), objectMapper, OUTBOX_TOPIC),
+            readyClock(event.eventId),
         )
         consumer().use { consumer ->
             publisher.publishPending()
-            val record = KafkaTestUtils.getRecords(consumer).records(OUTBOX_TOPIC)
-                .single { it.key() == event.eventId.toString() }
+            assertThat(statusOf(event.eventId)).isEqualTo("PUBLISHED")
+            val record = awaitRecord(consumer, event.eventId)
             assertThat(record.value()).contains(event.eventId.toString())
         }
-        assertThat(statusOf(event.eventId)).isEqualTo("PUBLISHED")
     }
 
     @Test
@@ -169,11 +170,11 @@ class OutboxKafkaIT @Autowired constructor(
         insertOutbox(event)
         val publisher = OutboxPublisher(
             store, CreditEvaluationEventProducer(KafkaBrokerPublisher(kafkaTemplate), objectMapper, OUTBOX_TOPIC),
+            readyClock(event.eventId),
         )
         consumer().use { consumer ->
             publisher.publishPending()
-            val payload = KafkaTestUtils.getRecords(consumer).records(OUTBOX_TOPIC)
-                .single { it.key() == event.eventId.toString() }.value()
+            val payload = awaitRecord(consumer, event.eventId).value()
             assertThat(payload).contains(
                 "eventVersion", "evaluationId", "decision", "approvedAmount", "ruleVersion", "evaluatedAt", "correlationId",
             )
@@ -212,8 +213,28 @@ class OutboxKafkaIT @Autowired constructor(
         properties[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         properties[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         return KafkaConsumer<String, String>(properties).also {
-            embeddedKafka.consumeFromAnEmbeddedTopic(it, OUTBOX_TOPIC)
+            embeddedKafka.consumeFromAnEmbeddedTopic(it, false, OUTBOX_TOPIC)
         }
+    }
+
+    private fun awaitRecord(consumer: KafkaConsumer<String, String>, eventId: UUID): ConsumerRecord<String, String> {
+        val deadline = System.nanoTime() + Duration.ofSeconds(10).toNanos()
+        do {
+            consumer.poll(Duration.ofMillis(250))
+                .firstOrNull { it.topic() == OUTBOX_TOPIC && it.key() == eventId.toString() }
+                ?.let { return it }
+        } while (System.nanoTime() < deadline)
+        throw AssertionError("Kafka record was not received for event $eventId")
+    }
+
+    private fun readyClock(eventId: UUID): Clock {
+        val readyAt = Instant.parse("2026-08-16T12:00:00Z")
+        jdbcTemplate.update(
+            "update credit_outbox set next_attempt_at = ? where event_id = ?",
+            Timestamp.from(readyAt),
+            eventId,
+        )
+        return Clock.fixed(readyAt, ZoneOffset.UTC)
     }
 
     private fun producerProperties(): Map<String, Any> = mapOf(

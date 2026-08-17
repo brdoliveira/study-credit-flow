@@ -41,11 +41,22 @@ class OidcBrowserSecurityIT @Autowired constructor(private val mvc: MockMvc) {
     }
 
     @Test
+    fun `serves frontend dependencies locally for authenticated sessions`() {
+        mvc.perform(get("/webjars/bootstrap/5.3.8/css/bootstrap.min.css").with(browser("credit:read")))
+            .andExpect(status().isOk)
+        mvc.perform(get("/webjars/lucide/1.16.0/dist/umd/lucide.min.js").with(browser("credit:read")))
+            .andExpect(status().isOk)
+    }
+
+    @Test
     // @spec:AC-049
     fun `AC-049 keeps OAuth tokens server-side and requires CSRF for session mutations`() {
         val session = MockHttpSession()
         mvc.perform(get("/api/session").session(session).with(browser("credit:write")))
             .andExpect(status().isOk)
+            .andExpect(header().string("Content-Security-Policy", org.hamcrest.Matchers.containsString("script-src 'self'")))
+            .andExpect(header().string("Referrer-Policy", "no-referrer"))
+            .andExpect(header().string("Permissions-Policy", org.hamcrest.Matchers.containsString("camera=()")))
             .andExpect(jsonPath("$.csrfToken").isNotEmpty)
             .andExpect(jsonPath("$.accessToken").doesNotExist())
             .andExpect(jsonPath("$.refreshToken").doesNotExist())

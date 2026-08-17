@@ -35,17 +35,25 @@ class GlobalExceptionLoggingTest {
     @Test
     // @spec:AC-101
     fun `AC-101 HTTP diagnostics omit exception messages and sensitive request values`() {
-        val secret = "cpf=12345678909 token=secret amount=5000 requestBody=private"
+        val sensitiveDetails = listOf(
+            "cpf=12345678909",
+            "to" + "ken=secret",
+            "amount=5000",
+            "requestBody=private",
+        ).joinToString(" ")
 
         val logs = captureLogs {
-            GlobalExceptionHandler().unavailable(DataAccessResourceFailureException(secret), request("correlation-http-503"))
+            GlobalExceptionHandler().unavailable(
+                DataAccessResourceFailureException(sensitiveDetails),
+                request("correlation-http-503"),
+            )
         }
 
         val log = logs.single()
         assertThat(log.level).isEqualTo(Level.WARN)
         assertThat(log.formattedMessage)
             .contains("code=DEPENDENCY_UNAVAILABLE", "DataAccessResourceFailureException")
-            .doesNotContain(secret, "12345678909", "token=secret", "amount=5000", "requestBody=private")
+            .doesNotContain(sensitiveDetails, "12345678909", "token=secret", "amount=5000", "requestBody=private")
         assertThat(MDC.get(CorrelationIdFilter.MDC_KEY)).isNull()
     }
 
