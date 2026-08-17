@@ -73,8 +73,11 @@ class ObservabilityTest {
         }
         val handler = GlobalExceptionHandler()
 
-        val internal = handler.unexpected(request)
-        val unavailable = handler.unavailable(request)
+        val internal = handler.unexpected(IllegalStateException("secret details"), request)
+        val unavailable = handler.unavailable(
+            org.springframework.dao.DataAccessResourceFailureException("secret details"),
+            request,
+        )
 
         assertEquals(500, internal.statusCode.value())
         assertEquals("INTERNAL_ERROR", internal.body!!.code)

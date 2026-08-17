@@ -4,9 +4,12 @@ import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyK
 import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
 import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
 import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
+import io.github.brdoliveira.creditflow.platform.observability.SafeExceptionDetails
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.ConstraintViolationException
+import org.slf4j.LoggerFactory
+import org.slf4j.MDC
 import org.springframework.dao.DataAccessResourceFailureException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -69,8 +72,9 @@ class GlobalExceptionHandler(
 
     /** Trata indisponibilidade temporária de dependências. */
     @ExceptionHandler(DataAccessResourceFailureException::class)
-    fun unavailable(request: HttpServletRequest): ResponseEntity<ApiError> {
+    fun unavailable(exception: DataAccessResourceFailureException, request: HttpServletRequest): ResponseEntity<ApiError> {
         metrics?.recordTechnicalError("DEPENDENCY")
+        logTechnicalFailure("DEPENDENCY_UNAVAILABLE", request, exception, LogLevel.WARN)
         return error(
             HttpStatus.SERVICE_UNAVAILABLE,
             "DEPENDENCY_UNAVAILABLE",
@@ -81,9 +85,21 @@ class GlobalExceptionHandler(
 
     /** Impede exposição de detalhes em falhas técnicas inesperadas. */
     @ExceptionHandler(Exception::class)
-    fun unexpected(request: HttpServletRequest): ResponseEntity<ApiError> {
+    fun unexpected(exception: Exception, request: HttpServletRequest): ResponseEntity<ApiError> {
         metrics?.recordTechnicalError("INTERNAL")
+        logTechnicalFailure("INTERNAL_ERROR", request, exception, LogLevel.ERROR)
         return error(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_ERROR", "An unexpected error occurred", request)
+    }
+
+    private fun logTechnicalFailure(code: String, request: HttpServletRequest, exception: Throwable, level: LogLevel) {
+        val details = SafeExceptionDetails.from(exception)
+        MDC.putCloseable(CorrelationIdFilter.MDC_KEY, request.correlationId()).use {
+            val event = "http_technical_failure code={} method={} path={} exceptionType={} exceptionFrames={}"
+            when (level) {
+                LogLevel.ERROR -> logger.error(event, code, request.method, request.requestURI, details.type, details.frames)
+                LogLevel.WARN -> logger.warn(event, code, request.method, request.requestURI, details.type, details.frames)
+            }
+        }
     }
 
     private fun error(
@@ -96,6 +112,13 @@ class GlobalExceptionHandler(
         ApiError(status.value(), code, message, request.correlationId(), request.requestURI, fieldErrors),
     )
 }
+
+private enum class LogLevel {
+    ERROR,
+    WARN,
+}
+
+private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
 
 private fun HttpServletRequest.correlationId(): String =
     (getAttribute(CorrelationIdFilter.REQUEST_ATTRIBUTE) as? String)

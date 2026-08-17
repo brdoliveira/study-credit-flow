@@ -40,8 +40,11 @@ class RuntimeObservabilityIT {
             setAttribute(CorrelationIdFilter.REQUEST_ATTRIBUTE, "runtime-correlation")
         }
 
-        val internal = handler.unexpected(request)
-        val dependency = handler.unavailable(request)
+        val internal = handler.unexpected(IllegalStateException(), request)
+        val dependency = handler.unavailable(
+            org.springframework.dao.DataAccessResourceFailureException("database unavailable"),
+            request,
+        )
 
         assertEquals(1.0, registry.counter("credit.evaluation.errors", "type", "INTERNAL").count())
         assertEquals(1.0, registry.counter("credit.evaluation.errors", "type", "DEPENDENCY").count())
