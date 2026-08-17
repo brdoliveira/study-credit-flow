@@ -1175,10 +1175,10 @@
       "codigo": "VERIFY_OBSOLETO",
       "feature": "credito-rotativo",
       "ref": "—",
-      "ocorrencias": 9,
+      "ocorrencias": 10,
       "primeiraVez": "2026-08-16T21:51:16.396Z",
-      "ultimaVez": "2026-08-17T04:37:55.525Z",
-      "gitRev": "d9aa204"
+      "ultimaVez": "2026-08-17T05:29:02.852Z",
+      "gitRev": "ee85e32"
     },
     "TASK_CONCLUIDA_SEM_PROVA::prontidao-entrega::T-019": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
@@ -1355,10 +1355,10 @@
       "codigo": "REF_MALFORMADA",
       "feature": "neutralizacao-marca",
       "ref": "T-028",
-      "ocorrencias": 20,
+      "ocorrencias": 22,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T05:23:41.329Z",
-      "gitRev": "ddb7fa3"
+      "ultimaVez": "2026-08-17T05:29:02.852Z",
+      "gitRev": "ee85e32"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
       "codigo": "AC_SEM_PROVA",
@@ -1481,10 +1481,10 @@
       "codigo": "VERIFY_OBSOLETO",
       "feature": "prontidao-entrega",
       "ref": "—",
-      "ocorrencias": 7,
+      "ocorrencias": 8,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T04:37:55.526Z",
-      "gitRev": "d9aa204"
+      "ultimaVez": "2026-08-17T05:29:02.852Z",
+      "gitRev": "ee85e32"
     },
     "AC_SEM_PROVA::arquitetura-kotlin::AC-082": {
       "codigo": "AC_SEM_PROVA",
@@ -1949,10 +1949,10 @@
       "codigo": "VERIFY_OBSOLETO",
       "feature": "arquitetura-kotlin",
       "ref": "—",
-      "ocorrencias": 3,
+      "ocorrencias": 4,
       "primeiraVez": "2026-08-17T03:51:30.395Z",
-      "ultimaVez": "2026-08-17T04:37:55.525Z",
-      "gitRev": "d9aa204"
+      "ultimaVez": "2026-08-17T05:29:02.851Z",
+      "gitRev": "ee85e32"
     },
     "TASK_CONCLUIDA_SEM_PROVA::fortalecer-arquitetura-modular::T-036": {
       "codigo": "TASK_CONCLUIDA_SEM_PROVA",
@@ -2250,6 +2250,24 @@
       "primeiraVez": "2026-08-17T05:23:41.329Z",
       "ultimaVez": "2026-08-17T05:23:41.329Z",
       "gitRev": "ddb7fa3"
+    },
+    "VERIFY_OBSOLETO::fortalecer-arquitetura-modular::—": {
+      "codigo": "VERIFY_OBSOLETO",
+      "feature": "fortalecer-arquitetura-modular",
+      "ref": "—",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:29:02.852Z",
+      "ultimaVez": "2026-08-17T05:29:02.852Z",
+      "gitRev": "ee85e32"
+    },
+    "VERIFY_OBSOLETO::neutralizacao-marca::—": {
+      "codigo": "VERIFY_OBSOLETO",
+      "feature": "neutralizacao-marca",
+      "ref": "—",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:29:02.852Z",
+      "ultimaVez": "2026-08-17T05:29:02.852Z",
+      "gitRev": "ee85e32"
     }
   }
 }
