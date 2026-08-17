@@ -14,6 +14,18 @@ Aplicação demonstrativa para avaliar concessão de crédito rotativo de forma 
 
 A arquitetura e o caminho para AWS estão em [docs/architecture.md](docs/architecture.md). As decisões e seus trade-offs estão em [docs/adrs](docs/adrs).
 
+## Logs operacionais
+
+O console emite uma linha JSON Logstash por registro. Para investigar uma requisição ou evento, copie o `correlationId` devolvido pela API e filtre os logs por esse campo; por exemplo, no Compose:
+
+```powershell
+docker compose logs app | Select-String '"correlationId":"<correlationId>"'
+```
+
+Em CloudWatch ou outro agregador JSON, pesquise o campo `correlationId` pelo valor exato. Os registros incluem `timestamp`, `level`, `logger`, `message`, `service.name`, `service.version` e `service.environment`; quando o rastreamento estiver disponível, também incluem `correlationId`, `traceId` e `spanId`.
+
+Use `DEBUG` para sucesso nominal detalhado, `INFO` para marcos operacionais como eventos duplicados, `WARN` para retentativas e indisponibilidades tratadas e `ERROR` para falhas técnicas. Avaliações e publicações bem-sucedidas não geram um `INFO` por item. Nunca registre CPF, token, valores financeiros, corpo de requisição ou payload de evento; use somente identificadores e contexto operacional seguro.
+
 ## Pré-requisitos
 
 - Docker Desktop com Docker Compose;

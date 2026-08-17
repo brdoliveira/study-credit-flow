@@ -241,3 +241,47 @@ test('AC-095: Documentação e contratos continuam coerentes @spec:AC-095', () =
   assert.equal(tests.some((file) => /@(?:Disabled|Ignore)\b/.test(source(file))), false,
     'nenhum contrato funcional pode ser desabilitado durante a refatoração');
 });
+
+test('AC-100: Logs JSON estruturados têm identidade e correlação documentadas @spec:AC-100', () => {
+  const logback = readFileSync(resolve('src/main/resources/logback-spring.xml'), 'utf8');
+  const observability = readFileSync(resolve('src/main/resources/application-observability.yml'), 'utf8');
+  const readme = readFileSync(resolve('README.md'), 'utf8');
+  const architecture = readFileSync(resolve('docs/architecture.md'), 'utf8');
+  const environment = readFileSync(resolve('.env.example'), 'utf8');
+
+  assert.match(logback, /StructuredLogEncoder/, 'o console deve usar o encoder estruturado do Spring Boot');
+  assert.match(logback, /<format>\$\{CONSOLE_LOG_STRUCTURED_FORMAT\}<\/format>/,
+    'o encoder deve respeitar o formato estruturado configurado');
+  assert.match(observability, /console:\s*logstash/, 'o console deve produzir Logstash JSON');
+  for (const field of ['service.name', 'service.version', 'service.environment']) {
+    assert.match(observability, new RegExp(field.replace('.', '\\.')), `configuração JSON sem ${field}`);
+  }
+  for (const variable of ['APP_VERSION=local', 'APP_ENVIRONMENT=local']) {
+    assert.ok(environment.includes(variable), `.env.example deve expor ${variable}`);
+  }
+  for (const field of ['timestamp', 'level', 'logger', 'message', 'correlationId', 'traceId', 'spanId']) {
+    assert.ok(readme.includes(field) && architecture.includes(field),
+      `a operação deve documentar o campo JSON ${field}`);
+  }
+  assert.match(readme, /docker compose logs app[\s\S]*correlationId/,
+    'README deve explicar como buscar logs pelo correlationId');
+});
+
+test('AC-101: Documentação e configuração protegem dados sensíveis e volume nominal @spec:AC-101', () => {
+  const observability = readFileSync(resolve('src/main/resources/application-observability.yml'), 'utf8');
+  const documentation = `${readFileSync(resolve('README.md'), 'utf8')}\n${readFileSync(resolve('docs/architecture.md'), 'utf8')}`;
+
+  for (const field of ['cpf', 'token', 'amount', 'requestBody', 'payload']) {
+    assert.match(observability, new RegExp(`-\\s+${field}\\b`),
+      `a configuração JSON deve excluir ${field}`);
+  }
+  for (const term of ['CPF', 'token', 'valores financeiros', 'corpo de requisição', 'payload de evento']) {
+    assert.match(documentation, new RegExp(`nunca registre[\\s\\S]{0,180}${term}`, 'i'),
+      `a documentação deve proibir o registro de ${term}`);
+  }
+  for (const level of ['DEBUG', 'INFO', 'WARN', 'ERROR']) {
+    assert.ok(documentation.includes(level), `a documentação deve definir o nível ${level}`);
+  }
+  assert.match(documentation, /não geram um `INFO` por item/i,
+    'a documentação deve vedar INFO por sucesso nominal individual');
+});
