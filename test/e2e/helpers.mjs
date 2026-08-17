@@ -59,8 +59,13 @@ export async function waitFor(assertion, timeoutMs = 30_000) {
 export function compose(args, timeoutMs = 10_000) {
   const project = process.env.E2E_COMPOSE_PROJECT;
   if (!project) throw new Error('E2E_COMPOSE_PROJECT is required');
+  const standalone = process.env.E2E_COMPOSE_COMMAND;
+  const command = standalone || 'docker';
+  const commandArgs = standalone
+    ? ['--project-name', project, ...args]
+    : ['compose', '--project-name', project, ...args];
   return new Promise((resolve, reject) => {
-    const child = spawn('docker', ['compose', '--project-name', project, ...args], {
+    const child = spawn(command, commandArgs, {
       stdio: ['ignore', 'pipe', 'pipe'], timeout: timeoutMs,
     });
     let stdout = ''; let stderr = '';

@@ -4,6 +4,11 @@
   "type": "module",
   "packageManager": "npm@10.9.2",
   "scripts": {
-    "test": "node --test \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\""
+    "test": "node --test \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\"",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1"
   }
 }

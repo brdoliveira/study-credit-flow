@@ -13,6 +13,18 @@ Os objetivos abaixo são janelas operacionais iniciais. Eles devem ser revistos 
 
 O teste k6 usa os mesmos limites de p99 e erro técnico. Ele comprova o comportamento durante a janela do teste, não o SLO mensal.
 
+## Calibração de alertas
+
+Os limites operacionais ficam em `observability/prometheus/alert-thresholds.json`; `alerts.yml` é gerado a partir do template e o CI bloqueia divergências. O alerta de erro exige burn rate simultâneo em cinco minutos e uma hora, além de volume mínimo, para não disparar por uma única falha em período ocioso.
+
+Depois de uma janela representativa de carga, gere a evidência sem alterar regras:
+
+```bash
+ALERT_CALIBRATION_DAYS=7 node scripts/calibrate-alerts.mjs
+```
+
+Revise `.context/alert-calibration.json` com operação e negócio. Para aceitar os limites sugeridos de volume, latência e outbox, execute `node scripts/calibrate-alerts.mjs --apply`, valide com `./scripts/observability.sh validate` e abra uma mudança revisável. A taxa de erro permanece vinculada ao SLO e nunca é alterada automaticamente. Repita mensalmente e após mudanças relevantes de tráfego ou capacidade.
+
 ## Ambiente local
 
 Preencha `PROMETHEUS_CLIENT_SECRET`, `GRAFANA_ADMIN_USER` e `GRAFANA_ADMIN_PASSWORD` no `.env`. O Prometheus usa client credentials do Keycloak com somente `credit:admin`; o segredo é escrito apenas no filesystem temporário do container.
@@ -57,6 +69,8 @@ docker-compose start kafka
 ```
 
 Depois de cada cenário, confira Prometheus em `Status > Targets`, Alertmanager, o dashboard Grafana e os traces no Tempo. A restauração da dependência deve resolver readiness e alertas após as janelas configuradas.
+
+O gate automatizado equivalente é `./scripts/system-tests.sh`. Ele comprova que Kafka e PostgreSQL derrubam readiness, que uma sessão existente continua autorizada durante a indisponibilidade do Keycloak e que a outbox acumulada chega a `PUBLISHED` depois da recuperação do broker.
 
 ## Runbooks
 

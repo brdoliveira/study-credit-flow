@@ -82,6 +82,7 @@ if (typeof document !== "undefined") {
       setSubmitting(submitButton, false);
     }
   });
+  submitButton.disabled = false;
 }
 
 if (typeof process !== "undefined" && process.env.NODE_TEST_CONTEXT) {

@@ -12,6 +12,15 @@ resource "aws_secretsmanager_secret" "application" {
   recovery_window_in_days = 30
 }
 
+resource "aws_secretsmanager_secret_rotation" "application" {
+  count               = var.secret_rotation_lambda_arn == "" ? 0 : 1
+  secret_id           = aws_secretsmanager_secret.application.id
+  rotation_lambda_arn = var.secret_rotation_lambda_arn
+  rotation_rules {
+    automatically_after_days = var.secret_rotation_days
+  }
+}
+
 module "network" {
   source = "./modules/network"
   name   = var.name

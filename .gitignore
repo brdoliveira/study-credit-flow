@@ -39,6 +39,9 @@ out/
 ### Kotlin ###
 .kotlin
 .env
+node_modules/
+playwright-report/
+test-results/
 
 ### Terraform ###
 **/.terraform/

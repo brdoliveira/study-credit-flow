@@ -1,0 +1,8 @@
+{
+  "minimumRequestRate": 0.1,
+  "errorBudgetRatio": 0.01,
+  "fastBurnErrorRatio": 0.05,
+  "p99LatencySeconds": 1,
+  "outboxBacklogCount": 100,
+  "outboxOldestAgeSeconds": 60
+}

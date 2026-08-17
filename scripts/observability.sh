@@ -35,6 +35,7 @@ require_environment() {
 
 validate() {
   require_environment
+  node scripts/render-alert-rules.mjs --check
   "${COMPOSE[@]}" "${COMPOSE_FILES[@]}" config --quiet
   mkdir -p .context
   touch .context/prometheus-test-secret

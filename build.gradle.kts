@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version "4.1.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("dev.detekt") version "2.0.0-alpha.3"
+    jacoco
 }
 
 group = "io.github.brdoliveira"
@@ -77,6 +78,39 @@ detekt {
     config.setFrom(files("config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
     parallel = true
+}
+
+jacoco {
+    toolVersion = "0.8.14"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+    violationRules {
+        rule {
+            limit {
+                counter = "LINE"
+                minimum = "0.85".toBigDecimal()
+            }
+            limit {
+                counter = "BRANCH"
+                minimum = "0.55".toBigDecimal()
+            }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
 }
 
 // Java/Gradle argument files corrupt non-ASCII workspace paths on Windows. A

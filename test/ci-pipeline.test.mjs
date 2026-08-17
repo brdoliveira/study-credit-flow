@@ -27,7 +27,8 @@ test('@spec:AC-072 integração real com PostgreSQL, Kafka e jornada HTTP bloque
   const integrationTest = './gradlew --no-daemon test --tests "*IT"';
   const imageBuild = 'docker build --tag credito-rotativo:${{ github.sha }} .';
 
-  assert.match(workflow, /container-image:\s*[\s\S]*?needs: integration-gates/);
+  assert.match(workflow, /system-gates:\s*[\s\S]*?needs: integration-gates/);
+  assert.match(workflow, /container-image:\s*[\s\S]*?needs: system-gates/);
   assert.ok(workflow.indexOf(integrationStart) >= 0, 'CI must start real PostgreSQL and Kafka');
   assert.ok(workflow.indexOf(integrationTest) > workflow.indexOf(integrationStart));
   assert.ok(workflow.indexOf(imageBuild) > workflow.indexOf(integrationTest));
@@ -51,4 +52,27 @@ test('@spec:AC-073 supply chain bloqueia segredos e vulnerabilidades e publica S
   assert.doesNotMatch(workflow, /continue-on-error:\s*true/);
   assert.match(trivy, /severity:\s*HIGH,CRITICAL/);
   assert.match(gitleaks, /useDefault\s*=\s*true/);
+});
+
+test('CI bloqueia regressao de cobertura e publica o relatorio JaCoCo', async () => {
+  const [workflow, build] = await Promise.all([
+    read('.github/workflows/ci.yml'),
+    read('build.gradle.kts'),
+  ]);
+
+  assert.match(workflow, /jacocoTestCoverageVerification/);
+  assert.match(workflow, /kotlin-coverage-\$\{\{ github\.sha \}\}/);
+  assert.match(workflow, /build\/reports\/jacoco\/test/);
+  assert.match(build, /counter = "LINE"[\s\S]*minimum = "0\.85"/);
+  assert.match(build, /counter = "BRANCH"[\s\S]*minimum = "0\.55"/);
+  assert.match(build, /tasks\.check[\s\S]*jacocoTestCoverageVerification/);
+});
+
+test('CI executa jornada de browser, WCAG e recuperacao antes da imagem', async () => {
+  const workflow = await read('.github/workflows/ci.yml');
+  assert.match(workflow, /system-gates:[\s\S]*needs: integration-gates/);
+  assert.match(workflow, /npm exec playwright install --with-deps chromium/);
+  assert.match(workflow, /\.\/scripts\/system-tests\.sh/);
+  assert.match(workflow, /browser-diagnostics-\$\{\{ github\.sha \}\}/);
+  assert.match(workflow, /container-image:[\s\S]*needs: system-gates/);
 });

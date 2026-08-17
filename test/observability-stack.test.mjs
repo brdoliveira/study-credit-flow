@@ -31,6 +31,9 @@ test('alerts cover SLOs, readiness and asynchronous processing with runbooks', (
     assert.match(alerts, new RegExp(`alert: ${alert}`));
     assert.match(runbooks, new RegExp(`### ${alert}`));
   }
+  assert.match(alerts, /\[5m\][\s\S]*\[1h\]/);
+  assert.match(alerts, /sum\(rate\(http_server_requests_seconds_count[\s\S]*> 0\.1/);
+  assert.match(read('scripts/observability.sh'), /render-alert-rules\.mjs --check/);
 });
 
 test('application exports OpenTelemetry and bounded asynchronous metrics', () => {

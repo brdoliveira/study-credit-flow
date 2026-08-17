@@ -1,5 +1,6 @@
 services:
   app:
+    image: ${APP_IMAGE:-credit-flow-app:local}
     build:
       context: .
       dockerfile: Dockerfile
@@ -58,6 +59,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
       CREDIT_DEMO_PASSWORD: ${CREDIT_DEMO_PASSWORD}
+      APP_PORT: ${APP_PORT:-8080}
       KC_HEALTH_ENABLED: "true"
       KC_HOSTNAME: http://localhost:${KEYCLOAK_PORT:-8180}
       KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"

@@ -36,8 +36,8 @@
       "publicClient": true,
       "standardFlowEnabled": true,
       "directAccessGrantsEnabled": false,
-      "redirectUris": ["http://localhost:8080/login/oauth2/code/*"],
-      "webOrigins": ["http://localhost:8080"],
+      "redirectUris": ["http://localhost:${APP_PORT}/login/oauth2/code/*"],
+      "webOrigins": ["http://localhost:${APP_PORT}"],
       "protocol": "openid-connect",
       "protocolMappers": [
         {

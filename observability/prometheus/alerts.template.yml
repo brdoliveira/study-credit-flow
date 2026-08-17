@@ -16,16 +16,16 @@ groups:
             sum(rate(http_server_requests_seconds_count{job="credit-flow",status=~"5.."}[5m]))
             /
             clamp_min(sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])), 0.001)
-            > 0.05
+            > {{fastBurnErrorRatio}}
           )
           and
           (
             sum(rate(http_server_requests_seconds_count{job="credit-flow",status=~"5.."}[1h]))
             /
             clamp_min(sum(rate(http_server_requests_seconds_count{job="credit-flow"}[1h])), 0.001)
-            > 0.01
+            > {{errorBudgetRatio}}
           )
-          and sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])) > 0.1
+          and sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])) > {{minimumRequestRate}}
         for: 5m
         labels:
           severity: critical
@@ -37,8 +37,8 @@ groups:
         expr: |
           histogram_quantile(0.99,
             sum by (le) (rate(http_server_requests_seconds_bucket{job="credit-flow"}[5m]))
-          ) > 1
-          and sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])) > 0.1
+          ) > {{p99LatencySeconds}}
+          and sum(rate(http_server_requests_seconds_count{job="credit-flow"}[5m])) > {{minimumRequestRate}}
         for: 5m
         labels:
           severity: warning
@@ -58,7 +58,7 @@ groups:
           runbook: docs/observability.md#creditflowoutboxterminalfailure
 
       - alert: CreditFlowOutboxBacklog
-        expr: credit_outbox_backlog{job="credit-flow"} > 100 or credit_outbox_oldest_pending_age_seconds{job="credit-flow"} > 60
+        expr: credit_outbox_backlog{job="credit-flow"} > {{outboxBacklogCount}} or credit_outbox_oldest_pending_age_seconds{job="credit-flow"} > {{outboxOldestAgeSeconds}}
         for: 5m
         labels:
           severity: warning

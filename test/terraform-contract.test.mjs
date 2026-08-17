@@ -35,4 +35,8 @@ test('@spec:AC-077 Terraform aplica defaults seguros e documenta backup, HA, lea
   assert.match(docs, /least|somente `GetSecretValue`/i);
   assert.match(docs, /Flyway|migra/i);
   assert.match(docs, /nunca executa `apply`/i);
+  assert.match(all, /aws_secretsmanager_secret_rotation/);
+  assert.match(all, /automatically_after_days/);
+  assert.match(all, /deployment_circuit_breaker\s*\{[\s\S]*rollback\s*=\s*true/);
+  assert.match(all, /deployment_minimum_healthy_percent\s*=\s*100/);
 });

@@ -84,6 +84,18 @@ A pilha opcional adiciona Prometheus, Alertmanager, Grafana, OpenTelemetry Colle
 
 O Grafana fica em `http://localhost:3000`, com dashboard, Prometheus e Tempo provisionados. Alertas, SLOs, testes de falha e runbooks estão em [docs/observability.md](docs/observability.md).
 
+### Gate de sistema e recuperação
+
+No macOS e Linux, o gate abaixo cria uma pilha descartável em portas isoladas, executa a jornada HTTP e no Chromium, audita WCAG A/AA, interrompe PostgreSQL, Kafka e Keycloak e valida backup/restore, rotação da senha do banco e rollback da imagem:
+
+```bash
+npm ci
+npm exec playwright install chromium
+./scripts/system-tests.sh
+```
+
+O script aceita tanto `docker compose` quanto `docker-compose`, nunca reutiliza volumes da aplicação normal e remove o ambiente ao terminar. Os critérios e o procedimento equivalente para AWS estão em [docs/recovery.md](docs/recovery.md).
+
 ### Prova reproduzível a partir de volumes limpos
 
 Para comprovar a pilha de um ambiente limpo, sem reutilizar banco ou broker, execute:
@@ -113,6 +125,7 @@ Com PostgreSQL e as demais dependências disponíveis nos endereços configurado
 .\gradlew.bat bootRun --no-daemon
 .\gradlew.bat test --no-daemon
 .\gradlew.bat detekt --no-daemon
+.\gradlew.bat jacocoTestReport jacocoTestCoverageVerification --no-daemon
 node --test "test/*.test.mjs" "src/test/resources/performance/*.test.js" "src/main/resources/static/ts/*.ts"
 ```
 
@@ -183,7 +196,7 @@ Com a aplicação em execução, consulte o contrato versionado em `http://local
 - o frontend é demonstrativo e não substitui um BFF ou design system corporativo;
 - o Keycloak e o broker locais são single-node e não representam alta disponibilidade;
 - a carga deve ser executada em ambiente isolado com sizing e telemetria reais;
-- rotação de chaves, mTLS, WAF, backup/restore e DR pertencem à implantação corporativa;
+- mTLS e um DR entre regiões ainda pertencem à implantação corporativa; backup/restore, rotação e rollback já possuem gates locais e controles na referência AWS;
 - a evolução sugerida usa ECS/Fargate, Aurora PostgreSQL, MSK/EventBridge, Secrets Manager, KMS e CloudWatch, detalhada na arquitetura.
 
 O uso de IA e as verificações humanas realizadas estão registrados em [docs/ai-usage.md](docs/ai-usage.md).

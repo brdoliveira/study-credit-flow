@@ -117,9 +117,12 @@ if (typeof document !== "undefined") {
     }
   });
 
-  document.querySelector("#download-pdf").addEventListener("click", () => {
+  const downloadButton = document.querySelector("#download-pdf");
+  downloadButton.addEventListener("click", () => {
     window.location.assign(`${API_BASE}/report.pdf?${filterQuery(filters())}`);
   });
+  submitButton.disabled = false;
+  downloadButton.disabled = false;
 }
 
 if (typeof process !== "undefined" && process.env.NODE_TEST_CONTEXT) {

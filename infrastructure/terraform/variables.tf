@@ -21,6 +21,20 @@ variable "alarm_notification_email" {
   type        = string
   default     = ""
 }
+variable "secret_rotation_lambda_arn" {
+  description = "Optional Secrets Manager rotation Lambda ARN; required by the production deployment process."
+  type        = string
+  default     = ""
+}
+variable "secret_rotation_days" {
+  description = "Maximum age of the runtime application secret."
+  type        = number
+  default     = 30
+  validation {
+    condition     = var.secret_rotation_days >= 1 && var.secret_rotation_days <= 365
+    error_message = "secret_rotation_days must be between 1 and 365."
+  }
+}
 variable "tags" {
   type    = map(string)
   default = { Project = "credito-rotativo", ManagedBy = "terraform" }

@@ -4,7 +4,7 @@
   --ink-800: #2f3d4c;
   --ink-700: #465668;
   --ink-600: #617084;
-  --ink-500: #7b8898;
+  --ink-500: #526174;
   --line: #dce2e8;
   --line-strong: #c9d1da;
   --canvas: #f4f6f8;
@@ -511,8 +511,9 @@ select {
 }
 
 .btn-primary:disabled {
-  border-color: #6da9a4;
-  background: #6da9a4;
+  border-color: var(--ink-500);
+  background: var(--ink-500);
+  opacity: 1;
 }
 
 .btn-outline-secondary {
