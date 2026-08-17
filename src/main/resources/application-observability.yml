@@ -17,3 +17,19 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+logging:
+  structured:
+    format:
+      console: logstash
+    json:
+      exclude:
+        - cpf
+        - token
+        - amount
+        - requestBody
+        - payload
+      add:
+        service.name: ${spring.application.name}
+        service.version: ${APP_VERSION:unknown}
+        service.environment: ${APP_ENVIRONMENT:local}
