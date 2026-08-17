@@ -31,6 +31,16 @@ function filesUnder(fragment) {
   return kotlinFiles.filter((file) => rel(file).includes(fragment));
 }
 
+function imports(file) {
+  return [...source(file).matchAll(/^\s*import\s+([\w.]+)/gm)].map((match) => match[1]);
+}
+
+function dependencyViolations(files, forbidden) {
+  return files.flatMap((file) => imports(file)
+    .filter((dependency) => forbidden.test(dependency))
+    .map((dependency) => `${rel(file)} imports ${dependency}`));
+}
+
 function kdocBefore(lines, index) {
   const windowStart = Math.max(0, index - 24);
   const localEnd = lines.slice(windowStart, index).findLastIndex((line) => line.includes('*/'));
@@ -111,6 +121,27 @@ test('AC-085: aplicação depende diretamente do domínio @spec:AC-085', () => {
     .filter((file) => /creditflow\.(?:application\.evaluation|domain\.)/.test(source(file)))
     .map(rel);
   assert.deepEqual(legacyImports, [], 'a aplicação não deve importar os pacotes legados');
+});
+
+test('AC-090: Fronteiras de dependência são verificadas integralmente @spec:AC-090', () => {
+  const evaluation = 'io/github/brdoliveira/creditflow/evaluation/';
+  const domain = filesUnder(`${evaluation}domain/`);
+  const application = filesUnder(`${evaluation}application/`);
+  assert.ok(domain.length > 0, 'o domínio real de evaluation não pode ser um diretório vazio');
+  assert.ok(application.length > 0, 'a aplicação de evaluation não pode ser um diretório vazio');
+
+  const externalToDomain = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?(?:application|infrastructure)(?:\.|$)/;
+  const infrastructureToApplication = /^io\.github\.brdoliveira\.creditflow\.(?:evaluation\.)?infrastructure(?:\.|$)/;
+  assert.deepEqual(
+    dependencyViolations(domain, externalToDomain),
+    [],
+    'o domínio não pode depender das camadas de aplicação ou infraestrutura',
+  );
+  assert.deepEqual(
+    dependencyViolations(application, infrastructureToApplication),
+    [],
+    'a aplicação não pode depender de adaptadores ou infraestrutura compartilhada',
+  );
 });
 
 test('AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086', () => {
