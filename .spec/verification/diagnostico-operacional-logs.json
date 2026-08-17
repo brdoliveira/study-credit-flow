@@ -1,7 +1,7 @@
 {
   "feature": "diagnostico-operacional-logs",
-  "timestamp": "2026-08-17T06:29:00.746Z",
-  "gitRev": "efadd36",
+  "timestamp": "2026-08-17T06:34:01.828Z",
+  "gitRev": "ecb8abb",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,

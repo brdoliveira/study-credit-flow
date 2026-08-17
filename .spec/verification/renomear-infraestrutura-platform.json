@@ -1,7 +1,7 @@
 {
   "feature": "renomear-infraestrutura-platform",
-  "timestamp": "2026-08-17T06:30:18.232Z",
-  "gitRev": "efadd36",
+  "timestamp": "2026-08-17T06:34:27.352Z",
+  "gitRev": "ecb8abb",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,
