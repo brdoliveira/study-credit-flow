@@ -66,7 +66,7 @@ O CPF completo existe apenas durante o processamento necessário. Persistência,
 
 ### Logs estruturados e diagnóstico
 
-O appender de console usa Logstash JSON. Cada linha possui `timestamp`, `level`, `logger`, `message`, `service.name`, `service.version` e `service.environment`; os campos MDC `correlationId`, `traceId` e `spanId` são incluídos quando estiverem no contexto. A identidade do serviço vem de `spring.application.name`, `APP_VERSION` e `APP_ENVIRONMENT`.
+O appender de console usa Logstash JSON. Cada linha possui `@timestamp`, `level`, `logger_name`, `message`, `service.name`, `service.version` e `service.environment`; os campos MDC `correlationId`, `traceId` e `spanId` são incluídos quando estiverem no contexto. A identidade do serviço vem de `spring.application.name`, `APP_VERSION` e `APP_ENVIRONMENT`.
 
 O `correlationId` conecta HTTP, outbox e Kafka. A pessoa operadora deve pesquisar esse campo pelo valor exato no agregador de logs ou usar `docker compose logs app | Select-String '"correlationId":"<correlationId>"'` localmente. O nível `DEBUG` representa sucesso nominal detalhado; `INFO`, marcos operacionais como duplicatas; `WARN`, retentativas e falhas tratadas; e `ERROR`, falhas técnicas. Para conter o volume, sucessos de avaliação e publicação não produzem um log `INFO` por item.
 

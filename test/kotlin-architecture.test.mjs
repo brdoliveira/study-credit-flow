@@ -259,7 +259,7 @@ test('AC-100: Logs JSON estruturados têm identidade e correlação documentadas
   for (const variable of ['APP_VERSION=local', 'APP_ENVIRONMENT=local']) {
     assert.ok(environment.includes(variable), `.env.example deve expor ${variable}`);
   }
-  for (const field of ['timestamp', 'level', 'logger', 'message', 'correlationId', 'traceId', 'spanId']) {
+  for (const field of ['@timestamp', 'level', 'logger_name', 'message', 'correlationId', 'traceId', 'spanId']) {
     assert.ok(readme.includes(field) && architecture.includes(field),
       `a operação deve documentar o campo JSON ${field}`);
   }
