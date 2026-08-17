@@ -1355,10 +1355,10 @@
       "codigo": "REF_MALFORMADA",
       "feature": "neutralizacao-marca",
       "ref": "T-028",
-      "ocorrencias": 26,
+      "ocorrencias": 28,
       "primeiraVez": "2026-08-17T01:16:32.541Z",
-      "ultimaVez": "2026-08-17T05:31:36.610Z",
-      "gitRev": "43e92fd"
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
     },
     "AC_SEM_PROVA::neutralizacao-marca::AC-080": {
       "codigo": "AC_SEM_PROVA",
@@ -2268,6 +2268,87 @@
       "primeiraVez": "2026-08-17T05:29:02.852Z",
       "ultimaVez": "2026-08-17T05:29:02.852Z",
       "gitRev": "ee85e32"
+    },
+    "ARQUIVO_INEXISTENTE::diagnostico-operacional-logs::T-042": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "T-042",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.209Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "ARQUIVO_INEXISTENTE::diagnostico-operacional-logs::T-043": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "T-043",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "ARQUIVO_INEXISTENTE::diagnostico-operacional-logs::T-044": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "T-044",
+      "ocorrencias": 2,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "ARQUIVO_INEXISTENTE::diagnostico-operacional-logs::T-045": {
+      "codigo": "ARQUIVO_INEXISTENTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "T-045",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "AC_SEM_TESTE::diagnostico-operacional-logs::AC-097": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "AC-097",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "AC_SEM_TESTE::diagnostico-operacional-logs::AC-098": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "AC-098",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "AC_SEM_TESTE::diagnostico-operacional-logs::AC-099": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "AC-099",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "AC_SEM_TESTE::diagnostico-operacional-logs::AC-100": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "AC-100",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
+    },
+    "AC_SEM_TESTE::diagnostico-operacional-logs::AC-101": {
+      "codigo": "AC_SEM_TESTE",
+      "feature": "diagnostico-operacional-logs",
+      "ref": "AC-101",
+      "ocorrencias": 1,
+      "primeiraVez": "2026-08-17T05:48:19.210Z",
+      "ultimaVez": "2026-08-17T05:48:19.210Z",
+      "gitRev": "6b423a1"
     }
   }
 }
