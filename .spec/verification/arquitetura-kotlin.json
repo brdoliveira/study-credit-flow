@@ -1,11 +1,57 @@
 {
   "feature": "arquitetura-kotlin",
-  "timestamp": "2026-08-17T02:44:22.650Z",
-  "gitRev": "79728a1",
+  "timestamp": "2026-08-17T04:38:18.878Z",
+  "gitRev": "afa99fe",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
-  "exitCode": 1,
-  "testsParsed": 0,
-  "results": {},
-  "principles": {}
+  "exitCode": 0,
+  "testsParsed": 112,
+  "results": {
+    "AC-082": {
+      "status": "pass",
+      "testName": "AC-082: um tipo público principal por arquivo @spec:AC-082",
+      "method": "tap"
+    },
+    "AC-083": {
+      "status": "pass",
+      "testName": "AC-083: KDocs consistentes em português @spec:AC-083",
+      "method": "tap"
+    },
+    "AC-084": {
+      "status": "pass",
+      "testName": "AC-084: adaptador web separado por responsabilidade @spec:AC-084",
+      "method": "tap"
+    },
+    "AC-085": {
+      "status": "pass",
+      "testName": "AC-085: aplicação depende diretamente do domínio @spec:AC-085",
+      "method": "tap"
+    },
+    "AC-086": {
+      "status": "pass",
+      "testName": "AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086",
+      "method": "tap"
+    },
+    "AC-087": {
+      "status": "pass",
+      "testName": "AC-087: casos de uso fora do adaptador web @spec:AC-087",
+      "method": "tap"
+    },
+    "AC-088": {
+      "status": "pass",
+      "testName": "AC-088: contratos funcionais preservados @spec:AC-088",
+      "method": "tap"
+    },
+    "AC-089": {
+      "status": "pass",
+      "testName": "AC-089: arquitetura documentada corresponde ao código @spec:AC-089",
+      "method": "tap"
+    }
+  },
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
 }

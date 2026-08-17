@@ -1,11 +1,11 @@
 {
   "feature": "prontidao-entrega",
-  "timestamp": "2026-08-16T21:51:16.070Z",
-  "gitRev": "a03188d",
+  "timestamp": "2026-08-17T04:38:51.931Z",
+  "gitRev": "afa99fe",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,
-  "testsParsed": 83,
+  "testsParsed": 112,
   "results": {
     "AC-048": {
       "status": "pass",
@@ -47,6 +47,51 @@
       "testName": "@spec:AC-055 AC-055 concurrent real HTTP calls converge and a divergent payload conflicts in PostgreSQL()",
       "method": "tap"
     },
+    "AC-056": {
+      "status": "pass",
+      "testName": "@spec:AC-056 AC-056 evaluation and Kotlin event outbox commit atomically in real PostgreSQL()",
+      "method": "tap"
+    },
+    "AC-057": {
+      "status": "pass",
+      "testName": "@spec:AC-057 AC-057 publisher waits for Kafka acknowledgement before confirming the Outbox()",
+      "method": "tap"
+    },
+    "AC-058": {
+      "status": "pass",
+      "testName": "@spec:AC-058 AC-058 transient broker failure persists sanitized retry and publishes after recovery()",
+      "method": "tap"
+    },
+    "AC-059": {
+      "status": "pass",
+      "testName": "@spec:AC-059 AC-059 Kafka duplicate delivery persists its marker and applies the effect only once()",
+      "method": "tap"
+    },
+    "AC-060": {
+      "status": "pass",
+      "testName": "@spec:AC-060 AC-060 event from producer to Kafka listener preserves the public contract without sensitive data()",
+      "method": "tap"
+    },
+    "AC-061": {
+      "status": "pass",
+      "testName": "@spec:AC-061 AC-061 runtime evaluation records decision duration and failed rules once()",
+      "method": "tap"
+    },
+    "AC-062": {
+      "status": "pass",
+      "testName": "@spec:AC-062 AC-062 global handler records one bounded technical metric per response()",
+      "method": "tap"
+    },
+    "AC-063": {
+      "status": "pass",
+      "testName": "@spec:AC-063 AC-063 readiness fails independently for postgres and kafka()",
+      "method": "tap"
+    },
+    "AC-064": {
+      "status": "pass",
+      "testName": "@spec:AC-064 AC-064 operational configuration separates probes from sensitive endpoints()",
+      "method": "tap"
+    },
     "AC-065": {
       "status": "pass",
       "testName": "@spec:AC-065 roteiro documenta Compose limpo e serviços saudáveis",
@@ -64,7 +109,7 @@
     },
     "AC-068": {
       "status": "pass",
-      "testName": "AC-068 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto, p99 abaixo de um segundo e nenhuma iteração descartada",
+      "testName": "AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto e seus thresholds",
       "method": "tap"
     },
     "AC-069": {
@@ -79,7 +124,7 @@
     },
     "AC-071": {
       "status": "pass",
-      "testName": "@spec:AC-071 CI verifica e audita a spec com o motor versionado no repositório",
+      "testName": "@spec:AC-045 @spec:AC-071 CI bloqueia mudança inválida e audita com o motor versionado",
       "method": "tap"
     },
     "AC-072": {
@@ -100,6 +145,16 @@
     "AC-075": {
       "status": "pass",
       "testName": "@spec:AC-075 Contrato OpenAPI acompanha métodos, status e cabeçalhos HTTP",
+      "method": "tap"
+    },
+    "AC-076": {
+      "status": "pass",
+      "testName": "@spec:AC-076 Terraform representa rede privada, entrada protegida, ECS, Aurora, eventos, segredos e observabilidade",
+      "method": "tap"
+    },
+    "AC-077": {
+      "status": "pass",
+      "testName": "@spec:AC-077 Terraform aplica defaults seguros e documenta backup, HA, least privilege e migrations",
       "method": "tap"
     },
     "AC-078": {

@@ -1,15 +1,15 @@
 {
   "feature": "credito-rotativo",
-  "timestamp": "2026-08-16T18:59:08.905Z",
-  "gitRev": "0ae87c8",
+  "timestamp": "2026-08-17T04:38:36.082Z",
+  "gitRev": "afa99fe",
   "command": "gradlew.bat test --no-daemon && node --test --test-reporter=tap \"test/*.test.mjs\" \"src/test/resources/performance/*.test.js\" \"src/main/resources/static/ts/*.ts\" && node scripts/junit-to-tap.mjs",
   "reporter": "tap",
   "exitCode": 0,
-  "testsParsed": 62,
+  "testsParsed": 112,
   "results": {
     "AC-001": {
       "status": "pass",
-      "testName": "@spec:AC-001 AC-001 creates a single evaluation for a valid command()",
+      "testName": "@spec:AC-001 AC-001 complete Spring context creates queries and reports one evaluation()",
       "method": "tap"
     },
     "AC-002": {
@@ -114,7 +114,7 @@
     },
     "AC-022": {
       "status": "pass",
-      "testName": "@spec:AC-022 AC-022 list is filtered paginated and ordered()",
+      "testName": "@spec:AC-022 AC-022 lists evaluations with pagination filters and ordering()",
       "method": "tap"
     },
     "AC-023": {
@@ -229,12 +229,12 @@
     },
     "AC-045": {
       "status": "pass",
-      "testName": "@spec:AC-045 pipeline blocks an invalid change before the image build",
+      "testName": "@spec:AC-045 @spec:AC-071 CI bloqueia mudança inválida e audita com o motor versionado",
       "method": "tap"
     },
     "AC-046": {
       "status": "pass",
-      "testName": "AC-046 @spec:AC-046 configura 10.000 avaliações/minuto com p99 e erros técnicos dentro do objetivo",
+      "testName": "AC-046 AC-068 @spec:AC-046 @spec:AC-068 configura a fase nominal com 10.000 avaliações/minuto e seus thresholds",
       "method": "tap"
     },
     "AC-047": {
@@ -243,5 +243,10 @@
       "method": "tap"
     }
   },
-  "principles": {}
+  "principles": {
+    "P-002": {
+      "status": "pass",
+      "testName": "@spec:AC-067 @principle:P-002 execução local usa segredos locais e não versionados"
+    }
+  }
 }
