@@ -191,3 +191,34 @@ test('AC-089: arquitetura documentada corresponde ao código @spec:AC-089', () =
     assert.ok(documentation.includes(term), `documentação não descreve ${term}`);
   }
 });
+
+test('AC-095: Documentação e contratos continuam coerentes @spec:AC-095', () => {
+  const architecture = readFileSync(resolve('docs/architecture.md'), 'utf8');
+  const adr = readFileSync(resolve('docs/adrs/001-modular-monolith.md'), 'utf8');
+  const documentation = `${architecture}\n${adr}`;
+  const requiredPackages = [
+    'evaluation/domain',
+    'evaluation/application',
+    'evaluation/application/event',
+    'evaluation/infrastructure',
+    'evaluation/infrastructure/outbox',
+    'evaluation/infrastructure/messaging',
+  ];
+  for (const packagePath of requiredPackages) {
+    assert.ok(filesUnder(`io/github/brdoliveira/creditflow/${packagePath}/`).length > 0,
+      `pacote produtivo ausente: ${packagePath}`);
+    assert.ok(documentation.includes(packagePath), `documentação não descreve ${packagePath}`);
+  }
+
+  const eventContract = filesUnder('io/github/brdoliveira/creditflow/evaluation/application/event/CreditEvaluationCompleted.kt');
+  assert.equal(eventContract.length, 1, 'contrato Kotlin do evento de avaliação ausente');
+  assert.match(documentation, /CreditEvaluationCompleted/, 'a documentação deve registrar a fonte do contrato da outbox');
+
+  const tests = walk(resolve('src/test/kotlin')).filter((file) => file.endsWith('.kt'));
+  for (const area of ['web', 'security', 'persistence', 'messaging', 'report', 'observability']) {
+    assert.ok(tests.some((file) => file.replaceAll('\\', '/').includes(`/${area}/`)),
+      `contrato funcional sem cobertura: ${area}`);
+  }
+  assert.equal(tests.some((file) => /@(?:Disabled|Ignore)\b/.test(source(file))), false,
+    'nenhum contrato funcional pode ser desabilitado durante a refatoração');
+});

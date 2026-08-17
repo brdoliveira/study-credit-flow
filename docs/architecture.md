@@ -35,7 +35,7 @@ creditflow
     └── web
 ```
 
-Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event` e `evaluation/infrastructure`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature e seus testes espelham os pacotes de produção. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
+Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event` e `evaluation/infrastructure`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature — em especial `evaluation/infrastructure/messaging` e `evaluation/infrastructure/outbox`; bootstrap Spring, segurança, saúde e correlação permanecem transversais. Os testes de domínio e aplicação espelham os pacotes de produção, enquanto as integrações transversais preservam seus agrupamentos de contrato. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
 
 O domínio contém modelos, regras e cálculo sem Spring, JPA ou Jackson. A aplicação usa o domínio diretamente e define portas somente para recursos externos: persistência, idempotência, métricas e geração do PDF. Os adaptadores da feature implementam HTTP, PostgreSQL, relatório, mensageria e outbox. Bootstrap Spring, segurança, saúde e correlação permanecem transversais.
 
@@ -49,7 +49,7 @@ controller → caso de uso → domínio
           PostgreSQL / idempotência / PDF
 ```
 
-O controller valida o contrato HTTP e converte DTOs por meio do mapper. `CreateCreditEvaluationUseCase` coordena idempotência e métricas; `EvaluateRevolvingCreditUseCase` executa diretamente `RuleEngine` e `CreditLimitCalculator`, monta `CreditEvaluation` e solicita sua persistência. Os controllers não acessam repositórios, serializadores nem geradores de relatório.
+O controller valida o contrato HTTP e converte DTOs por meio do mapper. `CreateCreditEvaluationUseCase` coordena idempotência e métricas; `EvaluateRevolvingCreditUseCase` executa diretamente `RuleEngine` e `CreditLimitCalculator`, monta `CreditEvaluation` e solicita sua persistência. No mesmo limite transacional, o adaptador PostgreSQL cria a entrada da outbox serializando `CreditEvaluationCompleted`; o contrato do evento fica definido pela classe Kotlin, e não por uma segunda estrutura em SQL. Os controllers não acessam repositórios, serializadores nem geradores de relatório.
 
 O CPF completo existe apenas durante o processamento necessário. Persistência, eventos, relatórios e respostas usam identificação mascarada. O modelo tipado do domínio é compartilhado com a aplicação; JSON e JPA ficam restritos aos adaptadores.
 
