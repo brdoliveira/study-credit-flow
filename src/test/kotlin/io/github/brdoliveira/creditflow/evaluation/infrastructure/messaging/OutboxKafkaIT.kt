@@ -80,8 +80,7 @@ class OutboxKafkaIT @Autowired constructor(
 
     @Test
     // @spec:AC-056
-    // @spec:AC-094
-    fun `AC-056 AC-094 evaluation and Kotlin event outbox commit atomically in real PostgreSQL`() {
+    fun `AC-056 evaluation and Kotlin event outbox commit atomically in real PostgreSQL`() {
         val committedId = UUID.randomUUID()
         newTransaction().executeWithoutResult { insertEvaluation(committedId) }
         assertThat(count("credit_evaluation", committedId)).isEqualTo(1)

@@ -35,6 +35,19 @@ class CreditEvaluationMessagingIT {
     }
 
     @Test
+    // @spec:AC-094
+    fun `AC-094 Kotlin event is the single source of the outbox payload contract`() {
+        val repository = Path.of(
+            "src/main/kotlin/io/github/brdoliveira/creditflow/evaluation/infrastructure/persistence/" +
+                "PostgresCreditEvaluationRepository.kt",
+        ).readText()
+        val migration = javaClass.getResource("/db/migration/V5__explicit_credit_outbox.sql")!!.readText()
+
+        assertThat(repository).contains("CreditEvaluationCompleted(", "objectMapper.writeValueAsString(event)")
+        assertThat(migration).contains("DROP TRIGGER").doesNotContain("CREATE TRIGGER", "jsonb_build_object")
+    }
+
+    @Test
     // @spec:AC-034
     fun `AC-034 serialized event is versioned and never exposes a complete CPF`() {
         val event = event()
