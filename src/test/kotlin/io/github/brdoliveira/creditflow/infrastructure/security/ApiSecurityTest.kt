@@ -2,8 +2,10 @@ package io.github.brdoliveira.creditflow.infrastructure.security
 
 import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationApiService
 import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationController
+import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationPageResponse
 import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationRequest
 import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationResponse
+import io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationSearchCriteria
 import io.github.brdoliveira.creditflow.infrastructure.web.RuleResponse
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.doThrow
@@ -114,8 +116,8 @@ class SecurityTestServices {
 
         override fun findById(evaluationId: UUID, correlationId: String) = response(evaluationId)
 
-        override fun list(criteria: io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationSearchCriteria, correlationId: String) =
-            io.github.brdoliveira.creditflow.infrastructure.web.CreditEvaluationPageResponse(emptyList(), 0, criteria.page, criteria.size, criteria.sort)
+        override fun list(criteria: CreditEvaluationSearchCriteria, correlationId: String) =
+            CreditEvaluationPageResponse(emptyList(), 0, criteria.page, criteria.size, criteria.sort)
 
         private fun response(evaluationId: UUID = UUID.randomUUID()) = CreditEvaluationResponse(
             evaluationId,

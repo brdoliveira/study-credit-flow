@@ -31,10 +31,19 @@ test('@spec:AC-080 árvore publicável não contém referência à marca origina
 
 test('@spec:AC-081 fontes Kotlin usam namespace autoral alinhado ao grupo Gradle', () => {
   const kotlinFiles = publicFiles().filter(path => /^src\/(main|test)\/kotlin\/.*\.kt$/.test(path));
+  const qualifiedUsages = [];
   assert.ok(kotlinFiles.length > 0);
   for (const path of kotlinFiles) {
     assert.ok(path.includes(`/kotlin/${expectedPath}/`), `Caminho fora do namespace: ${path}`);
-    assert.match(readFileSync(new URL(path, root), 'utf8'), new RegExp(`^package ${expectedPackage.replaceAll('.', '\\.')}`, 'm'));
+    const content = readFileSync(new URL(path, root), 'utf8');
+    assert.match(content, new RegExp(`^package ${expectedPackage.replaceAll('.', '\\.')}`, 'm'));
+    content.split(/\r?\n/).forEach((line, index) => {
+      const trimmed = line.trimStart();
+      if (line.includes(expectedPackage) && !trimmed.startsWith('package ') && !trimmed.startsWith('import ')) {
+        qualifiedUsages.push(`${path}:${index + 1}`);
+      }
+    });
   }
+  assert.deepEqual(qualifiedUsages, [], 'Use imports ou aliases em vez do caminho totalmente qualificado');
   assert.match(readFileSync(new URL('build.gradle.kts', root), 'utf8'), /group = "io\.github\.brdoliveira"/);
 });

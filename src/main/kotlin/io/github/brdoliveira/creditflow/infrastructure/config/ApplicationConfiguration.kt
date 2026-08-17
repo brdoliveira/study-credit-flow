@@ -7,9 +7,15 @@ import io.github.brdoliveira.creditflow.application.evaluation.EvaluateRevolving
 import io.github.brdoliveira.creditflow.application.evaluation.ExecutedRule
 import io.github.brdoliveira.creditflow.application.evaluation.RevolvingCreditCalculator
 import io.github.brdoliveira.creditflow.application.evaluation.RuleEvaluation
+import io.github.brdoliveira.creditflow.application.evaluation.RuleSeverity as ApplicationRuleSeverity
+import io.github.brdoliveira.creditflow.application.evaluation.RuleStatus as ApplicationRuleStatus
+import io.github.brdoliveira.creditflow.application.port.CreditEvaluationFilter
+import io.github.brdoliveira.creditflow.application.port.CreditEvaluationPageRequest
 import io.github.brdoliveira.creditflow.application.port.CreditEvaluationRepository
 import io.github.brdoliveira.creditflow.application.port.CreditEvaluationSnapshot as StoredSnapshot
 import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportDataSource
+import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportFilter
+import io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportRow
 import io.github.brdoliveira.creditflow.domain.calculation.ConfigurableCreditLimitCalculator
 import io.github.brdoliveira.creditflow.domain.model.CreditEvaluationContext
 import io.github.brdoliveira.creditflow.domain.rule.AvailableLimitRule
@@ -87,8 +93,8 @@ class ApplicationConfiguration {
                     ExecutedRule(
                         rule.code,
                         rule.name,
-                        io.github.brdoliveira.creditflow.application.evaluation.RuleSeverity.valueOf(rule.severity.name),
-                        io.github.brdoliveira.creditflow.application.evaluation.RuleStatus.valueOf(rule.status.name),
+                        ApplicationRuleSeverity.valueOf(rule.severity.name),
+                        ApplicationRuleStatus.valueOf(rule.status.name),
                         rule.reason,
                     )
                 },
@@ -188,22 +194,22 @@ class ApplicationConfiguration {
 
 private fun reportRows(
     repository: CreditEvaluationRepository,
-    filter: io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportFilter,
-): List<io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportRow> {
-    val storedFilter = io.github.brdoliveira.creditflow.application.port.CreditEvaluationFilter(
+    filter: CreditEvaluationReportFilter,
+): List<CreditEvaluationReportRow> {
+    val storedFilter = CreditEvaluationFilter(
         filter.decision,
         filter.from?.atStartOfDay(java.time.ZoneOffset.UTC)?.toInstant(),
         filter.to?.plusDays(1)?.atStartOfDay(java.time.ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
     )
-    val rows = mutableListOf<io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportRow>()
+    val rows = mutableListOf<CreditEvaluationReportRow>()
     var pageNumber = 0
     do {
         val page = repository.findPage(
             storedFilter,
-            io.github.brdoliveira.creditflow.application.port.CreditEvaluationPageRequest(pageNumber, 100),
+            CreditEvaluationPageRequest(pageNumber, 100),
         )
         rows += page.items.map {
-            io.github.brdoliveira.creditflow.application.report.CreditEvaluationReportRow(
+            CreditEvaluationReportRow(
                 it.evaluationId,
                 it.maskedCpf,
                 it.decision,
