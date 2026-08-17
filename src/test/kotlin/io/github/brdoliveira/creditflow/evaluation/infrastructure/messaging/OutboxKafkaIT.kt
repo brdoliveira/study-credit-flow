@@ -134,6 +134,35 @@ class OutboxKafkaIT @Autowired constructor(
     }
 
     @Test
+    fun `retry limit moves the PostgreSQL outbox record to terminal failure`() {
+        val event = event()
+        insertOutbox(event)
+        val now = Instant.parse("2026-08-16T12:00:00Z")
+        jdbcTemplate.update(
+            "update credit_outbox set attempts = 9, next_attempt_at = ? where event_id = ?",
+            Timestamp.from(now),
+            event.eventId,
+        )
+        val producer = CreditEvaluationEventProducer(
+            BrokerPublisher { _, _, _ -> throw TransientBrokerException("broker unavailable") },
+            objectMapper,
+            OUTBOX_TOPIC,
+        )
+
+        OutboxPublisher(store, producer, Clock.fixed(now, ZoneOffset.UTC), maximumAttempts = 10).publishPending()
+
+        val failed = jdbcTemplate.queryForMap(
+            "select status, attempts, failed_at, last_error from credit_outbox where event_id = ?",
+            event.eventId,
+        )
+        assertThat(failed["status"]).isEqualTo("FAILED")
+        assertThat((failed["attempts"] as Number).toInt()).isEqualTo(10)
+        assertThat(failed["failed_at"]).isNotNull()
+        assertThat(failed["last_error"]).isEqualTo("Retry limit reached (TransientBrokerException)")
+        assertThat(store.pending(now.plus(Duration.ofDays(1)), 10)).isEmpty()
+    }
+
+    @Test
     // @spec:AC-060
     fun `AC-060 event crossing Outbox and Kafka preserves contract without private data`() {
         val event = event()

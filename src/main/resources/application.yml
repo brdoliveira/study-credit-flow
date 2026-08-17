@@ -41,3 +41,7 @@ credit:
     rounding-mode: HALF_EVEN
   idempotency:
     retention: PT24H
+  report:
+    maximum-rows: ${CREDIT_REPORT_MAXIMUM_ROWS:10000}
+  outbox:
+    maximum-attempts: ${CREDIT_OUTBOX_MAXIMUM_ATTEMPTS:10}

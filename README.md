@@ -146,9 +146,11 @@ Endpoints principais:
 | `POST /api/v1/credit-evaluations` | cria avaliação; exige `Idempotency-Key` |
 | `GET /api/v1/credit-evaluations/{evaluationId}` | consulta fotografia da decisão |
 | `GET /api/v1/credit-evaluations` | histórico paginado e filtrado |
-| `GET /api/v1/credit-evaluations/report.pdf` | relatório PDF com os mesmos filtros |
+| `GET /api/v1/credit-evaluations/report.pdf` | relatório PDF com os mesmos filtros, limitado a 10.000 avaliações |
 
 Toda chamada aceita `X-Correlation-ID`; se ausente ou inválido, a aplicação cria um identificador e o devolve na resposta. Erros seguem um contrato estável com `status`, `code`, `message`, `correlationId`, `path` e, quando aplicável, `fieldErrors`.
+
+Eventos da outbox são retentados com backoff limitado. Depois de dez tentativas, ou diante de uma falha permanente, o registro passa para `FAILED` e produz log `ERROR`. Após corrigir a causa, a operação pode reprocessar um evento explicitamente com `UPDATE credit_outbox SET status = 'PENDING', attempts = 0, next_attempt_at = CURRENT_TIMESTAMP, failed_at = NULL, last_error = NULL WHERE event_id = '<uuid>' AND status = 'FAILED';`.
 
 ## Regras e cálculo demonstrativos
 

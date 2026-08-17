@@ -143,5 +143,6 @@ class AsyncOperationalLoggingTest {
         override fun reschedule(eventId: UUID, attempts: Int, nextAttemptAt: Instant, reason: String) {
             rescheduled = Reschedule(attempts, nextAttemptAt)
         }
+        override fun markFailed(eventId: UUID, attempts: Int, failedAt: Instant, reason: String) = Unit
     }
 }

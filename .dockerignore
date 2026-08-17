@@ -5,6 +5,7 @@
 .env
 .DS_Store
 node_modules/
+tools/**/build/
 build/*
 !build/libs/
 !build/libs/*.jar

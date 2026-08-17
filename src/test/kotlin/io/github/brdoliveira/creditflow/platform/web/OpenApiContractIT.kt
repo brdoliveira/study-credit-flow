@@ -24,7 +24,7 @@ class OpenApiContractIT {
     @DisplayName("@spec:AC-074 OpenAPI descreve operações, contratos, escopos e exemplos mascarados")
     fun openApiDescribesRelevantOperationsAndContracts() {
         val contract = contract()
-        listOf("/api/v1/credit-evaluations:", "/api/v1/credit-evaluations/{evaluationId}:", "/api/v1/credit-evaluations/report.pdf:", "Idempotency-Key", "Idempotency-Replayed", "X-Correlation-ID", "credit:read", "credit:write", "credit:report", "credit:admin", "maskedCpf:", "fieldErrors:", "page:", "size:", "sort:").forEach { expected ->
+        listOf("/api/v1/credit-evaluations:", "/api/v1/credit-evaluations/{evaluationId}:", "/api/v1/credit-evaluations/report.pdf:", "Idempotency-Key", "Idempotency-Replayed", "X-Correlation-ID", "credit:read", "credit:write", "credit:report", "credit:admin", "ReportTooLarge", "'422':", "maskedCpf:", "fieldErrors:", "page:", "size:", "sort:").forEach { expected ->
             assertTrue(contract.contains(expected), "Contract must contain $expected")
         }
         assertTrue(contract.contains("'***.982.247-**'"), "Response CPF example must be masked")

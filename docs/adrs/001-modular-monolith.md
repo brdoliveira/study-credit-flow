@@ -11,6 +11,8 @@ A aplicação usa regras, cálculos e modelos do domínio diretamente. Portas re
 
 Cada tipo público ou interno de nível superior possui arquivo próprio. Tipos e operações públicas ou internas recebem KDoc em português.
 
+Ferramentas de engenharia que não participam do runtime, como o gerador do relatório de carga, permanecem em subprojetos sob `tools` e não entram no JAR executável da aplicação.
+
 ## Consequências
 
 Ganhamos transações locais, navegação previsível, depuração simples e menor custo operacional. Controllers ficam limitados à tradução HTTP e à chamada de casos de uso; serialização e persistência permanecem nos adaptadores.

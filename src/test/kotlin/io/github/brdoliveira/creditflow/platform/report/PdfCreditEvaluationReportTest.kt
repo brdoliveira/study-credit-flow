@@ -6,6 +6,7 @@ import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationP
 import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase
 import io.github.brdoliveira.creditflow.evaluation.application.port.CreditEvaluationRepository
 import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
+import io.github.brdoliveira.creditflow.evaluation.application.report.ReportRowLimitExceededException
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditEvaluation
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.controller.CreditEvaluationReportController
@@ -71,6 +72,31 @@ class PdfCreditEvaluationReportTest {
     }
 
     @Test
+    fun `synchronous report rejects an unbounded result and requests narrower filters`() {
+        val useCase = GenerateCreditEvaluationReportUseCase(
+            ListCreditEvaluationsUseCase(FixedRepository(rows())),
+            generator,
+            maximumRows = 1,
+        )
+
+        val error = assertThrows<ReportRowLimitExceededException> { useCase.execute() }
+
+        assertEquals(2, error.totalRows)
+        assertEquals(1, error.maximumRows)
+    }
+
+    @Test
+    fun `report fixes the query end at its generation instant`() {
+        val repository = FixedRepository(rows())
+        val generatedAt = Instant.parse("2026-08-16T12:30:45Z")
+        val useCase = GenerateCreditEvaluationReportUseCase(ListCreditEvaluationsUseCase(repository), generator)
+
+        useCase.execute(generatedAt = generatedAt)
+
+        assertEquals(generatedAt, repository.filters.single().to)
+    }
+
+    @Test
     fun `report repeats table header and numbers every page`() {
         val evaluations = (1..40).map { index ->
             evaluation(
@@ -123,9 +149,13 @@ class PdfCreditEvaluationReportTest {
     private fun extractText(bytes: ByteArray): String = Loader.loadPDF(bytes).use(PDFTextStripper()::getText)
 
     private class FixedRepository(private val evaluations: List<CreditEvaluation>) : CreditEvaluationRepository {
+        val filters = mutableListOf<CreditEvaluationFilter>()
+
         override fun save(evaluation: CreditEvaluation) = evaluation
         override fun findById(evaluationId: UUID) = evaluations.find { it.evaluationId == evaluationId }
-        override fun findPage(filter: CreditEvaluationFilter, page: CreditEvaluationPageRequest) =
-            CreditEvaluationPage(evaluations, evaluations.size.toLong(), page.page, page.size, page.sort)
+        override fun findPage(filter: CreditEvaluationFilter, page: CreditEvaluationPageRequest): CreditEvaluationPage {
+            filters += filter
+            return CreditEvaluationPage(evaluations, evaluations.size.toLong(), page.page, page.size, page.sort)
+        }
     }
 }

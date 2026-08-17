@@ -1,4 +1,4 @@
-package io.github.brdoliveira.creditflow.platform.report
+package io.github.brdoliveira.creditflow.tools.performance
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPage

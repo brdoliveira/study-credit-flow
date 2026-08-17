@@ -47,6 +47,10 @@ test('AC-096: Plataforma compartilhada possui namespace proprio @spec:AC-096', (
   const evaluationInfrastructure = filesUnder('io/github/brdoliveira/creditflow/evaluation/infrastructure/');
   assert.ok(platform.length > 0, 'o pacote compartilhado platform nao pode estar vazio');
   assert.deepEqual(legacyInfrastructure.map(rel), [], 'o pacote global infrastructure deve ser removido');
+  assert.equal(platform.some((file) => file.includes('LoadTestPdfReport')), false,
+    'ferramentas de carga não podem entrar no source set produtivo');
+  assert.ok(existsSync(resolve('tools/load-test-report/build.gradle.kts')),
+    'o relatório de carga deve permanecer em um subprojeto de ferramentas');
   assert.ok(evaluationInfrastructure.length > 0, 'os adaptadores da feature devem permanecer em evaluation.infrastructure');
 
   const tests = walk(resolve('src/test/kotlin')).filter((file) => file.endsWith('.kt'));
@@ -175,6 +179,9 @@ test('AC-086: modelo de avaliação sem duplicações conceituais @spec:AC-086',
     .filter((file) => declarations(file).some((name) => forbidden.test(name)));
   assert.deepEqual(duplicates, [], 'conceitos de avaliação devem ter uma única representação no domínio');
   assert.equal(domain.some((file) => /jackson|jakarta\.persistence|org\.springframework/.test(source(file))), false, 'serialização deve ficar nos adaptadores');
+  const evaluationContext = domain.find((file) => file.endsWith('CreditEvaluationContext.kt'));
+  assert.doesNotMatch(source(evaluationContext), /customerName|\bcpf\b/i,
+    'o contexto das regras não deve transportar identificação pessoal sem uso de negócio');
 });
 
 test('AC-087: casos de uso fora do adaptador web @spec:AC-087', () => {

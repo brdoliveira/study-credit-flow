@@ -227,7 +227,7 @@ set -e
 unset AUTHORIZATION token
 log "Gerando o relatorio PDF com grafico"
 set +e
-./gradlew generateLoadTestPdfReport \
+./gradlew :tools:load-test-report:generateLoadTestPdfReport \
   -PloadTestEvidence="$EVIDENCE_FILE" \
   -PloadTestPdf="$PDF_FILE" \
   --no-daemon

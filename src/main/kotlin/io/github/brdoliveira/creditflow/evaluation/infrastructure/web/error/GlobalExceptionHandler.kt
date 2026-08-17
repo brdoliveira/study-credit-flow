@@ -3,6 +3,7 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error
 import io.github.brdoliveira.creditflow.evaluation.application.port.IdempotencyKeyConflictException
 import io.github.brdoliveira.creditflow.evaluation.application.port.InvalidIdempotencyKeyException
 import io.github.brdoliveira.creditflow.evaluation.application.port.MissingIdempotencyKeyException
+import io.github.brdoliveira.creditflow.evaluation.application.report.ReportRowLimitExceededException
 import io.github.brdoliveira.creditflow.platform.observability.CorrelationIdFilter
 import io.github.brdoliveira.creditflow.platform.observability.SafeExceptionDetails
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
@@ -69,6 +70,18 @@ class GlobalExceptionHandler(
     @ExceptionHandler(EvaluationNotFoundException::class)
     fun notFound(request: HttpServletRequest): ResponseEntity<ApiError> =
         error(HttpStatus.NOT_FOUND, "EVALUATION_NOT_FOUND", "Credit evaluation was not found", request)
+
+    /** Solicita filtros mais restritos quando o relatório síncrono excede o limite seguro. */
+    @ExceptionHandler(ReportRowLimitExceededException::class)
+    fun reportTooLarge(
+        exception: ReportRowLimitExceededException,
+        request: HttpServletRequest,
+    ): ResponseEntity<ApiError> = error(
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        "REPORT_ROW_LIMIT_EXCEEDED",
+        exception.message ?: "Report row limit exceeded",
+        request,
+    )
 
     /** Trata indisponibilidade temporária de dependências. */
     @ExceptionHandler(DataAccessResourceFailureException::class)

@@ -4,8 +4,6 @@ import java.math.BigDecimal
 
 /** Dados validados usados por todas as regras de crédito. */
 data class CreditEvaluationContext(
-    val customerName: String,
-    val cpf: String,
     val creditScore: Int,
     val currentInvoiceAmount: BigDecimal,
     val totalLimit: BigDecimal,
@@ -14,7 +12,6 @@ data class CreditEvaluationContext(
     val monthlySpending: List<BigDecimal>,
 ) {
     init {
-        require(customerName.isNotBlank()) { "Customer name is required" }
         require(creditScore in 0..1000) { "Credit score must be between 0 and 1000" }
         require(currentInvoiceAmount >= BigDecimal.ZERO) { "Current invoice must not be negative" }
         require(totalLimit > BigDecimal.ZERO) { "Total limit must be positive" }

@@ -2,6 +2,7 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.outbox
 
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.BrokerPublisher
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.messaging.CreditEvaluationEventProducer
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -22,7 +23,11 @@ class OutboxSchedulingConfiguration {
     /** Cria o publicador da outbox quando o produtor está disponível. */
     @Bean
     @ConditionalOnBean(CreditEvaluationEventProducer::class)
-    fun outboxPublisher(store: OutboxStore, producer: CreditEvaluationEventProducer) = OutboxPublisher(store, producer)
+    fun outboxPublisher(
+        store: OutboxStore,
+        producer: CreditEvaluationEventProducer,
+        @Value("\${credit.outbox.maximum-attempts:10}") maximumAttempts: Int,
+    ) = OutboxPublisher(store, producer, maximumAttempts = maximumAttempts)
 
     /** Cria o agendador da outbox quando a funcionalidade está habilitada. */
     @Bean

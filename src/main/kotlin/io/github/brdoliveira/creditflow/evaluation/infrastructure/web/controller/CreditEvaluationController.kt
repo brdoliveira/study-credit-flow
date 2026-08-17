@@ -3,7 +3,6 @@ package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.controlle
 import io.github.brdoliveira.creditflow.evaluation.application.CreateCreditEvaluationUseCase
 import io.github.brdoliveira.creditflow.evaluation.application.FindCreditEvaluationUseCase
 import io.github.brdoliveira.creditflow.evaluation.application.ListCreditEvaluationsUseCase
-import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationFilter
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationPageRequest
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto.CreditEvaluationPageResponse
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto.CreditEvaluationRequest
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 import java.time.LocalDate
-import java.time.ZoneOffset
 import java.util.UUID
 
 /** Expõe criação, consulta e listagem de avaliações de crédito. */
@@ -82,11 +80,7 @@ class CreditEvaluationController(
         val criteria = CreditEvaluationSearchCriteria(decision, from, to, page, size, sort, direction)
         criteria.validate(params.keys)
         val result = listEvaluations.execute(
-            CreditEvaluationFilter(
-                criteria.toDecision(),
-                from?.atStartOfDay(ZoneOffset.UTC)?.toInstant(),
-                to?.plusDays(1)?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
-            ),
+            criteria.toFilter(),
             CreditEvaluationPageRequest(page, size, criteria.toSort()),
         )
         return CreditEvaluationPageResponse(

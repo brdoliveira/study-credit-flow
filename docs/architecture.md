@@ -33,6 +33,9 @@ creditflow
     ├── privacy
     ├── security
     └── web
+
+tools
+└── load-test-report (CLI e PDF de evidência, fora do artefato produtivo)
 ```
 
 Os caminhos de referência são `evaluation/domain`, `evaluation/application`, `evaluation/application/event`, `evaluation/infrastructure` e `creditflow/platform`. Idempotência, mensageria, outbox e métricas de crédito pertencem à feature — em especial `evaluation/infrastructure/messaging` e `evaluation/infrastructure/outbox`; bootstrap Spring, segurança, saúde e correlação ficam em `platform`. Os testes de domínio e aplicação espelham os pacotes de produção, enquanto as integrações transversais preservam seus agrupamentos de contrato. Cada tipo público ou interno de nível superior fica em um arquivo próprio e de mesmo nome.
@@ -51,14 +54,16 @@ controller → caso de uso → domínio
 
 O controller valida o contrato HTTP e converte DTOs por meio do mapper. `CreateCreditEvaluationUseCase` coordena idempotência e métricas; `EvaluateRevolvingCreditUseCase` executa diretamente `RuleEngine` e `CreditLimitCalculator`, monta `CreditEvaluation` e solicita sua persistência. No mesmo limite transacional, o adaptador PostgreSQL cria a entrada da outbox serializando `CreditEvaluationCompleted`; o contrato do evento fica definido pela classe Kotlin, e não por uma segunda estrutura em SQL. Os controllers não acessam repositórios, serializadores nem geradores de relatório.
 
-O CPF completo existe apenas durante o processamento necessário. Persistência, eventos, relatórios e respostas usam identificação mascarada. O modelo tipado do domínio é compartilhado com a aplicação; JSON e JPA ficam restritos aos adaptadores.
+O CPF completo e o nome existem apenas no comando transitório necessário à entrada. O contexto das regras recebe somente atributos financeiros e de risco. Persistência, eventos, relatórios e respostas usam identificação mascarada. O modelo tipado do domínio é compartilhado com a aplicação; JSON e JPA ficam restritos aos adaptadores.
+
+Relatórios síncronos usam um instante final fixo para manter a paginação estável e aceitam no máximo 10.000 avaliações. Acima desse volume, a API solicita filtros mais restritos; uma evolução para exportações maiores deve usar processamento assíncrono e armazenamento de objetos.
 
 ## Controles operacionais
 
 - OIDC/JWT e autorização por escopo;
 - HTTPS obrigatório no perfil de produção;
 - idempotência com retenção de 24 horas e detecção de payload divergente;
-- transactional outbox para evitar dual write;
+- transactional outbox para evitar dual write, com backoff, limite de dez tentativas e estado terminal `FAILED`;
 - correlação em resposta, MDC, decisão e evento;
 - métricas sem CPF ou `evaluationId` como tag;
 - liveness do processo separada da readiness de dependências;

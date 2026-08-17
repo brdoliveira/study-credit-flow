@@ -24,7 +24,7 @@ class EvaluateRevolvingCreditUseCase(
     fun execute(command: EvaluateCreditCommand): CreditEvaluation {
         val startedAt = clock.instant()
         val decision = ruleEngine.evaluate(CreditEvaluationContext(
-            command.customerName, command.cpf, command.creditScore,
+            command.creditScore,
             command.currentInvoiceAmount, command.totalLimit, command.availableLimit,
             command.latePayments, command.monthlySpending,
         ))

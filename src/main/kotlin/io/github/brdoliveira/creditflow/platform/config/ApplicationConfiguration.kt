@@ -20,6 +20,7 @@ import io.github.brdoliveira.creditflow.evaluation.infrastructure.report.PdfCred
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.mapper.CreditEvaluationWebMapper
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.observability.CreditMetrics
 import io.micrometer.core.instrument.MeterRegistry
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.time.Clock
@@ -81,7 +82,8 @@ class ApplicationConfiguration {
         list: ListCreditEvaluationsUseCase,
         generator: CreditEvaluationReportGenerator,
         clock: Clock,
-    ) = GenerateCreditEvaluationReportUseCase(list, generator, clock)
+        @Value("\${credit.report.maximum-rows:10000}") maximumRows: Int,
+    ) = GenerateCreditEvaluationReportUseCase(list, generator, clock, maximumRows)
 
     /** Fornece as métricas técnicas e de negócio. */
     @Bean

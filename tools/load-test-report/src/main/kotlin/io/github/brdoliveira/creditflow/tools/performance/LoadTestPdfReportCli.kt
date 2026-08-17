@@ -1,4 +1,4 @@
-package io.github.brdoliveira.creditflow.platform.report
+package io.github.brdoliveira.creditflow.tools.performance
 
 import java.nio.file.Files
 import java.nio.file.Path

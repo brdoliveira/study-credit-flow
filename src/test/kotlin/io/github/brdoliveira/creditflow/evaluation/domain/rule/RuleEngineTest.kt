@@ -109,6 +109,6 @@ class RuleEngineTest {
         latePayments: Int = 0,
         monthlySpending: List<BigDecimal> = listOf(BigDecimal("1000"), BigDecimal("1100"), BigDecimal("1150")),
     ) = CreditEvaluationContext(
-        "Maria", "52998224725", creditScore, currentInvoiceAmount, totalLimit, availableLimit, latePayments, monthlySpending,
+        creditScore, currentInvoiceAmount, totalLimit, availableLimit, latePayments, monthlySpending,
     )
 }

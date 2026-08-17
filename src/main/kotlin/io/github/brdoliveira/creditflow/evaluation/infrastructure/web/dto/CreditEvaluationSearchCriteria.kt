@@ -1,6 +1,7 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto
 
 import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationSort
+import io.github.brdoliveira.creditflow.evaluation.application.CreditEvaluationFilter
 import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
 import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.InvalidFilterException
 import java.time.LocalDate
@@ -17,13 +18,7 @@ data class CreditEvaluationSearchCriteria(
 ) {
     /** Valida campos, intervalo, ordenação e parâmetros desconhecidos. */
     fun validate(parameterNames: Set<String>) {
-        val allowed = setOf("decision", "from", "to", "page", "size", "sort", "direction")
-        val unknown = parameterNames - allowed
-        valid(unknown.isEmpty()) { "Unknown filter: ${unknown.sorted().joinToString()}" }
-        valid(decision == null || decision in setOf("APPROVED", "REJECTED")) {
-            "decision must be APPROVED or REJECTED"
-        }
-        valid(from == null || to == null || !from.isAfter(to)) { "from must not be after to" }
+        filters().validate(parameterNames, PAGINATION_PARAMETERS)
         valid(sort in setOf("processedAt", "decision", "approvedAmount")) {
             "Unsupported sort field: $sort"
         }
@@ -43,7 +38,16 @@ data class CreditEvaluationSearchCriteria(
     /** Converte a decisão HTTP validada para o estado do domínio. */
     fun toDecision(): CreditDecisionStatus? = decision?.let(CreditDecisionStatus::valueOf)
 
+    /** Converte os filtros HTTP para o contrato tipado da aplicação. */
+    fun toFilter(): CreditEvaluationFilter = filters().toFilter()
+
+    private fun filters() = CreditEvaluationFilterCriteria(decision, from, to)
+
     private fun valid(condition: Boolean, message: () -> String) {
         if (!condition) throw InvalidFilterException(message())
+    }
+
+    private companion object {
+        val PAGINATION_PARAMETERS = setOf("page", "size", "sort", "direction")
     }
 }

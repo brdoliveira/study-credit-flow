@@ -49,6 +49,15 @@ class PostgresOutboxStore(
         )
     }
 
+    /** Registra uma falha terminal sem permitir novas reservas automáticas. */
+    override fun markFailed(eventId: UUID, attempts: Int, failedAt: Instant, reason: String) {
+        jdbcTemplate.update(
+            """update credit_outbox set status = 'FAILED', attempts = ?, failed_at = ?, last_error = ?
+               where event_id = ? and status = 'PROCESSING'""",
+            attempts, Timestamp.from(failedAt), sanitize(reason), eventId,
+        )
+    }
+
     private fun sanitize(reason: String): String = reason.replace(Regex("[\\r\\n\\t]+"), " ").take(MAX_ERROR_LENGTH)
 
     private companion object {

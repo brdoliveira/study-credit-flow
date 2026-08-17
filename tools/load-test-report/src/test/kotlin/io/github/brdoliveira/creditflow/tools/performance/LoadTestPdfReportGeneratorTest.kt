@@ -1,4 +1,4 @@
-package io.github.brdoliveira.creditflow.platform.report
+package io.github.brdoliveira.creditflow.tools.performance
 
 import org.apache.pdfbox.Loader
 import org.apache.pdfbox.text.PDFTextStripper

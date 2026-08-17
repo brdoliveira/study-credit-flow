@@ -82,6 +82,42 @@ class CreditEvaluationMessagingIT {
     }
 
     @Test
+    fun `transient publication reaches a terminal failure after the configured attempt limit`() {
+        val store = InMemoryOutboxStore(PendingOutboxEvent(event().eventId, event(), attempts = 2))
+        val producer = CreditEvaluationEventProducer(
+            broker = BrokerPublisher { _, _, _ -> throw TransientBrokerException("broker unavailable") },
+            objectMapper = ObjectMapper(),
+        )
+        val publisher = OutboxPublisher(
+            store,
+            producer,
+            clock,
+            Duration.ofSeconds(1),
+            Duration.ofSeconds(2),
+            maximumAttempts = 3,
+        )
+
+        publisher.publishPending()
+
+        assertThat(store.failed).isEqualTo(Failure(3, now, "Retry limit reached (TransientBrokerException)"))
+        assertThat(store.retry).isNull()
+    }
+
+    @Test
+    fun `permanent publication failure is not retried`() {
+        val store = InMemoryOutboxStore(PendingOutboxEvent(event().eventId, event(), attempts = 0))
+        val producer = CreditEvaluationEventProducer(
+            broker = BrokerPublisher { _, _, _ -> throw IllegalArgumentException("invalid topic") },
+            objectMapper = ObjectMapper(),
+        )
+
+        OutboxPublisher(store, producer, clock).publishPending()
+
+        assertThat(store.failed).isEqualTo(Failure(1, now, "Permanent publication failure (IllegalArgumentException)"))
+        assertThat(store.retry).isNull()
+    }
+
+    @Test
     // @spec:AC-036
     fun `AC-036 duplicate event is acknowledged without repeating its effect`() {
         val seen = mutableSetOf<UUID>()
@@ -107,15 +143,20 @@ class CreditEvaluationMessagingIT {
     )
 
     private data class Retry(val attempts: Int, val nextAttemptAt: Instant, val reason: String)
+    private data class Failure(val attempts: Int, val failedAt: Instant, val reason: String)
 
     private class InMemoryOutboxStore(initial: PendingOutboxEvent) : OutboxStore {
         var event = initial
         var now: Instant = Instant.EPOCH
         val published = mutableListOf<UUID>()
         var retry: Retry? = null
+        var failed: Failure? = null
 
-        override fun pending(now: Instant, limit: Int): List<PendingOutboxEvent> =
-            if (published.isEmpty() && (retry == null || this.now >= retry!!.nextAttemptAt)) listOf(event) else emptyList()
+        override fun pending(now: Instant, limit: Int): List<PendingOutboxEvent> {
+            if (published.isNotEmpty() || failed != null) return emptyList()
+            val available = retry?.let { this.now >= it.nextAttemptAt } ?: true
+            return if (available) listOf(event) else emptyList()
+        }
 
         override fun markPublished(eventId: UUID, publishedAt: Instant) {
             published += eventId
@@ -124,6 +165,11 @@ class CreditEvaluationMessagingIT {
         override fun reschedule(eventId: UUID, attempts: Int, nextAttemptAt: Instant, reason: String) {
             event = event.copy(attempts = attempts)
             retry = Retry(attempts, nextAttemptAt, reason)
+        }
+
+        override fun markFailed(eventId: UUID, attempts: Int, failedAt: Instant, reason: String) {
+            event = event.copy(attempts = attempts)
+            failed = Failure(attempts, failedAt, reason)
         }
     }
 }

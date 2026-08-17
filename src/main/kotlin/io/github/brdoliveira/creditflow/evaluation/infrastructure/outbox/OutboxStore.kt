@@ -13,4 +13,7 @@ interface OutboxStore {
 
     /** Agenda uma nova tentativa de publicação. */
     fun reschedule(eventId: UUID, attempts: Int, nextAttemptAt: Instant, reason: String)
+
+    /** Move um evento irrecuperável para o estado terminal de falha. */
+    fun markFailed(eventId: UUID, attempts: Int, failedAt: Instant, reason: String)
 }

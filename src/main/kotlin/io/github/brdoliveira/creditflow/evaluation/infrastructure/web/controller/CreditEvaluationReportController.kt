@@ -1,8 +1,7 @@
 package io.github.brdoliveira.creditflow.evaluation.infrastructure.web.controller
 
 import io.github.brdoliveira.creditflow.evaluation.application.report.GenerateCreditEvaluationReportUseCase
-import io.github.brdoliveira.creditflow.evaluation.domain.CreditDecisionStatus
-import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.error.InvalidFilterException
+import io.github.brdoliveira.creditflow.evaluation.infrastructure.web.dto.CreditEvaluationFilterCriteria
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -31,15 +30,10 @@ class CreditEvaluationReportController(
         @RequestParam(required = false) to: LocalDate?,
         @RequestParam params: Map<String, String>,
     ): ResponseEntity<ByteArray> {
-        val filter = CreditEvaluationReportFilter(decision, from, to)
-        validate(filter, params.keys)
+        val filter = CreditEvaluationFilterCriteria(decision, from, to)
+        filter.validate(params.keys)
         val generatedAt = clock.instant()
-        val bytes = generate.execute(
-            filter.toDecision()?.name,
-            filter.from?.atStartOfDay(ZoneOffset.UTC)?.toInstant(),
-            filter.to?.plusDays(1)?.atStartOfDay(ZoneOffset.UTC)?.toInstant()?.minusNanos(1),
-            generatedAt,
-        )
+        val bytes = generate.execute(filter.toFilter(), generatedAt)
         val filename = "credit-evaluations-${FILE_DATE_FORMAT.format(generatedAt.atOffset(ZoneOffset.UTC))}.pdf"
         val disposition = ContentDisposition.attachment().filename(filename).build().toString()
         return ResponseEntity.ok()
@@ -47,37 +41,7 @@ class CreditEvaluationReportController(
             .header(HttpHeaders.CONTENT_DISPOSITION, disposition)
             .body(bytes)
     }
-
-    private fun validate(filter: CreditEvaluationReportFilter, parameterNames: Set<String>) {
-        try {
-            filter.validate(parameterNames)
-        } catch (exception: IllegalArgumentException) {
-            throw InvalidFilterException(exception.message ?: "Invalid report filter", exception)
-        }
-    }
-
     private companion object {
         val FILE_DATE_FORMAT: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss")
     }
-}
-
-private data class CreditEvaluationReportFilter(
-    val decision: String?,
-    val from: LocalDate?,
-    val to: LocalDate?,
-) {
-    /** Valida os filtros privados usados para montar o relatório. */
-    fun validate(parameterNames: Set<String>) {
-        val allowed = setOf("decision", "from", "to")
-        require(parameterNames.all { it in allowed }) {
-            "Unknown filter: ${(parameterNames - allowed).sorted().joinToString()}"
-        }
-        require(decision == null || decision in setOf("APPROVED", "REJECTED")) {
-            "decision must be APPROVED or REJECTED"
-        }
-        require(from == null || to == null || !from.isAfter(to)) { "from must not be after to" }
-    }
-
-    /** Converte a decisão HTTP validada para o estado do domínio. */
-    fun toDecision(): CreditDecisionStatus? = decision?.let(CreditDecisionStatus::valueOf)
 }

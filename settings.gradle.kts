@@ -10,3 +10,5 @@ plugins {
 }
 
 rootProject.name = "credit-flow"
+
+include("tools:load-test-report")

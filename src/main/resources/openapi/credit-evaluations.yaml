@@ -86,6 +86,7 @@ paths:
         '400': { $ref: '#/components/responses/InvalidRequest' }
         '401': { $ref: '#/components/responses/Unauthorized' }
         '403': { $ref: '#/components/responses/Forbidden' }
+        '422': { $ref: '#/components/responses/ReportTooLarge' }
 components:
   securitySchemes:
     oauth2: { type: oauth2, description: Autenticação por meio do realm credit-rotativo no Keycloak., flows: { authorizationCode: { authorizationUrl: /oauth2/authorization/keycloak, tokenUrl: /login/oauth2/code/keycloak, scopes: { 'credit:read': Consultar avaliações de crédito., 'credit:write': Criar avaliações de crédito., 'credit:report': Gerar relatórios de avaliações., 'credit:admin': Acessar operações administrativas. } } } }
@@ -161,6 +162,7 @@ components:
     Forbidden: { description: Usuário autenticado sem o escopo OAuth2 exigido pela operação., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
     NotFound: { description: Avaliação não encontrada para o identificador informado., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
     IdempotencyConflict: { description: A Idempotency-Key informada já foi utilizada com outro conteúdo., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
+    ReportTooLarge: { description: O relatório ultrapassa 10.000 avaliações. Restrinja o período ou a decisão nos filtros., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
     InternalError: { description: Falha interna inesperada. Informe o correlationId ao suporte., content: { application/json: { schema: { $ref: '#/components/schemas/ApiError' } } } }
   schemas:
     CreditEvaluationRequest:
