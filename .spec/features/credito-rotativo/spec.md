@@ -9,7 +9,7 @@ Construir uma solução backend em Kotlin que simule a avaliação e a liberaç�
 
 Fontes desta especificação:
 
-- `SPEC_Credito_Rotativo_Itau.md` — levantamento e arquitetura inicial;
+- `SPEC_Credito_Rotativo.md` — levantamento e arquitetura inicial;
 - `CE 3 - Sistema de Regras para Crédito Rotativo em Cartão de Crédito.pdf` — enunciado oficial do case;
 - descrição da vaga de Engenharia de Sistemas Backend da comunidade de Crédito Imobiliário.
 

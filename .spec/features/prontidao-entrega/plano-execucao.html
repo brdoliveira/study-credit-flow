@@ -67,7 +67,7 @@
           <span class="tid">T-017</span>
           <span class="ttitulo">Implementar login OIDC pelo BFF</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>build.gradle.kts</code> <code>compose.yaml</code> <code>docker/keycloak/realm-export.json</code> <code>src/main/resources/application-security.yml</code> <code>src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/security/OidcSessionAuthoritiesMapper.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/web/SessionController.kt</code> <code>src/main/resources/static/index.html</code> <code>src/main/resources/static/report.html</code> <code>src/main/resources/static/ts/api.ts</code> <code>src/main/resources/static/ts/session.ts</code> <code>src/test/kotlin/com/itau/credit/infrastructure/security/OidcBrowserSecurityIT.kt</code></span>
+          <span class="arquivos"><code>build.gradle.kts</code> <code>compose.yaml</code> <code>docker/keycloak/realm-export.json</code> <code>src/main/resources/application-security.yml</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcSessionAuthoritiesMapper.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionController.kt</code> <code>src/main/resources/static/index.html</code> <code>src/main/resources/static/report.html</code> <code>src/main/resources/static/ts/api.ts</code> <code>src/main/resources/static/ts/session.ts</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcBrowserSecurityIT.kt</code></span>
         </div>
         <div class="tarefa">
           <span class="tid">T-022</span>
@@ -79,7 +79,7 @@
           <span class="tid">T-025</span>
           <span class="ttitulo">Publicar e testar o contrato OpenAPI</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>build.gradle.kts</code> <code>src/main/kotlin/com/itau/credit/infrastructure/web/OpenApiConfiguration.kt</code> <code>src/main/resources/openapi/credit-evaluations.yaml</code> <code>src/test/kotlin/com/itau/credit/infrastructure/web/OpenApiContractIT.kt</code> <code>README.md</code></span>
+          <span class="arquivos"><code>build.gradle.kts</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiConfiguration.kt</code> <code>src/main/resources/openapi/credit-evaluations.yaml</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiContractIT.kt</code> <code>README.md</code></span>
         </div>
         <div class="tarefa">
           <span class="tid">T-027</span>
@@ -95,7 +95,7 @@
           <span class="tid">T-018</span>
           <span class="ttitulo">Corrigir a semântica HTTP da idempotência</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt</code> <code>src/test/kotlin/com/itau/credit/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt</code></span>
+          <span class="arquivos"><code>src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt</code></span>
         </div>
       </div>
       <div class="faixa">
@@ -105,7 +105,7 @@
           <span class="tid">T-019</span>
           <span class="ttitulo">Conectar Outbox PostgreSQL ao Kafka</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>src/main/resources/db/migration/V4__outbox_runtime.sql</code> <code>src/main/kotlin/com/itau/credit/infrastructure/outbox/PostgresOutboxStore.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxSchedulingConfiguration.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/messaging/KafkaBrokerPublisher.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt</code> <code>src/test/kotlin/com/itau/credit/infrastructure/messaging/OutboxKafkaIT.kt</code></span>
+          <span class="arquivos"><code>src/main/resources/db/migration/V4__outbox_runtime.sql</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PostgresOutboxStore.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxSchedulingConfiguration.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/KafkaBrokerPublisher.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt</code></span>
         </div>
       </div></div>
     </section>
@@ -119,7 +119,7 @@
           <span class="tid">T-020</span>
           <span class="ttitulo">Implementar consumidor Kafka idempotente</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationKafkaListener.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/messaging/PostgresProcessedEventStore.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt</code> <code>src/test/kotlin/com/itau/credit/infrastructure/messaging/IdempotentKafkaConsumerIT.kt</code></span>
+          <span class="arquivos"><code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationKafkaListener.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/PostgresProcessedEventStore.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentKafkaConsumerIT.kt</code></span>
         </div>
       </div>
       <div class="faixa">
@@ -129,7 +129,7 @@
           <span class="tid">T-021</span>
           <span class="ttitulo">Integrar métricas e health checks ao runtime</span>
           <span class="meta"><code>gpt-5.6-terra</code> · esforço <b>medium</b></span>
-          <span class="arquivos"><code>src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/observability/ObservedCreditEvaluationService.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt</code> <code>src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt</code> <code>src/main/resources/application-observability.yml</code> <code>src/test/kotlin/com/itau/credit/infrastructure/observability/RuntimeObservabilityIT.kt</code></span>
+          <span class="arquivos"><code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt</code> <code>src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt</code> <code>src/main/resources/application-observability.yml</code> <code>src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt</code></span>
         </div>
       </div>
       <div class="faixa">

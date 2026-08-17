@@ -4,27 +4,27 @@
 
 ## T-017 — Implementar login OIDC pelo BFF [concluida]
 - Refs: US-013, AC-048, AC-049, AC-050, AC-051, AC-052
-- Arquivos: build.gradle.kts, compose.yaml, docker/keycloak/realm-export.json, src/main/resources/application-security.yml, src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/security/OidcSessionAuthoritiesMapper.kt, src/main/kotlin/com/itau/credit/infrastructure/web/SessionController.kt, src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/session.ts, src/test/kotlin/com/itau/credit/infrastructure/security/OidcBrowserSecurityIT.kt
+- Arquivos: build.gradle.kts, compose.yaml, docker/keycloak/realm-export.json, src/main/resources/application-security.yml, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcSessionAuthoritiesMapper.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionController.kt, src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/session.ts, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcBrowserSecurityIT.kt
 - Notas: depende da confirmação de Q-004; manter Resource Server para clientes máquina a máquina.
 
 ## T-018 — Corrigir a semântica HTTP da idempotência [concluida]
 - Refs: US-014, AC-053, AC-054, AC-055
-- Arquivos: src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt, src/test/kotlin/com/itau/credit/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
 - Notas: o controller precisa distinguir criação de replay sem comparar payloads fora do repositório.
 
 ## T-019 — Conectar Outbox PostgreSQL ao Kafka [concluida]
 - Refs: US-015, AC-056, AC-057, AC-058, AC-060
-- Arquivos: src/main/resources/db/migration/V4__outbox_runtime.sql, src/main/kotlin/com/itau/credit/infrastructure/outbox/PostgresOutboxStore.kt, src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxSchedulingConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/KafkaBrokerPublisher.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/test/kotlin/com/itau/credit/infrastructure/messaging/OutboxKafkaIT.kt
+- Arquivos: src/main/resources/db/migration/V4__outbox_runtime.sql, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PostgresOutboxStore.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxSchedulingConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/KafkaBrokerPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt
 - Notas: usar confirmação do broker, lote com concorrência segura e retry persistido.
 
 ## T-020 — Implementar consumidor Kafka idempotente [concluida]
 - Refs: US-015, AC-059, AC-060
-- Arquivos: src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationKafkaListener.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/PostgresProcessedEventStore.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/com/itau/credit/infrastructure/messaging/IdempotentKafkaConsumerIT.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationKafkaListener.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/PostgresProcessedEventStore.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentKafkaConsumerIT.kt
 - Notas: registro de `eventId` e efeito devem compartilhar a mesma transação local.
 
 ## T-021 — Integrar métricas e health checks ao runtime [concluida]
 - Refs: US-016, AC-061, AC-062, AC-063, AC-064
-- Arquivos: src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/com/itau/credit/infrastructure/observability/ObservedCreditEvaluationService.kt, src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt, src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/com/itau/credit/infrastructure/observability/RuntimeObservabilityIT.kt
+- Arquivos: src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt
 - Notas: impedir dupla contagem e tags de alta cardinalidade.
 
 ## T-022 — Criar prova ponta a ponta do Docker Compose [concluida]
@@ -44,7 +44,7 @@
 
 ## T-025 — Publicar e testar o contrato OpenAPI [concluida]
 - Refs: US-020, AC-074, AC-075
-- Arquivos: build.gradle.kts, src/main/kotlin/com/itau/credit/infrastructure/web/OpenApiConfiguration.kt, src/main/resources/openapi/credit-evaluations.yaml, src/test/kotlin/com/itau/credit/infrastructure/web/OpenApiContractIT.kt, README.md
+- Arquivos: build.gradle.kts, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiConfiguration.kt, src/main/resources/openapi/credit-evaluations.yaml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiContractIT.kt, README.md
 - Notas: documentar OAuth2, idempotência, replay, correlação, erros e exemplos mascarados.
 
 ## T-026 — Criar infraestrutura AWS de referência [concluida]

@@ -182,7 +182,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-017 — "Implementar login OIDC pelo BFF"
   critérios/refs: AC-048 (Acesso interativo inicia o login corporativo), AC-049 (Tokens não ficam expostos ao JavaScript), AC-050 (Permissões controlam telas e operações), AC-051 (Logout encerra a sessão local), AC-052 (O mesmo emissor funciona dentro e fora dos containers)
-  arquivos permitidos (e seus testes): build.gradle.kts, compose.yaml, docker/keycloak/realm-export.json, src/main/resources/application-security.yml, src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/security/OidcSessionAuthoritiesMapper.kt, src/main/kotlin/com/itau/credit/infrastructure/web/SessionController.kt, src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/session.ts, src/test/kotlin/com/itau/credit/infrastructure/security/OidcBrowserSecurityIT.kt
+  arquivos permitidos (e seus testes): build.gradle.kts, compose.yaml, docker/keycloak/realm-export.json, src/main/resources/application-security.yml, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcSessionAuthoritiesMapper.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionController.kt, src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/session.ts, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcBrowserSecurityIT.kt
   mensagem de commit: "T-017 prontidao-entrega: Implementar login OIDC pelo BFF"
 
 Regras inegociáveis:
@@ -212,7 +212,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-025 — "Publicar e testar o contrato OpenAPI"
   critérios/refs: AC-074 (OpenAPI descreve operações e contratos relevantes), AC-075 (Contrato OpenAPI acompanha o comportamento)
-  arquivos permitidos (e seus testes): build.gradle.kts, src/main/kotlin/com/itau/credit/infrastructure/web/OpenApiConfiguration.kt, src/main/resources/openapi/credit-evaluations.yaml, src/test/kotlin/com/itau/credit/infrastructure/web/OpenApiContractIT.kt, README.md
+  arquivos permitidos (e seus testes): build.gradle.kts, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiConfiguration.kt, src/main/resources/openapi/credit-evaluations.yaml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiContractIT.kt, README.md
   mensagem de commit: "T-025 prontidao-entrega: Publicar e testar o contrato OpenAPI"
 
 Regras inegociáveis:
@@ -257,7 +257,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-018 — "Corrigir a semântica HTTP da idempotência"
   critérios/refs: AC-053 (Primeira execução retorna criação), AC-054 (Replay retorna sucesso sem nova criação), AC-055 (Concorrência e conflito são provados pela API real)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt, src/test/kotlin/com/itau/credit/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt
   mensagem de commit: "T-018 prontidao-entrega: Corrigir a semântica HTTP da idempotência"
 
 Regras inegociáveis:
@@ -287,7 +287,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-019 — "Conectar Outbox PostgreSQL ao Kafka"
   critérios/refs: AC-056 (Avaliação e Outbox são confirmadas atomicamente no PostgreSQL), AC-057 (Publisher envia o evento ao broker e confirma a Outbox), AC-058 (Falha transitória persiste tentativa e executa retry), AC-060 (Evento ponta a ponta preserva contrato e privacidade)
-  arquivos permitidos (e seus testes): src/main/resources/db/migration/V4__outbox_runtime.sql, src/main/kotlin/com/itau/credit/infrastructure/outbox/PostgresOutboxStore.kt, src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxSchedulingConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/KafkaBrokerPublisher.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/test/kotlin/com/itau/credit/infrastructure/messaging/OutboxKafkaIT.kt
+  arquivos permitidos (e seus testes): src/main/resources/db/migration/V4__outbox_runtime.sql, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PostgresOutboxStore.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxSchedulingConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/KafkaBrokerPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt
   mensagem de commit: "T-019 prontidao-entrega: Conectar Outbox PostgreSQL ao Kafka"
 
 Regras inegociáveis:
@@ -317,7 +317,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-020 — "Implementar consumidor Kafka idempotente"
   critérios/refs: AC-059 (Consumidor Kafka aplica o efeito uma única vez), AC-060 (Evento ponta a ponta preserva contrato e privacidade)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationKafkaListener.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/PostgresProcessedEventStore.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/com/itau/credit/infrastructure/messaging/IdempotentKafkaConsumerIT.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationKafkaListener.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/PostgresProcessedEventStore.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentKafkaConsumerIT.kt
   mensagem de commit: "T-020 prontidao-entrega: Implementar consumidor Kafka idempotente"
 
 Regras inegociáveis:
@@ -347,7 +347,7 @@ Leia primeiro: .spec/features/prontidao-entrega/spec.md, .spec/features/prontida
 Sua tarefa (somente ela):
 T-021 — "Integrar métricas e health checks ao runtime"
   critérios/refs: AC-061 (Avaliações alimentam métricas de negócio e duração), AC-062 (Erros técnicos alimentam métricas operacionais), AC-063 (Readiness verifica dependências realmente obrigatórias), AC-064 (Endpoints operacionais têm política de acesso explícita)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/com/itau/credit/infrastructure/observability/ObservedCreditEvaluationService.kt, src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt, src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/com/itau/credit/infrastructure/observability/RuntimeObservabilityIT.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt
   mensagem de commit: "T-021 prontidao-entrega: Integrar métricas e health checks ao runtime"
 
 Regras inegociáveis:

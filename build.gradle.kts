@@ -7,7 +7,7 @@ plugins {
     id("dev.detekt") version "2.0.0-alpha.3"
 }
 
-group = "com.itau"
+group = "io.github.brdoliveira"
 version = "0.1.0-SNAPSHOT"
 
 java {

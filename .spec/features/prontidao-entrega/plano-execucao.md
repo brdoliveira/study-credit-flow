@@ -18,22 +18,22 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-017 | Implementar login OIDC pelo BFF | `gpt-5.6-terra` | medium | `build.gradle.kts`, `compose.yaml`, `docker/keycloak/realm-export.json`, `src/main/resources/application-security.yml`, `src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt`, `src/main/kotlin/com/itau/credit/infrastructure/security/OidcSessionAuthoritiesMapper.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/SessionController.kt`, `src/main/resources/static/index.html`, `src/main/resources/static/report.html`, `src/main/resources/static/ts/api.ts`, `src/main/resources/static/ts/session.ts`, `src/test/kotlin/com/itau/credit/infrastructure/security/OidcBrowserSecurityIT.kt` |
+| T-017 | Implementar login OIDC pelo BFF | `gpt-5.6-terra` | medium | `build.gradle.kts`, `compose.yaml`, `docker/keycloak/realm-export.json`, `src/main/resources/application-security.yml`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcSessionAuthoritiesMapper.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionController.kt`, `src/main/resources/static/index.html`, `src/main/resources/static/report.html`, `src/main/resources/static/ts/api.ts`, `src/main/resources/static/ts/session.ts`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcBrowserSecurityIT.kt` |
 | T-022 | Criar prova ponta a ponta do Docker Compose | `gpt-5.6-terra` | medium | `compose.yaml`, `.env.example`, `docker/keycloak/realm-export.json`, `scripts/e2e-compose.ps1`, `test/e2e/credit-flow.spec.mjs`, `test/e2e/helpers.mjs`, `docs/evidence/compose-e2e.md` |
-| T-025 | Publicar e testar o contrato OpenAPI | `gpt-5.6-terra` | medium | `build.gradle.kts`, `src/main/kotlin/com/itau/credit/infrastructure/web/OpenApiConfiguration.kt`, `src/main/resources/openapi/credit-evaluations.yaml`, `src/test/kotlin/com/itau/credit/infrastructure/web/OpenApiContractIT.kt`, `README.md` |
+| T-025 | Publicar e testar o contrato OpenAPI | `gpt-5.6-terra` | medium | `build.gradle.kts`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiConfiguration.kt`, `src/main/resources/openapi/credit-evaluations.yaml`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiContractIT.kt`, `README.md` |
 | T-027 | Consolidar roteiro e índice de evidências | `gpt-5.6-terra` | medium | `README.md`, `docs/evidence/README.md`, `docs/architecture.md`, `docs/ai-usage.md`, `scripts/demo.ps1`, `test/delivery-documentation.test.mjs` |
 
 #### faixa-2 — branch `spec/prontidao-entrega-faixa-2` — worktree `../onp-worktrees/study-credit-flow-prontidao-entrega-faixa-2`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-018 | Corrigir a semântica HTTP da idempotência | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt`, `src/test/kotlin/com/itau/credit/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt` |
+| T-018 | Corrigir a semântica HTTP da idempotência | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt` |
 
 #### faixa-3 — branch `spec/prontidao-entrega-faixa-3` — worktree `../onp-worktrees/study-credit-flow-prontidao-entrega-faixa-3`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-019 | Conectar Outbox PostgreSQL ao Kafka | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V4__outbox_runtime.sql`, `src/main/kotlin/com/itau/credit/infrastructure/outbox/PostgresOutboxStore.kt`, `src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt`, `src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxSchedulingConfiguration.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/KafkaBrokerPublisher.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt`, `src/test/kotlin/com/itau/credit/infrastructure/messaging/OutboxKafkaIT.kt` |
+| T-019 | Conectar Outbox PostgreSQL ao Kafka | `gpt-5.6-terra` | medium | `src/main/resources/db/migration/V4__outbox_runtime.sql`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PostgresOutboxStore.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxSchedulingConfiguration.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/KafkaBrokerPublisher.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt` |
 
 ### Onda 2 — faixa-4 ∥ faixa-5 ∥ faixa-6
 
@@ -41,13 +41,13 @@
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-020 | Implementar consumidor Kafka idempotente | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationKafkaListener.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/PostgresProcessedEventStore.kt`, `src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt`, `src/test/kotlin/com/itau/credit/infrastructure/messaging/IdempotentKafkaConsumerIT.kt` |
+| T-020 | Implementar consumidor Kafka idempotente | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationKafkaListener.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/PostgresProcessedEventStore.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentKafkaConsumerIT.kt` |
 
 #### faixa-5 — branch `spec/prontidao-entrega-faixa-5` — worktree `../onp-worktrees/study-credit-flow-prontidao-entrega-faixa-5`
 
 | tarefa | título | modelo | esforço | arquivos |
 |---|---|---|---|---|
-| T-021 | Integrar métricas e health checks ao runtime | `gpt-5.6-terra` | medium | `src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt`, `src/main/kotlin/com/itau/credit/infrastructure/observability/ObservedCreditEvaluationService.kt`, `src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt`, `src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt`, `src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt`, `src/main/resources/application-observability.yml`, `src/test/kotlin/com/itau/credit/infrastructure/observability/RuntimeObservabilityIT.kt` |
+| T-021 | Integrar métricas e health checks ao runtime | `gpt-5.6-terra` | medium | `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt`, `src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt`, `src/main/resources/application-observability.yml`, `src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt` |
 
 #### faixa-6 — branch `spec/prontidao-entrega-faixa-6` — worktree `../onp-worktrees/study-credit-flow-prontidao-entrega-faixa-6`
 

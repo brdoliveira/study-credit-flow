@@ -281,7 +281,7 @@ Como avaliador técnico, quero um roteiro curto e evidências indexadas, para re
 
 ## Fora de escopo
 
-- Integração com o provedor corporativo real do Itaú, MFA, SCIM ou diretório de funcionários.
+- Integração com o provedor corporativo real da instituição financeira de referência, MFA, SCIM ou diretório de funcionários.
 - Provisionamento efetivo de recursos pagos na AWS ou publicação de imagem em registry externo.
 - Garantia de entrega exatamente uma vez; permanece entrega pelo menos uma vez com consumidor idempotente.
 - Frontend produtivo completo, design system corporativo ou aplicação móvel.

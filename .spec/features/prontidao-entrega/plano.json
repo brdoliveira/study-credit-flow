@@ -43,14 +43,14 @@
             "compose.yaml",
             "docker/keycloak/realm-export.json",
             "src/main/resources/application-security.yml",
-            "src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/security/OidcSessionAuthoritiesMapper.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/SessionController.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcSessionAuthoritiesMapper.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/SessionController.kt",
             "src/main/resources/static/index.html",
             "src/main/resources/static/report.html",
             "src/main/resources/static/ts/api.ts",
             "src/main/resources/static/ts/session.ts",
-            "src/test/kotlin/com/itau/credit/infrastructure/security/OidcBrowserSecurityIT.kt"
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/OidcBrowserSecurityIT.kt"
           ],
           "refs": [
             "US-013",
@@ -93,9 +93,9 @@
           "esforco": "medium",
           "arquivos": [
             "build.gradle.kts",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/OpenApiConfiguration.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiConfiguration.kt",
             "src/main/resources/openapi/credit-evaluations.yaml",
-            "src/test/kotlin/com/itau/credit/infrastructure/web/OpenApiContractIT.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/OpenApiContractIT.kt",
             "README.md"
           ],
           "refs": [
@@ -140,11 +140,11 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/DefaultCreditEvaluationApiService.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/DefaultCreditEvaluationApiService.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/IdempotentCreditEvaluationHttpIT.kt"
           ],
           "refs": [
             "US-014",
@@ -167,12 +167,12 @@
           "esforco": "medium",
           "arquivos": [
             "src/main/resources/db/migration/V4__outbox_runtime.sql",
-            "src/main/kotlin/com/itau/credit/infrastructure/outbox/PostgresOutboxStore.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxSchedulingConfiguration.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/KafkaBrokerPublisher.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/messaging/OutboxKafkaIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/PostgresOutboxStore.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxSchedulingConfiguration.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/KafkaBrokerPublisher.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/OutboxKafkaIT.kt"
           ],
           "refs": [
             "US-015",
@@ -195,10 +195,10 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationKafkaListener.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/PostgresProcessedEventStore.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt",
-            "src/test/kotlin/com/itau/credit/infrastructure/messaging/IdempotentKafkaConsumerIT.kt"
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationKafkaListener.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/PostgresProcessedEventStore.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt",
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentKafkaConsumerIT.kt"
           ],
           "refs": [
             "US-015",
@@ -219,13 +219,13 @@
           "modelo": "gpt-5.6-terra",
           "esforco": "medium",
           "arquivos": [
-            "src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/observability/ObservedCreditEvaluationService.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt",
-            "src/main/kotlin/com/itau/credit/infrastructure/config/ApplicationConfiguration.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservedCreditEvaluationService.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt",
+            "src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/config/ApplicationConfiguration.kt",
             "src/main/resources/application-observability.yml",
-            "src/test/kotlin/com/itau/credit/infrastructure/observability/RuntimeObservabilityIT.kt"
+            "src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/RuntimeObservabilityIT.kt"
           ],
           "refs": [
             "US-016",

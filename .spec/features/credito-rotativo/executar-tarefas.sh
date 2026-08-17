@@ -182,7 +182,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-001 — "Preparar projeto Kotlin e testes de especificação"
   critérios/refs: AC-045 (Pipeline bloqueia mudança inválida), AC-047 (Documentação permite reprodução e defesa técnica)
-  arquivos permitidos (e seus testes): settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/test/kotlin/com/itau/credit/spec/SpecificationContractTest.kt
+  arquivos permitidos (e seus testes): settings.gradle.kts, build.gradle.kts, gradle.properties, gradlew, gradlew.bat, gradle/wrapper/gradle-wrapper.properties, onpspec.config.json, src/test/kotlin/io/github/brdoliveira/creditflow/spec/SpecificationContractTest.kt
   mensagem de commit: "T-001 credito-rotativo: Preparar projeto Kotlin e testes de especificação"
 
 Regras inegociáveis:
@@ -212,7 +212,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-002 — "Implementar domínio e motor extensível de regras"
   critérios/refs: AC-004 (Todas as regras registradas são executadas), AC-005 (Score abaixo do mínimo reprova), AC-006 (Excesso de atrasos reprova), AC-007 (Ausência de limite disponível reprova), AC-008 (Comprometimento excessivo reprova), AC-009 (Tendência elevada gera alerta explicável), AC-010 (Nova regra não altera o orquestrador), AC-011 (Mesmas entradas geram a mesma decisão)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/domain/model/CreditEvaluationContext.kt, src/main/kotlin/com/itau/credit/domain/model/RuleResult.kt, src/main/kotlin/com/itau/credit/domain/model/CreditDecision.kt, src/main/kotlin/com/itau/credit/domain/rule/CreditRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RuleEngine.kt, src/main/kotlin/com/itau/credit/domain/rule/MinimumScoreRule.kt, src/main/kotlin/com/itau/credit/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/com/itau/credit/domain/rule/AvailableLimitRule.kt, src/main/kotlin/com/itau/credit/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/com/itau/credit/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/com/itau/credit/domain/rule/RuleEngineTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditEvaluationContext.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/RuleResult.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/model/CreditDecision.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/CreditRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngine.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MinimumScoreRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/MaxLatePaymentsRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/AvailableLimitRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/LimitCommitmentRule.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/rule/RecentSpendingTrendRule.kt, src/test/kotlin/io/github/brdoliveira/creditflow/domain/rule/RuleEngineTest.kt
   mensagem de commit: "T-002 credito-rotativo: Implementar domínio e motor extensível de regras"
 
 Regras inegociáveis:
@@ -242,7 +242,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-003 — "Implementar cálculo do crédito"
   critérios/refs: AC-012 (Cliente elegível recebe valor calculado), AC-013 (Cálculo usa precisão monetária), AC-014 (Cliente reprovado não executa concessão)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/com/itau/credit/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/com/itau/credit/domain/calculation/CreditLimitCalculatorTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/ConfigurableCreditLimitCalculator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditCalculationPolicy.kt, src/test/kotlin/io/github/brdoliveira/creditflow/domain/calculation/CreditLimitCalculatorTest.kt
   mensagem de commit: "T-003 credito-rotativo: Implementar cálculo do crédito"
 
 Regras inegociáveis:
@@ -272,7 +272,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-004 — "Implementar caso de uso de avaliação"
   critérios/refs: AC-001 (Avaliação válida é criada), AC-003 (Reprovação de crédito não é erro técnico), AC-015 (Resposta contém rastreabilidade), AC-016 (Avaliação persiste a fotografia da decisão)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/com/itau/credit/application/evaluation/EvaluateCreditCommand.kt, src/main/kotlin/com/itau/credit/application/evaluation/CreditEvaluationResult.kt, src/test/kotlin/com/itau/credit/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCase.kt, src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateCreditCommand.kt, src/main/kotlin/io/github/brdoliveira/creditflow/application/evaluation/CreditEvaluationResult.kt, src/test/kotlin/io/github/brdoliveira/creditflow/application/evaluation/EvaluateRevolvingCreditUseCaseTest.kt
   mensagem de commit: "T-004 credito-rotativo: Implementar caso de uso de avaliação"
 
 Regras inegociáveis:
@@ -302,7 +302,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-005 — "Implementar API REST e contrato de erros"
   critérios/refs: AC-001 (Avaliação válida é criada), AC-002 (Dados inválidos são explicados), AC-003 (Reprovação de crédito não é erro técnico), AC-022 (Listagem é paginada e filtrável), AC-023 (Avaliação pode ser consultada por identificador), AC-024 (Avaliação inexistente retorna resposta padronizada), AC-028 (Filtros inválidos são rejeitados), AC-040 (Erro técnico tem resposta correlacionável)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationController.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationRequest.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationResponse.kt, src/main/kotlin/com/itau/credit/infrastructure/web/ApiError.kt, src/main/kotlin/com/itau/credit/infrastructure/web/GlobalExceptionHandler.kt, src/test/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationControllerTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationController.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationRequest.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationResponse.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/ApiError.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/GlobalExceptionHandler.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationControllerTest.kt
   mensagem de commit: "T-005 credito-rotativo: Implementar API REST e contrato de erros"
 
 Regras inegociáveis:
@@ -332,7 +332,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-006 — "Implementar persistência PostgreSQL e auditoria"
   critérios/refs: AC-015 (Resposta contém rastreabilidade), AC-016 (Avaliação persiste a fotografia da decisão), AC-017 (CPF completo não vaza), AC-022 (Listagem é paginada e filtrável), AC-023 (Avaliação pode ser consultada por identificador), AC-024 (Avaliação inexistente retorna resposta padronizada)
-  arquivos permitidos (e seus testes): src/main/resources/db/migration/V1__credit_evaluation.sql, src/main/kotlin/com/itau/credit/application/port/CreditEvaluationRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/persistence/CreditEvaluationEntity.kt, src/main/kotlin/com/itau/credit/infrastructure/privacy/CpfProtector.kt, src/test/kotlin/com/itau/credit/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt
+  arquivos permitidos (e seus testes): src/main/resources/db/migration/V1__credit_evaluation.sql, src/main/kotlin/io/github/brdoliveira/creditflow/application/port/CreditEvaluationRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/CreditEvaluationEntity.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/privacy/CpfProtector.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/persistence/PostgresCreditEvaluationRepositoryIT.kt
   mensagem de commit: "T-006 credito-rotativo: Implementar persistência PostgreSQL e auditoria"
 
 Regras inegociáveis:
@@ -362,7 +362,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-007 — "Implementar idempotência concorrente"
   critérios/refs: AC-018 (Chave de idempotência é obrigatória), AC-019 (Repetição idêntica devolve o resultado original), AC-020 (Reutilização divergente é rejeitada), AC-021 (Concorrência não duplica avaliação)
-  arquivos permitidos (e seus testes): src/main/resources/db/migration/V2__credit_idempotency.sql, src/main/kotlin/com/itau/credit/application/port/IdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/com/itau/credit/infrastructure/idempotency/CanonicalRequestHasher.kt, src/test/kotlin/com/itau/credit/infrastructure/idempotency/IdempotencyIT.kt
+  arquivos permitidos (e seus testes): src/main/resources/db/migration/V2__credit_idempotency.sql, src/main/kotlin/io/github/brdoliveira/creditflow/application/port/IdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/PostgresIdempotencyRepository.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/CanonicalRequestHasher.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/idempotency/IdempotencyIT.kt
   mensagem de commit: "T-007 credito-rotativo: Implementar idempotência concorrente"
 
 Regras inegociáveis:
@@ -392,7 +392,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-008 — "Implementar Outbox, publicação e consumo idempotente"
   critérios/refs: AC-033 (Avaliação e Outbox são atômicas), AC-034 (Evento possui contrato versionado e sem CPF completo), AC-035 (Publicação temporariamente falha e tenta novamente), AC-036 (Consumidor ignora evento duplicado)
-  arquivos permitidos (e seus testes): src/main/resources/db/migration/V3__credit_outbox.sql, src/main/kotlin/com/itau/credit/application/event/CreditEvaluationCompleted.kt, src/main/kotlin/com/itau/credit/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/main/kotlin/com/itau/credit/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/com/itau/credit/infrastructure/messaging/CreditEvaluationMessagingIT.kt
+  arquivos permitidos (e seus testes): src/main/resources/db/migration/V3__credit_outbox.sql, src/main/kotlin/io/github/brdoliveira/creditflow/application/event/CreditEvaluationCompleted.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/outbox/OutboxPublisher.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationEventProducer.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/IdempotentCreditEvaluationConsumer.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/messaging/CreditEvaluationMessagingIT.kt
   mensagem de commit: "T-008 credito-rotativo: Implementar Outbox, publicação e consumo idempotente"
 
 Regras inegociáveis:
@@ -422,7 +422,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-009 — "Implementar autenticação e autorização"
   critérios/refs: AC-029 (Token ausente ou inválido é rejeitado), AC-030 (Permissão insuficiente é rejeitada), AC-031 (Escopos separam as operações), AC-032 (Transporte produtivo exige HTTPS)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/com/itau/credit/infrastructure/security/ScopeAuthoritiesConverter.kt, src/main/resources/application-security.yml, src/test/kotlin/com/itau/credit/infrastructure/security/ApiSecurityTest.kt, docker/keycloak/realm-export.json
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/SecurityConfiguration.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ScopeAuthoritiesConverter.kt, src/main/resources/application-security.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/security/ApiSecurityTest.kt, docker/keycloak/realm-export.json
   mensagem de commit: "T-009 credito-rotativo: Implementar autenticação e autorização"
 
 Regras inegociáveis:
@@ -452,7 +452,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-010 — "Implementar relatório PDF"
   critérios/refs: AC-025 (PDF válido é gerado no backend), AC-026 (PDF contém os dados exigidos), AC-027 (Relatório vazio continua válido), AC-028 (Filtros inválidos são rejeitados)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/application/report/CreditEvaluationReportFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportGenerator.kt, src/main/kotlin/com/itau/credit/infrastructure/web/CreditEvaluationReportController.kt, src/test/kotlin/com/itau/credit/infrastructure/report/PdfCreditEvaluationReportTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportGenerator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/application/report/CreditEvaluationReportFilter.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportGenerator.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/CreditEvaluationReportController.kt, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/report/PdfCreditEvaluationReportTest.kt
   mensagem de commit: "T-010 credito-rotativo: Implementar relatório PDF"
 
 Regras inegociáveis:
@@ -482,7 +482,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-011 — "Implementar frontend demonstrativo"
   critérios/refs: AC-041 (Tela de avaliação apresenta a decisão explicável), AC-042 (Tela de relatório reutiliza os filtros), AC-043 (Erros são apresentados sem detalhes internos)
-  arquivos permitidos (e seus testes): src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/css/app.css, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/evaluation.ts, src/main/resources/static/ts/report.ts, src/test/kotlin/com/itau/credit/infrastructure/web/FrontendSmokeTest.kt
+  arquivos permitidos (e seus testes): src/main/resources/static/index.html, src/main/resources/static/report.html, src/main/resources/static/css/app.css, src/main/resources/static/ts/api.ts, src/main/resources/static/ts/evaluation.ts, src/main/resources/static/ts/report.ts, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/web/FrontendSmokeTest.kt
   mensagem de commit: "T-011 credito-rotativo: Implementar frontend demonstrativo"
 
 Regras inegociáveis:
@@ -512,7 +512,7 @@ Leia primeiro: .spec/features/credito-rotativo/spec.md, .spec/features/credito-r
 Sua tarefa (somente ela):
 T-012 — "Implementar observabilidade e resiliência"
   critérios/refs: AC-037 (Correlação acompanha a requisição), AC-038 (Métricas essenciais são expostas), AC-039 (Health checks distinguem vida e prontidão), AC-040 (Erro técnico tem resposta correlacionável)
-  arquivos permitidos (e seus testes): src/main/kotlin/com/itau/credit/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/com/itau/credit/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/com/itau/credit/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/com/itau/credit/infrastructure/observability/ObservabilityTest.kt
+  arquivos permitidos (e seus testes): src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CorrelationIdFilter.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/CreditMetrics.kt, src/main/kotlin/io/github/brdoliveira/creditflow/infrastructure/health/DependencyReadinessIndicator.kt, src/main/resources/logback-spring.xml, src/main/resources/application-observability.yml, src/test/kotlin/io/github/brdoliveira/creditflow/infrastructure/observability/ObservabilityTest.kt
   mensagem de commit: "T-012 credito-rotativo: Implementar observabilidade e resiliência"
 
 Regras inegociáveis:
