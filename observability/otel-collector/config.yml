@@ -17,10 +17,12 @@ processors:
   batch: {}
 
 exporters:
-  otlp/tempo:
+  otlp_grpc/tempo:
     endpoint: tempo:4317
     tls:
       insecure: true
+  otlp_http/loki:
+    endpoint: http://loki:3100/otlp
 
 service:
   extensions: [health_check]
@@ -28,4 +30,8 @@ service:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, batch]
-      exporters: [otlp/tempo]
+      exporters: [otlp_grpc/tempo]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [otlp_http/loki]

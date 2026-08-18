@@ -42,8 +42,22 @@ Serviços locais, todos vinculados ao loopback:
 | Prometheus | `http://localhost:9090` |
 | Alertmanager | `http://localhost:9093` |
 | Tempo | `http://localhost:3200/ready` |
+| Loki | `http://localhost:3100/ready` |
 
-O dashboard `Credit Flow - Operação` é provisionado automaticamente. Em Grafana Explore, selecione Tempo para consultar traces por serviço, duração, status ou `traceId` registrado nos logs.
+O dashboard `Credit Flow - Operação` é provisionado automaticamente e inclui os logs recentes da aplicação. Em Grafana Explore, selecione Tempo para consultar traces por serviço, duração ou status; selecione Loki para executar consultas LogQL:
+
+```logql
+# Todos os logs da aplicação
+{service_name="credit-flow"}
+
+# Jornada específica a partir do código devolvido pela API
+{service_name="credit-flow"} | correlationId = "<correlationId>"
+
+# Somente falhas técnicas
+{service_name="credit-flow"} | detected_level = "error"
+```
+
+Abra os detalhes de um log e use `TraceID` para navegar ao trace correspondente. Na direção inversa, o Tempo oferece `Logs for this span`, restringindo a busca pelo serviço, intervalo, `traceId` e `spanId`. O envio OTLP preserva o console JSON e não adiciona CPF, token, valores financeiros, corpo de requisição ou payload aos atributos coletados.
 
 Para encerrar a pilha preservando os volumes:
 
@@ -68,7 +82,7 @@ docker-compose start kafka
 ./scripts/run-load-test.sh
 ```
 
-Depois de cada cenário, confira Prometheus em `Status > Targets`, Alertmanager, o dashboard Grafana e os traces no Tempo. A restauração da dependência deve resolver readiness e alertas após as janelas configuradas.
+Depois de cada cenário, confira Prometheus em `Status > Targets`, Alertmanager, o dashboard Grafana, os logs no Loki e os traces no Tempo. A restauração da dependência deve resolver readiness e alertas após as janelas configuradas.
 
 O gate automatizado equivalente é `./scripts/system-tests.sh`. Ele comprova que Kafka e PostgreSQL derrubam readiness, que uma sessão existente continua autorizada durante a indisponibilidade do Keycloak e que a outbox acumulada chega a `PUBLISHED` depois da recuperação do broker.
 

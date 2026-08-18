@@ -3,6 +3,8 @@ services:
     environment:
       OTEL_TRACING_ENABLED: "true"
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otel-collector:4318/v1/traces
+      OTEL_LOGGING_ENABLED: "true"
+      OTEL_EXPORTER_OTLP_LOGS_ENDPOINT: http://otel-collector:4318/v1/logs
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
     depends_on:
       otel-collector:
@@ -58,6 +60,15 @@ services:
       - ./observability/tempo/tempo.yml:/etc/tempo/tempo.yml:ro
       - tempo_data:/var/tempo
 
+  loki:
+    image: grafana/loki:3.7.3
+    command: ["-config.file=/etc/loki/loki.yml"]
+    ports:
+      - "127.0.0.1:${LOKI_PORT:-3100}:3100"
+    volumes:
+      - ./observability/loki/loki.yml:/etc/loki/loki.yml:ro
+      - loki_data:/loki
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.153.0
     command: ["--config=/etc/otelcol-contrib/config.yml"]
@@ -65,6 +76,8 @@ services:
       - ./observability/otel-collector/config.yml:/etc/otelcol-contrib/config.yml:ro
     depends_on:
       tempo:
+        condition: service_started
+      loki:
         condition: service_started
 
   grafana:
@@ -86,9 +99,12 @@ services:
         condition: service_started
       tempo:
         condition: service_started
+      loki:
+        condition: service_started
 
 volumes:
   prometheus_data:
   alertmanager_data:
   tempo_data:
+  loki_data:
   grafana_data:

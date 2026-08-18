@@ -52,6 +52,9 @@ validate() {
   docker run --rm \
     -v "$ROOT_DIR/observability/tempo/tempo.yml:/etc/tempo/tempo.yml:ro" \
     grafana/tempo:2.10.7 -config.file=/etc/tempo/tempo.yml -config.verify=true
+  docker run --rm \
+    -v "$ROOT_DIR/observability/loki/loki.yml:/etc/loki/loki.yml:ro" \
+    grafana/loki:3.7.3 -config.file=/etc/loki/loki.yml -verify-config
   jq empty observability/grafana/dashboards/credit-flow.json
 }
 
@@ -67,6 +70,7 @@ case "${1:-}" in
     printf 'Grafana: http://localhost:%s\n' "${GRAFANA_PORT:-3000}"
     printf 'Prometheus: http://localhost:%s\n' "${PROMETHEUS_PORT:-9090}"
     printf 'Alertmanager: http://localhost:%s\n' "${ALERTMANAGER_PORT:-9093}"
+    printf 'Loki: http://localhost:%s/ready\n' "${LOKI_PORT:-3100}"
     ;;
   stop)
     "${COMPOSE[@]}" "${COMPOSE_FILES[@]}" down

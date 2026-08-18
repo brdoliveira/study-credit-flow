@@ -10,7 +10,7 @@ Aplicação demonstrativa para avaliar concessão de crédito rotativo de forma 
 - mensageria compatível com Kafka e transactional outbox;
 - PDF gerado no backend com PDFBox;
 - métricas Prometheus, correlação, liveness e readiness;
-- tracing OpenTelemetry com Tempo local e ADOT/X-Ray na referência AWS;
+- logs e tracing OpenTelemetry com Loki/Tempo locais e ADOT/X-Ray na referência AWS;
 - rastreabilidade mecânica entre spec, tarefas e testes em `.spec/`.
 
 A arquitetura e o caminho para AWS estão em [docs/architecture.md](docs/architecture.md). As decisões e seus trade-offs estão em [docs/adrs](docs/adrs).
@@ -23,7 +23,7 @@ O console emite uma linha JSON Logstash por registro. Para investigar uma requis
 docker compose logs app | Select-String '"correlationId":"<correlationId>"'
 ```
 
-Em CloudWatch ou outro agregador JSON, pesquise o campo `correlationId` pelo valor exato. Os registros incluem `@timestamp`, `level`, `logger_name`, `message`, `service.name`, `service.version` e `service.environment`; quando o rastreamento estiver disponível, também incluem `correlationId`, `traceId` e `spanId`.
+Na pilha opcional de observabilidade, os mesmos registros são enviados por OTLP ao Loki. No Grafana Explore, selecione Loki e pesquise `{service_name="credit-flow"} | correlationId = "<correlationId>"`. Os registros incluem `@timestamp`, `level`, `logger_name`, `message`, `service.name`, `service.version` e `service.environment`; quando o rastreamento estiver disponível, também incluem `correlationId`, `traceId` e `spanId`.
 
 Use `DEBUG` para sucesso nominal detalhado, `INFO` para marcos operacionais como eventos duplicados, `WARN` para retentativas e indisponibilidades tratadas e `ERROR` para falhas técnicas. Avaliações e publicações bem-sucedidas não geram um `INFO` por item. Nunca registre CPF, token, valores financeiros, corpo de requisição ou payload de evento; use somente identificadores e contexto operacional seguro.
 
@@ -75,14 +75,14 @@ Para encerrar preservando os volumes, execute `docker compose down`. A remoção
 
 ### Observabilidade local
 
-A pilha opcional adiciona Prometheus, Alertmanager, Grafana, OpenTelemetry Collector e Tempo sem expor portas além do loopback. Preencha as variáveis de observabilidade do `.env` e execute:
+A pilha opcional adiciona Prometheus, Alertmanager, Grafana, OpenTelemetry Collector, Loki e Tempo sem expor portas além do loopback. Preencha as variáveis de observabilidade do `.env` e execute:
 
 ```bash
 ./scripts/observability.sh validate
 ./scripts/observability.sh start
 ```
 
-O Grafana fica em `http://localhost:3000`, com dashboard, Prometheus e Tempo provisionados. Alertas, SLOs, testes de falha e runbooks estão em [docs/observability.md](docs/observability.md).
+O Grafana fica em `http://localhost:3000`, com dashboard, métricas, logs e traces provisionados. Alertas, SLOs, consultas, testes de falha e runbooks estão em [docs/observability.md](docs/observability.md).
 
 ### Gate de sistema e recuperação
 

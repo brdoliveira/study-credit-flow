@@ -87,6 +87,34 @@
       "targets": [{ "expr": "sum by (outcome) (rate(credit_kafka_events_total[1m]))", "legendFormat": "Kafka {{outcome}}", "refId": "A" }],
       "title": "Consumo Kafka",
       "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "fieldConfig": { "defaults": {}, "overrides": [] },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 24 },
+      "id": 8,
+      "options": {
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "loki" },
+          "editorMode": "code",
+          "expr": "{service_name=\"credit-flow\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Logs recentes da aplicação",
+      "type": "logs"
     }
   ],
   "refresh": "10s",

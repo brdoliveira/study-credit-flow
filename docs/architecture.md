@@ -72,13 +72,13 @@ Relatórios síncronos usam um instante final fixo para manter a paginação est
 - liveness do processo separada da readiness de dependências;
 - erros técnicos sem stack trace no contrato HTTP.
 
-O perfil local de observabilidade conecta Prometheus e Alertmanager às métricas, Grafana aos dashboards e Tempo aos traces recebidos pelo OpenTelemetry Collector. Na referência AWS, um sidecar ADOT envia métricas ao CloudWatch e traces ao X-Ray; alarmes dimensionados para ALB/ECS e erros estruturados notificam um tópico SNS criptografado por uma CMK operacional rotacionada.
+O perfil local de observabilidade conecta Prometheus e Alertmanager às métricas. A aplicação envia logs e traces por OTLP ao OpenTelemetry Collector, que os encaminha respectivamente ao Loki e ao Tempo; o Grafana reúne os três sinais e permite navegação entre log e trace. Na referência AWS, um sidecar ADOT envia métricas ao CloudWatch e traces ao X-Ray; alarmes dimensionados para ALB/ECS e erros estruturados notificam um tópico SNS criptografado por uma CMK operacional rotacionada.
 
 ### Logs estruturados e diagnóstico
 
 O appender de console usa Logstash JSON. Cada linha possui `@timestamp`, `level`, `logger_name`, `message`, `service.name`, `service.version` e `service.environment`; os campos MDC `correlationId`, `traceId` e `spanId` são incluídos quando estiverem no contexto. A identidade do serviço vem de `spring.application.name`, `APP_VERSION` e `APP_ENVIRONMENT`.
 
-O `correlationId` conecta HTTP, outbox e Kafka. A pessoa operadora deve pesquisar esse campo pelo valor exato no agregador de logs ou usar `docker compose logs app | Select-String '"correlationId":"<correlationId>"'` localmente. O nível `DEBUG` representa sucesso nominal detalhado; `INFO`, marcos operacionais como duplicatas; `WARN`, retentativas e falhas tratadas; e `ERROR`, falhas técnicas. Para conter o volume, sucessos de avaliação e publicação não produzem um log `INFO` por item.
+O `correlationId` conecta HTTP, outbox e Kafka. A pessoa operadora pode pesquisá-lo no Loki pelo valor exato ou usar `docker compose logs app | Select-String '"correlationId":"<correlationId>"'`. O nível `DEBUG` representa sucesso nominal detalhado; `INFO`, marcos operacionais como duplicatas; `WARN`, retentativas e falhas tratadas; e `ERROR`, falhas técnicas. Para conter o volume, sucessos de avaliação e publicação não produzem um log `INFO` por item.
 
 A fronteira de privacidade proíbe CPF, token, valores financeiros, corpo de requisição e payload de evento nos logs próprios. A configuração JSON exclui `cpf`, `token`, `amount`, `requestBody` e `payload`; os emissores devem registrar somente identificadores, tipos de falha e outros campos operacionais seguros.
 
