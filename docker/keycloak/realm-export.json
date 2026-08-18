@@ -2,7 +2,11 @@
   "realm": "credit-rotativo",
   "enabled": true,
   "accessTokenLifespan": 900,
-  "displayName": "Crédito Rotativo (local)",
+  "displayName": "Crédito Rotativo",
+  "loginTheme": "credit-flow",
+  "internationalizationEnabled": true,
+  "supportedLocales": ["pt-BR"],
+  "defaultLocale": "pt-BR",
   "roles": {
     "realm": [
       { "name": "credit:write", "description": "Criar avaliações de crédito" },

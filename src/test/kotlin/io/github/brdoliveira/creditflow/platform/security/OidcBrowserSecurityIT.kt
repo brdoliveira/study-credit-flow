@@ -105,6 +105,8 @@ class OidcBrowserSecurityIT @Autowired constructor(private val mvc: MockMvc) {
         require(security.contains("issuer-uri: \${KEYCLOAK_ISSUER_URI:"))
         require(realm.contains("oidc-usermodel-realm-role-mapper"))
         require(realm.contains("\"id.token.claim\": \"true\""))
+        require(realm.contains("\"loginTheme\": \"credit-flow\""))
+        require(compose.contains("/opt/keycloak/themes/credit-flow:ro"))
     }
 
     private fun browser(scope: String) = oauth2Login().authorities(SimpleGrantedAuthority("SCOPE_$scope"))
